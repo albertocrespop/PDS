@@ -100,4 +100,4 @@ La aplicación permitirá a los usuarios aprender programación a través de la 
 
 Por último la representación del Modelado de domínio que creemos oportuna en un análisis preliminar de la app es la siguiente:
 
-![ModeladoImg](CModelado.jpeg)
+![ModeladoImg](Modelado.jpeg)
