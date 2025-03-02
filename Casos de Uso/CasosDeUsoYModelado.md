@@ -3,8 +3,8 @@
 La aplicación permitirá a los usuarios aprender programación a través de la realización de cursos con diferentes tipos de ejercicios, estos cursos pueden ser creados por la comunidad o bien cursos nativos de la aplicación. A continuación, se identifican y detallan los principales casos de uso de la aplicación.
 
 ## Actores del sistema
-- **Usuario**: Persona que utiliza la aplicación para realizar cursos o crear nuevos cursos.
-- **Sistema**: Actor que inicia procesos para llevar a cabo la funcionalidad de la aplicación.
+**Usuario**: Persona que utiliza la aplicación para realizar cursos o crear nuevos cursos.<br>
+**Sistema**: Actor que inicia procesos para llevar a cabo la funcionalidad de la aplicación.
 
 ## Lista de Casos de Uso
 | ID   | Nombre del Caso de Uso           | Descripción                                          | Actor Principal |
@@ -67,7 +67,7 @@ La aplicación permitirá a los usuarios aprender programación a través de la 
 6. El usuario guarda el curso
 7. El sistema almacena el curso**
 
-*Por defecto los cursos serán privados
+*Por defecto los cursos serán privados<br>
 **El curso se guardará en el repositorio de cursos del usuario
 
 **Flujos Alternativos:**
@@ -93,7 +93,7 @@ La aplicación permitirá a los usuarios aprender programación a través de la 
 6. El Usuario sale del curso
 7. El Sistema guarda el progreso del curso y actualiza las estadísticas**
 
-*La estrategia de aprendizaje 
+*La estrategia de aprendizaje<br>
 **Se registra el progreso automáticamente
 
 ## Modelado de dominio
