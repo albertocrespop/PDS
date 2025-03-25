@@ -22,11 +22,11 @@ public class Login extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // Crear el contenedor principal con efecto de gradiente
-        StackPane root = new StackPane();
+        // Contenedor principal - Cambiado a BorderPane
+        BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: linear-gradient(to bottom right, #1a73e8, #0d47a1);");
         
-        // Crear el panel de login (tarjeta blanca)
+        // Panel de login
         VBox loginCard = new VBox(20);
         loginCard.setAlignment(Pos.CENTER);
         loginCard.setPadding(new Insets(40, 50, 50, 50));
@@ -34,7 +34,7 @@ public class Login extends Application {
         loginCard.setStyle("-fx-background-color: white; -fx-background-radius: 15;");
         loginCard.setEffect(new DropShadow(20, Color.rgb(0, 0, 0, 0.3)));
 
-        // Logo de la aplicación
+        // Logo
         ImageView logo = new ImageView(new Image("https://via.placeholder.com/80/1a73e8/ffffff?text=OC"));
         logo.setFitWidth(80);
         logo.setFitHeight(80);
@@ -58,19 +58,32 @@ public class Login extends Application {
         passwordField.setPromptText("Contraseña");
         styleTextField(passwordField);
         
-        // Checkbox de recordar usuario
+        // Checkbox
         CheckBox rememberMe = new CheckBox("Recordar mi usuario");
         rememberMe.setTextFill(Color.GRAY);
         
         // Botón de login
         Button loginButton = new Button("Iniciar Sesión");
         styleLoginButton(loginButton);
+        loginButton.setOnAction(e -> {
+            String username = usernameField.getText();
+            String password = passwordField.getText();
+            
+            if(username.isEmpty() || password.isEmpty()) {
+                showAlert("Error", "Por favor ingresa usuario y contraseña");
+            } else {
+                showAlert("Éxito", "Bienvenido a OfCourses, " + username + "!");
+            }
+        });
         
         // Enlace de olvidó contraseña
         Hyperlink forgotPassword = new Hyperlink("¿Olvidaste tu contraseña?");
         forgotPassword.setTextFill(Color.GRAY);
         forgotPassword.setBorder(Border.EMPTY);
         forgotPassword.setPadding(new Insets(5));
+        forgotPassword.setOnAction(e -> {
+            showAlert("Recuperar Contraseña", "Se ha enviado un enlace de recuperación a tu correo");
+        });
         
         // Separador
         Separator separator = new Separator();
@@ -81,6 +94,9 @@ public class Login extends Application {
         registerLink.setTextFill(Color.web("#1a73e8"));
         registerLink.setBorder(Border.EMPTY);
         registerLink.setPadding(new Insets(5));
+        registerLink.setOnAction(e -> {
+            showAlert("Registro", "Redirigiendo al formulario de registro...");
+        });
         
         // Agregar elementos al card
         loginCard.getChildren().addAll(
@@ -102,10 +118,10 @@ public class Login extends Application {
         titleBar.getChildren().add(closeButton);
         
         // Configurar el layout
-        root.getChildren().addAll(loginCard, titleBar);
-        StackPane.setAlignment(titleBar, Pos.TOP_RIGHT);
+        root.setCenter(loginCard);
+        root.setTop(titleBar);
         
-        // Hacer la ventana arrastrable
+        // Hacer la ventana arrastrable desde el card
         loginCard.setOnMousePressed(event -> {
             xOffset = event.getSceneX();
             yOffset = event.getSceneY();
@@ -127,11 +143,18 @@ public class Login extends Application {
         primaryStage.show();
     }
     
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    
     private void styleTextField(TextField field) {
         field.setStyle("-fx-background-color: #f5f5f5; -fx-background-radius: 5; -fx-border-radius: 5; -fx-padding: 12;");
         field.setFont(Font.font("Segoe UI", 14));
         
-        // Efecto de hover
         field.hoverProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
                 field.setStyle("-fx-background-color: #e8f0fe; -fx-background-radius: 5; -fx-border-radius: 5; -fx-padding: 12; -fx-border-color: #1a73e8; -fx-border-width: 1;");
@@ -145,7 +168,6 @@ public class Login extends Application {
         button.setStyle("-fx-background-color: #1a73e8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 12 30; -fx-background-radius: 5;");
         button.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
         
-        // Efecto de hover
         button.hoverProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
                 button.setStyle("-fx-background-color: #0d47a1; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 12 30; -fx-background-radius: 5;");
@@ -154,7 +176,6 @@ public class Login extends Application {
             }
         });
         
-        // Efecto de pulsación
         button.setOnMousePressed(e -> {
             button.setStyle("-fx-background-color: #0b3d91; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 12 30; -fx-background-radius: 5;");
         });
@@ -162,5 +183,9 @@ public class Login extends Application {
         button.setOnMouseReleased(e -> {
             button.setStyle("-fx-background-color: #1a73e8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 12 30; -fx-background-radius: 5;");
         });
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
