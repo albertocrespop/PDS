@@ -138,14 +138,6 @@ public class Login extends Application {
     }
 
     private HBox createTitleBar(Stage primaryStage) {
-        
-        // Agregar elementos al card
-        loginCard.getChildren().addAll(
-            title, subtitle,
-            usernameField, passwordField,
-            loginButton, separator, registerLink
-        );
-        
         // Barra de título personalizada
         HBox titleBar = new HBox();
         titleBar.setAlignment(Pos.CENTER_RIGHT);
@@ -172,11 +164,6 @@ public class Login extends Application {
         //Separador para que loginCard no se pegue a root
         HBox spacer = new HBox();
         spacer.setPrefHeight(50); // Ajusta la altura del espaciador
-        root.setBottom(spacer);
-        
-        // Configurar el layout
-        root.setCenter(loginCard);
-        root.setTop(titleBar);
         
         // Hacer la ventana arrastrable desde el card
         root.setOnMousePressed(event -> {
@@ -203,8 +190,10 @@ public class Login extends Application {
         
         // Centra la ventana
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        primaryStage.setX((screenBounds.getWidth() - primaryStage.getWidth()) / 2);
-        primaryStage.setY((screenBounds.getHeight() - primaryStage.getHeight()) / 2);
+        double xCenter = (screenBounds.getWidth() - primaryStage.getWidth()) / 2;
+        double yCenter = (screenBounds.getHeight() - primaryStage.getHeight()) / 2;
+        primaryStage.setX(xCenter);
+        primaryStage.setY(yCenter);
     }
 
     private void showAlert(String title, String message) {
