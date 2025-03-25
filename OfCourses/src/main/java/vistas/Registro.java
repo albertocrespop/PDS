@@ -1,5 +1,8 @@
 package vistas;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import javafx.stage.FileChooser;
 import java.io.File;
 
@@ -31,7 +35,6 @@ public class Registro extends Application {
         // Contenedor principal
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: linear-gradient(to bottom right, #1a73e8, #0d47a1);");
-        
         // Panel de registro
         VBox registroCard = new VBox(15);
         registroCard.setAlignment(Pos.CENTER);
@@ -39,11 +42,8 @@ public class Registro extends Application {
         registroCard.setMaxWidth(450);
         registroCard.setStyle("-fx-background-color: white; -fx-background-radius: 15;");
         registroCard.setEffect(new DropShadow(20, Color.rgb(0, 0, 0, 0.3)));
-
-        // Logo
-        ImageView logo = new ImageView(new Image("https://via.placeholder.com/80/1a73e8/ffffff?text=OC"));
-        logo.setFitWidth(80);
-        logo.setFitHeight(80);
+        
+        setupAnimations(registroCard);
         
         // Título
         Label title = new Label("Crear Cuenta");
@@ -101,7 +101,7 @@ public class Registro extends Application {
         
         // Agregar elementos al card
         registroCard.getChildren().addAll(
-            logo, title,
+            title,
             usernameField, passwordField, confirmPasswordField, emailField,
             imagenContainer,
             botonesBox
@@ -118,23 +118,28 @@ public class Registro extends Application {
         
         titleBar.getChildren().add(closeButton);
         
+        HBox spacer = new HBox();
+        spacer.setPrefHeight(50); // Ajusta la altura del espaciador
+        root.setBottom(spacer);
+        
         // Configurar el layout
         root.setCenter(registroCard);
         root.setTop(titleBar);
-        
+
         // Hacer la ventana arrastrable desde el card
-        registroCard.setOnMousePressed(event -> {
+        root.setOnMousePressed(event -> {
             xOffset = event.getSceneX();
             yOffset = event.getSceneY();
         });
         
-        registroCard.setOnMouseDragged(event -> {
+        root.setOnMouseDragged(event -> {
             primaryStage.setX(event.getScreenX() - xOffset);
             primaryStage.setY(event.getScreenY() - yOffset);
         });
         
         // Configurar la escena
-        Scene scene = new Scene(root, 850, 700);
+        Scene scene = new Scene(root, 850, 750);
+        root.requestFocus();
         scene.setFill(Color.TRANSPARENT);
         
         // Configurar el stage
@@ -203,7 +208,7 @@ public class Registro extends Application {
         
         field.hoverProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
-                field.setStyle("-fx-background-color: #e8f0fe; -fx-background-radius: 5; -fx-border-radius: 5; -fx-padding: 12; -fx-border-color: #1a73e8; -fx-border-width: 1;");
+                field.setStyle("-fx-background-color: #e8f0fe; -fx-background-radius: 5; -fx-border-radius: 5; -fx-padding: 12;");
             } else {
                 field.setStyle("-fx-background-color: #f5f5f5; -fx-background-radius: 5; -fx-border-radius: 5; -fx-padding: 12;");
             }
@@ -250,5 +255,18 @@ public class Registro extends Application {
         button.setOnMouseReleased(e -> {
             button.setStyle("-fx-background-color: transparent; -fx-text-fill: #1a73e8; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 20; -fx-background-radius: 5; -fx-border-color: #1a73e8; -fx-border-width: 1; -fx-border-radius: 5;");
         });
+    }
+    
+    private void setupAnimations(VBox loginCard) {
+        // Animación de entrada
+        loginCard.setOpacity(0);
+        loginCard.setTranslateY(30);
+        
+        Timeline timeline = new Timeline();
+        KeyValue kvOpacity = new KeyValue(loginCard.opacityProperty(), 1);
+        KeyValue kvTranslate = new KeyValue(loginCard.translateYProperty(), 0);
+        KeyFrame kf = new KeyFrame(Duration.millis(1500), kvOpacity, kvTranslate);
+        timeline.getKeyFrames().add(kf);
+        timeline.play();
     }
 }
