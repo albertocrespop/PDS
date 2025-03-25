@@ -19,4 +19,10 @@ public class OfCourses {
 		}
 		return unicaInstancia;
 	}
+	
+	public boolean Login() {
+		
+		
+		return false;
+	}
 }
