@@ -32,21 +32,6 @@ public class Login extends Application {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: linear-gradient(to bottom right, #1a73e8, #0d47a1);");
         
-        VBox loginCard = createLoginCard();
-        setupAnimations(loginCard); // Configurar animaciones
-
-        HBox titleBar = createTitleBar(primaryStage);
-        HBox spacer = createSpacer();
-        
-        root.setCenter(loginCard);
-        root.setTop(titleBar);
-        root.setBottom(spacer);
-
-        setupWindowDrag(root, primaryStage);
-        setupSceneAndStage(primaryStage, root);
-    }
-
-    private VBox createLoginCard() {
         VBox loginCard = new VBox(20);
         loginCard.setAlignment(Pos.CENTER);
         loginCard.setPadding(new Insets(40, 50, 50, 50));
@@ -54,6 +39,7 @@ public class Login extends Application {
         loginCard.setStyle("-fx-background-color: white; -fx-background-radius: 12;-fx-padding: 30;");
         loginCard.setEffect(new DropShadow(20, Color.rgb(0, 0, 0, 0.3)));
 
+        setupAnimations(loginCard);
         
         // Título
         Label title = new Label("OfCourses");
@@ -98,9 +84,55 @@ public class Login extends Application {
             usernameField, passwordField,
             loginButton, separator, registerLink
         );
+
+        // Barra de título personalizada
+        HBox titleBar = new HBox();
+        titleBar.setAlignment(Pos.CENTER_RIGHT);
+        titleBar.setPadding(new Insets(10));
         
-        return loginCard;
-    }
+ 
+        Button closeButton = new Button("✕");
+        closeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
+        closeButton.setOnAction(e -> primaryStage.close());
+  
+  
+        titleBar.getChildren().add(closeButton);        
+        
+        HBox spacer = new HBox();
+        spacer.setPrefHeight(50); // Ajusta la altura del espaciador
+                
+        root.setCenter(loginCard);
+        root.setTop(titleBar);
+        root.setBottom(spacer);
+
+
+        //Separador para que loginCard no se pegue a root
+        // Hacer la ventana arrastrable desde el card
+        root.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+        
+        root.setOnMouseDragged(event -> {
+            primaryStage.setX(event.getScreenX() - xOffset);
+            primaryStage.setY(event.getScreenY() - yOffset);
+        });        
+        Scene scene = new Scene(root, 800, 600);
+        scene.setFill(Color.TRANSPARENT);
+        primaryStage.initStyle(StageStyle.TRANSPARENT);
+        primaryStage.setTitle("OfCourses - Login");
+        primaryStage.setScene(scene);
+        // Quitar el foco inicial del campo user
+        root.setFocusTraversable(true);
+        root.requestFocus();
+        primaryStage.show();
+        
+        // Centra la ventana
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        double xCenter = (screenBounds.getWidth() - primaryStage.getWidth()) / 2;
+        double yCenter = (screenBounds.getHeight() - primaryStage.getHeight()) / 2;
+        primaryStage.setX(xCenter);
+        primaryStage.setY(yCenter);    }
 
     private void setupAnimations(VBox loginCard) {
         // Animación de entrada
@@ -137,64 +169,6 @@ public class Login extends Application {
         return registerLink;
     }
 
-    private HBox createTitleBar(Stage primaryStage) {
-        // Barra de título personalizada
-        HBox titleBar = new HBox();
-        titleBar.setAlignment(Pos.CENTER_RIGHT);
-        titleBar.setPadding(new Insets(10));
-        
- 
-        Button closeButton = new Button("✕");
-        closeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
-        closeButton.setOnAction(e -> primaryStage.close());
-  
-  
-        titleBar.getChildren().add(closeButton);
-        return titleBar;
-    }
-
-    private HBox createSpacer() {
-        HBox spacer = new HBox();
-        spacer.setPrefHeight(50);
-        return spacer;
-    }
-
-    private void setupWindowDrag(Parent root, Stage primaryStage) {
-  
-        //Separador para que loginCard no se pegue a root
-        HBox spacer = new HBox();
-        spacer.setPrefHeight(50); // Ajusta la altura del espaciador
-        
-        // Hacer la ventana arrastrable desde el card
-        root.setOnMousePressed(event -> {
-            xOffset = event.getSceneX();
-            yOffset = event.getSceneY();
-        });
-        
-        root.setOnMouseDragged(event -> {
-            primaryStage.setX(event.getScreenX() - xOffset);
-            primaryStage.setY(event.getScreenY() - yOffset);
-        });
-    }
-
-    private void setupSceneAndStage(Stage primaryStage, Parent root) {
-        Scene scene = new Scene(root, 800, 600);
-        scene.setFill(Color.TRANSPARENT);
-        primaryStage.initStyle(StageStyle.TRANSPARENT);
-        primaryStage.setTitle("OfCourses - Login");
-        primaryStage.setScene(scene);
-        // Quitar el foco inicial del campo user
-        root.setFocusTraversable(true);
-        root.requestFocus();
-        primaryStage.show();
-        
-        // Centra la ventana
-        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        double xCenter = (screenBounds.getWidth() - primaryStage.getWidth()) / 2;
-        double yCenter = (screenBounds.getHeight() - primaryStage.getHeight()) / 2;
-        primaryStage.setX(xCenter);
-        primaryStage.setY(yCenter);
-    }
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
