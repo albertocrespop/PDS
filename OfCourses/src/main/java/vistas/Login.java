@@ -51,9 +51,11 @@ public class Login extends Application {
         loginCard.setAlignment(Pos.CENTER);
         loginCard.setPadding(new Insets(40, 50, 50, 50));
         loginCard.setMaxWidth(400);
-        loginCard.setStyle("-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 30;");
+        loginCard.setStyle("-fx-background-color: white; -fx-background-radius: 12;-fx-padding: 30;");
         loginCard.setEffect(new DropShadow(20, Color.rgb(0, 0, 0, 0.3)));
 
+        
+        // Título
         Label title = new Label("OfCourses");
         title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 28));
         title.setTextFill(Color.web("#1a73e8"));
@@ -69,11 +71,23 @@ public class Login extends Application {
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("Contraseña");
         styleTextField(passwordField);
-
+        
+        // Botón de login
         Button loginButton = new Button("Iniciar Sesión");
         styleLoginButton(loginButton);
-        loginButton.setOnAction(e -> handleLogin(usernameField, passwordField));
-
+        loginButton.setOnAction(e -> {
+            String username = usernameField.getText();
+            String password = passwordField.getText();
+            
+            if(username.isEmpty() || password.isEmpty()) {
+                showAlert("Error", "Por favor ingresa usuario y contraseña");
+            } else {
+                showAlert("Éxito", "Bienvenido a OfCourses, " + username + "!");
+            }
+        });
+        
+        
+        // Separador
         Separator separator = new Separator();
         separator.setPadding(new Insets(10, 0, 10, 0));
 
@@ -124,14 +138,25 @@ public class Login extends Application {
     }
 
     private HBox createTitleBar(Stage primaryStage) {
+        
+        // Agregar elementos al card
+        loginCard.getChildren().addAll(
+            title, subtitle,
+            usernameField, passwordField,
+            loginButton, separator, registerLink
+        );
+        
+        // Barra de título personalizada
         HBox titleBar = new HBox();
         titleBar.setAlignment(Pos.CENTER_RIGHT);
         titleBar.setPadding(new Insets(10));
         
+ 
         Button closeButton = new Button("✕");
         closeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
         closeButton.setOnAction(e -> primaryStage.close());
-        
+  
+  
         titleBar.getChildren().add(closeButton);
         return titleBar;
     }
@@ -143,6 +168,17 @@ public class Login extends Application {
     }
 
     private void setupWindowDrag(Parent root, Stage primaryStage) {
+  
+        //Separador para que loginCard no se pegue a root
+        HBox spacer = new HBox();
+        spacer.setPrefHeight(50); // Ajusta la altura del espaciador
+        root.setBottom(spacer);
+        
+        // Configurar el layout
+        root.setCenter(loginCard);
+        root.setTop(titleBar);
+        
+        // Hacer la ventana arrastrable desde el card
         root.setOnMousePressed(event -> {
             xOffset = event.getSceneX();
             yOffset = event.getSceneY();
