@@ -251,8 +251,4 @@ public class Registro extends Application {
             button.setStyle("-fx-background-color: transparent; -fx-text-fill: #1a73e8; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 20; -fx-background-radius: 5; -fx-border-color: #1a73e8; -fx-border-width: 1; -fx-border-radius: 5;");
         });
     }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
