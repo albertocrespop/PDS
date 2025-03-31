@@ -65,11 +65,7 @@ public class Login extends Application {
             String username = usernameField.getText();
             String password = passwordField.getText();
             
-            if(username.isEmpty() || password.isEmpty()) {
-                showAlert("Error", "Por favor ingresa usuario y contraseña");
-            } else {
-                showAlert("Éxito", "Bienvenido a OfCourses, " + username + "!");
-            }
+            handleLogin(username, password, primaryStage);
         });
         
         
@@ -147,14 +143,19 @@ public class Login extends Application {
         timeline.play();
     }
 
-    private void handleLogin(TextField usernameField, PasswordField passwordField) {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-        
+    private void handleLogin(String username, String password, Stage primaryStage) {
         if(username.isEmpty() || password.isEmpty()) {
             showAlert("Error", "Por favor ingresa usuario y contraseña");
         } else {
             showAlert("Éxito", "Bienvenido a OfCourses, " + username + "!");
+            try {
+                VistaPrincipal cursos = new VistaPrincipal();
+                Stage stage = new Stage();
+                cursos.start(stage);
+                primaryStage.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

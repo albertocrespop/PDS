@@ -27,16 +27,16 @@ public class VistaPrincipal extends Application {
     private ImageView imagenPerfilView;
     private VBox cursosContainer;
     private List<String> cursos = new ArrayList<>();
-    private boolean menuAbierto = false;
 
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         
         // Datos de ejemplo
-        for (int i = 1; i <= 10; i++) {
+        /*for (int i = 1; i <= 10; i++) {
             cursos.add("Curso " + i + " - " + (i % 2 == 0 ? "Programación" : "Diseño"));
-        }
+        }*/
+        cursos.add("Curso de introducción a la programación");
         
         // Contenedor principal
         BorderPane root = new BorderPane();
@@ -294,11 +294,22 @@ public class VistaPrincipal extends Application {
     }
     
     private void abrirCurso(String nombreCurso) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Continuar curso");
-        alert.setHeaderText(null);
-        alert.setContentText("Abriendo el curso: " + nombreCurso);
-        alert.showAndWait();
+        try {
+            LeccionesCurso vistaLecciones = new LeccionesCurso(nombreCurso);
+            Stage stageLecciones = new Stage();
+            stageLecciones.initStyle(StageStyle.TRANSPARENT);
+            vistaLecciones.start(stageLecciones);
+            primaryStage.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            
+            // Mostrar mensaje de error si algo falla
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("No se pudo abrir el curso");
+            alert.setContentText("Ocurrió un error al intentar abrir el curso: " + e.getMessage());
+            alert.showAndWait();
+        }
     }
     
     private void cerrarSesion() {
