@@ -352,5 +352,4 @@ public class VistaPrincipal extends Application {
             }
         });
     }
-
 }
