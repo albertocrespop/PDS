@@ -64,17 +64,22 @@ La aplicación permitirá a los usuarios aprender programación a través de la 
 1. El Sistema muestra la lista de cursos disponibles públicamente
 2. El usuario selecciona un curso
 3. El Usuario selecciona una estrategia de aprendizaje*
-4. El Sistema presenta una pregunta al usuario
-5. [Bucle]El Usuario responde la pregunta
-6. [Bucle]El Sistema verifica la respuesta
-7. El Usuario sale del curso
-8. El Sistema guarda el progreso del curso y actualiza las estadísticas**
+4. El Sistema presenta las lecciones del curso al Usuario.
+5. El Usuario selecciona una de las lecciones.
+6. El Sistema presenta una pregunta al usuario*
+7. [Bucle]El Usuario responde la pregunta
+8. [Bucle]El Sistema verifica la respuesta
+9. El sistema presenta la siguiente lección
+10. El Usuario se sale del curso.
+11. El Sistema guarda el progreso del curso y actualiza las estadísticas**
+
+* La pregunta la elige el sistema dependiendo de la estrategia seleccionada
 
 **Flujo Alternativo**
-4a. El usuario sale del curso antes de realizar la pregunta
-5a. El Sistema guarda el progreso hasta la pregunta anterior
-6a. El Sistema actualiza las estadísticas del usuario
-7a. El sistema regresa a la ventana principal 
+6a. El usuario sale del curso antes de realizar la pregunta <br>
+7a. El Sistema guarda el progreso hasta la pregunta anterior<br>
+8a. El Sistema actualiza las estadísticas del usuario       <br>
+9a. El sistema regresa a la ventana principal               <br>
 
 *La estrategia de aprendizaje<br>
 **Se registra el progreso automáticamente
