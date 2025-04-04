@@ -32,21 +32,6 @@ public class Login extends Application {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: linear-gradient(to bottom right, #1a73e8, #0d47a1);");
         
-        VBox loginCard = createLoginCard();
-        setupAnimations(loginCard); // Configurar animaciones
-
-        HBox titleBar = createTitleBar(primaryStage);
-        HBox spacer = createSpacer();
-        
-        root.setCenter(loginCard);
-        root.setTop(titleBar);
-        root.setBottom(spacer);
-
-        setupWindowDrag(root, primaryStage);
-        setupSceneAndStage(primaryStage, root);
-    }
-
-    private VBox createLoginCard() {
         VBox loginCard = new VBox(20);
         loginCard.setAlignment(Pos.CENTER);
         loginCard.setPadding(new Insets(40, 50, 50, 50));
@@ -54,6 +39,7 @@ public class Login extends Application {
         loginCard.setStyle("-fx-background-color: white; -fx-background-radius: 12;-fx-padding: 30;");
         loginCard.setEffect(new DropShadow(20, Color.rgb(0, 0, 0, 0.3)));
 
+        setupAnimations(loginCard);
         
         // Título
         Label title = new Label("OfCourses");
@@ -79,11 +65,7 @@ public class Login extends Application {
             String username = usernameField.getText();
             String password = passwordField.getText();
             
-            if(username.isEmpty() || password.isEmpty()) {
-                showAlert("Error", "Por favor ingresa usuario y contraseña");
-            } else {
-                showAlert("Éxito", "Bienvenido a OfCourses, " + username + "!");
-            }
+            handleLogin(username, password, primaryStage);
         });
         
         
@@ -98,46 +80,7 @@ public class Login extends Application {
             usernameField, passwordField,
             loginButton, separator, registerLink
         );
-        
-        return loginCard;
-    }
 
-    private void setupAnimations(VBox loginCard) {
-        // Animación de entrada
-        loginCard.setOpacity(0);
-        loginCard.setTranslateY(30);
-        
-        Timeline timeline = new Timeline();
-        KeyValue kvOpacity = new KeyValue(loginCard.opacityProperty(), 1);
-        KeyValue kvTranslate = new KeyValue(loginCard.translateYProperty(), 0);
-        KeyFrame kf = new KeyFrame(Duration.millis(1500), kvOpacity, kvTranslate);
-        timeline.getKeyFrames().add(kf);
-        timeline.play();
-    }
-
-    private void handleLogin(TextField usernameField, PasswordField passwordField) {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-        
-        if(username.isEmpty() || password.isEmpty()) {
-            showAlert("Error", "Por favor ingresa usuario y contraseña");
-        } else {
-            showAlert("Éxito", "Bienvenido a OfCourses, " + username + "!");
-        }
-    }
-
-    private Hyperlink createRegisterLink() {
-        Hyperlink registerLink = new Hyperlink("Crear una cuenta nueva");
-        registerLink.setTextFill(Color.web("#1a73e8"));
-        registerLink.setBorder(Border.EMPTY);
-        registerLink.setPadding(new Insets(5));
-        registerLink.setOnAction(e -> {
-            showAlert("Registro", "Redirigiendo al formulario de registro...");
-        });
-        return registerLink;
-    }
-
-    private HBox createTitleBar(Stage primaryStage) {
         // Barra de título personalizada
         HBox titleBar = new HBox();
         titleBar.setAlignment(Pos.CENTER_RIGHT);
@@ -149,22 +92,17 @@ public class Login extends Application {
         closeButton.setOnAction(e -> primaryStage.close());
   
   
-        titleBar.getChildren().add(closeButton);
-        return titleBar;
-    }
-
-    private HBox createSpacer() {
-        HBox spacer = new HBox();
-        spacer.setPrefHeight(50);
-        return spacer;
-    }
-
-    private void setupWindowDrag(Parent root, Stage primaryStage) {
-  
-        //Separador para que loginCard no se pegue a root
+        titleBar.getChildren().add(closeButton);        
+        
         HBox spacer = new HBox();
         spacer.setPrefHeight(50); // Ajusta la altura del espaciador
-        
+                
+        root.setCenter(loginCard);
+        root.setTop(titleBar);
+        root.setBottom(spacer);
+
+
+        //Separador para que loginCard no se pegue a root
         // Hacer la ventana arrastrable desde el card
         root.setOnMousePressed(event -> {
             xOffset = event.getSceneX();
@@ -174,10 +112,7 @@ public class Login extends Application {
         root.setOnMouseDragged(event -> {
             primaryStage.setX(event.getScreenX() - xOffset);
             primaryStage.setY(event.getScreenY() - yOffset);
-        });
-    }
-
-    private void setupSceneAndStage(Stage primaryStage, Parent root) {
+        });        
         Scene scene = new Scene(root, 800, 600);
         scene.setFill(Color.TRANSPARENT);
         primaryStage.initStyle(StageStyle.TRANSPARENT);
@@ -193,8 +128,48 @@ public class Login extends Application {
         double xCenter = (screenBounds.getWidth() - primaryStage.getWidth()) / 2;
         double yCenter = (screenBounds.getHeight() - primaryStage.getHeight()) / 2;
         primaryStage.setX(xCenter);
-        primaryStage.setY(yCenter);
+        primaryStage.setY(yCenter);    }
+
+    private void setupAnimations(VBox loginCard) {
+        // Animación de entrada
+        loginCard.setOpacity(0);
+        loginCard.setTranslateY(30);
+        
+        Timeline timeline = new Timeline();
+        KeyValue kvOpacity = new KeyValue(loginCard.opacityProperty(), 1);
+        KeyValue kvTranslate = new KeyValue(loginCard.translateYProperty(), 0);
+        KeyFrame kf = new KeyFrame(Duration.millis(1500), kvOpacity, kvTranslate);
+        timeline.getKeyFrames().add(kf);
+        timeline.play();
     }
+
+    private void handleLogin(String username, String password, Stage primaryStage) {
+        if(username.isEmpty() || password.isEmpty()) {
+            showAlert("Error", "Por favor ingresa usuario y contraseña");
+        } else {
+            showAlert("Éxito", "Bienvenido a OfCourses, " + username + "!");
+            try {
+                VistaPrincipal cursos = new VistaPrincipal();
+                Stage stage = new Stage();
+                cursos.start(stage);
+                primaryStage.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private Hyperlink createRegisterLink() {
+        Hyperlink registerLink = new Hyperlink("Crear una cuenta nueva");
+        registerLink.setTextFill(Color.web("#1a73e8"));
+        registerLink.setBorder(Border.EMPTY);
+        registerLink.setPadding(new Insets(5));
+        registerLink.setOnAction(e -> {
+            showAlert("Registro", "Redirigiendo al formulario de registro...");
+        });
+        return registerLink;
+    }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
