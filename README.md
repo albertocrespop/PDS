@@ -11,4 +11,4 @@
 - Diego Quesada López
 - Daniel Conesa Sáez
 
-OfCourses es una app para aprender los más básico en cuanto a programación, esto se hace mediante cursos creados por la comunidad o mediante cursos de inicio integrados con la aplicación
+OfCourses es una app educativa para aprender mediante cursos interactivos creados por la comunidad. Permite realizar ejercicios variados como test, completar huecos o usar flashcards, adaptándose a distintos ritmos de estudio. Los cursos pueden compartirse fácilmente en formato JSON o YAML.
