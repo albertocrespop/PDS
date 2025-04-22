@@ -1,23 +1,36 @@
 package modelo;
 
-public abstract class Pregunta {
-    protected String texto;
-    protected String respuesta;
+import java.util.ArrayList;
+import java.util.List;
 
-    public Pregunta(String texto, String respuesta) {
+public class Pregunta {
+    private String texto;
+    private String respuesta;
+    private List<String> opciones;
+    private EstrategiaEvaluacion tipo;
+
+    public Pregunta(String texto, String respuesta, List<String> opciones, EstrategiaEvaluacion estrategia) {
         this.texto = texto;
         this.respuesta = respuesta;
+        this.opciones = new ArrayList<String>(opciones);
+        this.tipo = estrategia;
+    }
+
+    public boolean esCorrecta(String respuestaUsuario) {
+        return tipo.evaluar(this, respuestaUsuario);
+    }
+
+   
+    //Getters
+    public String getTexto() { 
+    	return texto; 
     }
     
-    public abstract boolean esCorrecta(String entradaUsuario);
+    public String getRespuesta() { 
+    	return respuesta; 
+    }
     
-    
-    //gettes
-    public String getRespuesta() {
-		return respuesta;
-	}
-    
-    public String getTexto() {
-		return texto;
-	}
+    public List<String> getOpciones() {
+    	return new ArrayList<String>(opciones); 
+    }
 }
