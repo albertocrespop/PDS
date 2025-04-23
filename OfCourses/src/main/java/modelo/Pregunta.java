@@ -1,18 +1,15 @@
 package modelo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Pregunta {
     private String texto;
     private String respuesta;
-    private List<String> opciones;
     private TipoEvaluacion tipo;
 
     public Pregunta(String texto, String respuesta, List<String> opciones, TipoEvaluacion estrategia) {
         this.texto = texto;
         this.respuesta = respuesta;
-        this.opciones = new ArrayList<String>(opciones);
         this.tipo = estrategia;
     }
 
@@ -28,9 +25,5 @@ public class Pregunta {
     
     public String getRespuesta() { 
     	return respuesta; 
-    }
-    
-    public List<String> getOpciones() {
-    	return new ArrayList<String>(opciones); 
     }
 }
