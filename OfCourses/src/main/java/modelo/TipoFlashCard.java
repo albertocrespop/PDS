@@ -1,5 +1,5 @@
 package modelo;
 
-public class EvaluacionFlashCard implements EstrategiaEvaluacion {
+public class TipoFlashCard implements TipoEvaluacion {
     public boolean evaluar(Pregunta pregunta, String r) { return true; }
 }

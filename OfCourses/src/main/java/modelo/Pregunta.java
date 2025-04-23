@@ -7,9 +7,9 @@ public class Pregunta {
     private String texto;
     private String respuesta;
     private List<String> opciones;
-    private EstrategiaEvaluacion tipo;
+    private TipoEvaluacion tipo;
 
-    public Pregunta(String texto, String respuesta, List<String> opciones, EstrategiaEvaluacion estrategia) {
+    public Pregunta(String texto, String respuesta, List<String> opciones, TipoEvaluacion estrategia) {
         this.texto = texto;
         this.respuesta = respuesta;
         this.opciones = new ArrayList<String>(opciones);
