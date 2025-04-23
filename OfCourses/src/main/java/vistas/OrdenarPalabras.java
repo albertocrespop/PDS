@@ -3,8 +3,10 @@ package vistas;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -16,6 +18,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -29,9 +32,72 @@ public class OrdenarPalabras extends Application {
     private double yOffset = 0;
     private List<Label> palabrasLabels = new ArrayList<>();
     private HBox palabrasContainer = new HBox(10);
+    private Stage primaryStage;
 
+    // <--------------------------------------------------------------->
+    // <------------------- FUNCIONES DE BOTONES ---------------------->
+    // <--------------------------------------------------------------->
+    
+    private void verificarOrden() {
+        StringBuilder fraseOrdenada = new StringBuilder();
+        
+        // Obtener el orden ACTUAL de las palabras en el contenedor visual
+        for (Node node : palabrasContainer.getChildren()) {
+            if (node instanceof Label) {
+                Label label = (Label) node;
+                fraseOrdenada.append(label.getText()).append(" ");
+            }
+        }
+        
+        String resultado = fraseOrdenada.toString().trim();
+        String correcto = "SI A ENTONCES B SINO C";
+        
+        if (resultado.equalsIgnoreCase(correcto)) {
+            mostrarAlerta("¡Correcto!", "Has ordenado las palabras correctamente: " + resultado, Alert.AlertType.INFORMATION);
+        } else {
+            mostrarAlerta("Incorrecto", "El orden correcto es: SI A ENTONCES B SINO C\nTu orden: " + resultado, Alert.AlertType.ERROR);
+        }
+    }
+    
+    private void mostrarPista() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Pista");
+        alert.setHeaderText(null);
+        
+        // TODO: Llamar al controlador para obtener la pista
+        alert.setContentText("Pista sobre el enunciado");
+        
+        // Estilo de la alerta
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.setStyle("-fx-background-color: white;");
+        dialogPane.lookup(".content.label").setStyle("-fx-font-size: 14; -fx-text-fill: #333333;");
+        
+        alert.showAndWait();
+    }
+    
+    private void volverAtras() {
+    	try {
+            LeccionesCurso lecciones = new LeccionesCurso();
+            Stage stage = new Stage();
+            lecciones.start(stage);
+            primaryStage.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void siguientePregunta() {
+    	// TODO: método para mostrar la siguiente pregunta
+    }
+    
+	// <--------------------------------------------------------------->
+	// <--------------------------------------------------------------->
+	// <--------------------------------------------------------------->
+    
     @Override
     public void start(Stage primaryStage) {
+    	this.primaryStage = primaryStage;
+    	
         // Contenedor principal
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: linear-gradient(to bottom right, #1a73e8, #0d47a1);");
@@ -39,12 +105,21 @@ public class OrdenarPalabras extends Application {
         // Barra superior con usuario
         HBox topBar = crearTopBar();
         
+        HBox botonVolver = crearPanelBotones();
+        
         // Panel central con ejercicio
         VBox centerCard = crearPanelEjercicio();
+
+		// Envolver el panel en otro VBox para dar márgenes arriba y abajo
+		VBox contenedorConMargenes = new VBox(centerCard);
+		contenedorConMargenes.setAlignment(Pos.CENTER);
+		contenedorConMargenes.setPadding(new Insets(10));
+		
+		VBox panelCentro = new VBox(botonVolver, contenedorConMargenes);
         
         // Configurar el layout
         root.setTop(topBar);
-        root.setCenter(centerCard);
+        root.setCenter(panelCentro);
         
         // Configurar la escena
         Scene scene = new Scene(root, 900, 600);
@@ -66,11 +141,34 @@ public class OrdenarPalabras extends Application {
         primaryStage.setTitle("Ordenar Palabras - OfCourses");
         primaryStage.setScene(scene);
         primaryStage.show();
+        
+        // Centra la ventana
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        double xCenter = (screenBounds.getWidth() - primaryStage.getWidth()) / 2;
+        double yCenter = (screenBounds.getHeight() - primaryStage.getHeight()) / 2;
+        primaryStage.setX(xCenter);
+        primaryStage.setY(yCenter);
+    }
+    
+    private HBox crearPanelBotones() {
+    	HBox panelBotones = new HBox();
+    	
+    	// Botón para volver atrás
+    	Button btnVolver = new Button("Volver a lecciones");
+        styleButton(btnVolver);
+        btnVolver.setOnAction(e -> volverAtras());
+        btnVolver.setEffect(new DropShadow(20, Color.rgb(0, 0, 0, 0.3)));
+        btnVolver.setPickOnBounds(false);
+        
+        panelBotones.getChildren().addAll(btnVolver);
+        panelBotones.setPadding(new Insets(10,10,30,10));
+        panelBotones.setSpacing(20);
+        return panelBotones;
     }
     
     private HBox crearTopBar() {
         // Foto de perfil
-        ImageView imagenPerfilView = new ImageView(new Image(getClass().getResourceAsStream("/images/logo.png")));
+        ImageView imagenPerfilView = new ImageView(new Image("imagenes/foto-perfil-default.png"));
         imagenPerfilView.setFitWidth(40);
         imagenPerfilView.setFitHeight(40);
         imagenPerfilView.setStyle("-fx-border-radius: 20; -fx-border-color: white; -fx-border-width: 2;");
@@ -140,37 +238,23 @@ public class OrdenarPalabras extends Application {
         
         // Botón de verificación
         Button btnVerificar = new Button("Verificar Orden");
-        styleLoginButton(btnVerificar);
-        // btnVerificar.setStyle("-fx-background-color: #1a73e8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 25; -fx-background-radius: 5;");
+        styleButton(btnVerificar);
         btnVerificar.setOnAction(e -> verificarOrden());
         
+        // Botón de pista
+        Button btnPista = new Button("Pista");
+        styleSecondaryButton(btnPista);
+        btnPista.setOnAction(e -> mostrarPista());
+        
+        
+        HBox panelBotones = new HBox(btnPista, btnVerificar);
+        panelBotones.setSpacing(20);
+        panelBotones.setAlignment(Pos.CENTER);
+        
         // Configurar el panel
-        panelEjercicio.getChildren().addAll(lblEnunciado, palabrasContainer, btnVerificar);
+        panelEjercicio.getChildren().addAll(lblEnunciado, palabrasContainer, panelBotones);
         
         return panelEjercicio;
-    }
-    
-    
-    
-    private void verificarOrden() {
-        StringBuilder fraseOrdenada = new StringBuilder();
-        
-        // Obtener el orden ACTUAL de las palabras en el contenedor visual
-        for (Node node : palabrasContainer.getChildren()) {
-            if (node instanceof Label) {
-                Label label = (Label) node;
-                fraseOrdenada.append(label.getText()).append(" ");
-            }
-        }
-        
-        String resultado = fraseOrdenada.toString().trim();
-        String correcto = "SI A ENTONCES B SINO C";
-        
-        if (resultado.equalsIgnoreCase(correcto)) {
-            mostrarAlerta("¡Correcto!", "Has ordenado las palabras correctamente: " + resultado, Alert.AlertType.INFORMATION);
-        } else {
-            mostrarAlerta("Incorrecto", "El orden correcto es: SI A ENTONCES B SINO C\nTu orden: " + resultado, Alert.AlertType.ERROR);
-        }
     }
     
     private void configurarDropTarget(HBox target) {
@@ -224,25 +308,29 @@ public class OrdenarPalabras extends Application {
         label.setStyle("-fx-background-color: #e8f0fe; -fx-text-fill: #1a73e8; -fx-padding: 10 15; " +
                      "-fx-background-radius: 5; -fx-border-color: #1a73e8; -fx-border-width: 1; " +
                      "-fx-border-radius: 5;");
-        
+
         label.setOnDragDetected(event -> {
-            // Solo permitir drag si el botón izquierdo está presionado
             if (event.isPrimaryButtonDown()) {
                 Dragboard db = label.startDragAndDrop(TransferMode.MOVE);
                 ClipboardContent content = new ClipboardContent();
                 content.putString(label.getText());
                 db.setContent(content);
+                
+                // El label se ve durate el drag
+                SnapshotParameters params = new SnapshotParameters();
+                params.setFill(Color.TRANSPARENT); // evita fondo blanco
+                db.setDragView(label.snapshot(params, null));
+
                 event.consume();
             }
         });
-        
+
         label.setOnDragDone(event -> {
             if (event.getTransferMode() == TransferMode.MOVE) {
-                // Aquí no hacemos nada, el movimiento se maneja en el drop target
                 event.consume();
             }
         });
-        
+
         return label;
     }
     
@@ -260,7 +348,28 @@ public class OrdenarPalabras extends Application {
         alert.showAndWait();
     }
     
-    private void styleLoginButton(Button button) {
+    private void styleSecondaryButton(Button button) {
+        button.setStyle("-fx-background-color: transparent; -fx-text-fill: #1a73e8; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 20; -fx-background-radius: 5; -fx-border-color: #1a73e8; -fx-border-width: 1; -fx-border-radius: 5;");
+        button.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
+        
+        button.hoverProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                button.setStyle("-fx-background-color: #e8f0fe; -fx-text-fill: #1a73e8; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 20; -fx-background-radius: 5; -fx-border-color: #1a73e8; -fx-border-width: 1; -fx-border-radius: 5;");
+            } else {
+                button.setStyle("-fx-background-color: transparent; -fx-text-fill: #1a73e8; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 20; -fx-background-radius: 5; -fx-border-color: #1a73e8; -fx-border-width: 1; -fx-border-radius: 5;");
+            }
+        });
+        
+        button.setOnMousePressed(e -> {
+            button.setStyle("-fx-background-color: #d2e3fc; -fx-text-fill: #1a73e8; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 20; -fx-background-radius: 5; -fx-border-color: #1a73e8; -fx-border-width: 1; -fx-border-radius: 5;");
+        });
+        
+        button.setOnMouseReleased(e -> {
+            button.setStyle("-fx-background-color: transparent; -fx-text-fill: #1a73e8; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 20; -fx-background-radius: 5; -fx-border-color: #1a73e8; -fx-border-width: 1; -fx-border-radius: 5;");
+        });
+    }
+    
+    private void styleButton(Button button) {
         button.setStyle("-fx-background-color: #1a73e8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 12 30; -fx-background-radius: 5;");
         button.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
         

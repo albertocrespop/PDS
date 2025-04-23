@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -20,86 +21,25 @@ import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
-public class VistaPrincipal extends Application {
+public class EditarPerfil extends Application {
 
     private double xOffset = 0;
     private double yOffset = 0;
     private Stage primaryStage;
     private ImageView imagenPerfilView;
-    private VBox cursosContainer;
-    private List<String> cursos = new ArrayList<>();
+    private File archivoEscogido = null;
+    private ImageView vistaPreviaFoto;
 
     // <--------------------------------------------------------------->
     // <------------------- FUNCIONES DE BOTONES ---------------------->
     // <--------------------------------------------------------------->
     
-    private void abrirCurso(String nombreCurso) {
+    private void volverACursos() {
         try {
-            LeccionesCurso vistaLecciones = new LeccionesCurso(nombreCurso);
-            Stage stageLecciones = new Stage();
-            stageLecciones.initStyle(StageStyle.TRANSPARENT);
-            vistaLecciones.start(stageLecciones);
-            primaryStage.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            
-            // Mostrar mensaje de error si algo falla
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("No se pudo abrir el curso");
-            alert.setContentText("Ocurrió un error al intentar abrir el curso: " + e.getMessage());
-            alert.showAndWait();
-        }
-    }
-    
-    private void agregarNuevoCurso() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Seleccionar archivo del curso");
-        fileChooser.getExtensionFilters().addAll(
-            new FileChooser.ExtensionFilter("Archivos de curso", "*.json", "*.yaml")
-        );
-        File file = fileChooser.showOpenDialog(primaryStage);
-        
-        if (file != null) {
-            String nombreCurso = file.getName().replaceFirst("[.][^.]+$", "");
-            cursos.add(nombreCurso);
-            actualizarListaCursos();
-            
-            // TODO: Llamar al controlador para guardar el curso
-            
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Curso añadido");
-            alert.setHeaderText(null);
-            alert.setContentText("El curso '" + nombreCurso + "' ha sido añadido correctamente.");
-            alert.showAndWait();
-        }
-    }
-    
-    private void editarPerfil() {
-    	EditarPerfil edit = new EditarPerfil();
-    	Stage stageEdit = new Stage();
-    	stageEdit.initStyle(StageStyle.TRANSPARENT);
-    	edit.start(stageEdit);
-    	primaryStage.close();
-    }
-    
-    private void estadisticas() {
-    	VentanaEstadisticas estadisticas = new VentanaEstadisticas();
-    	Stage stageEstadisticas = new Stage();
-    	stageEstadisticas.initStyle(StageStyle.TRANSPARENT);
-    	estadisticas.start(stageEstadisticas);
-        primaryStage.close();
-    	
-    }
-    
-    private void cerrarSesion() {
-        try {
-            Login login = new Login();
+            VistaPrincipal cursos = new VistaPrincipal();
             Stage stage = new Stage();
-            login.start(stage);
+            cursos.start(stage);
             primaryStage.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -113,13 +53,6 @@ public class VistaPrincipal extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        
-        /*for(int i = 0; i < 15; i++) {
-        	cursos.add("Prueba curso");
-        }*/
-        
-        // TODO: Llamar al controlador y pedirle toda la lista de cursos disponibles
-        cursos.add("Curso de introducción a la programación");
         
         // Contenedor principal
         BorderPane root = new BorderPane();
@@ -165,36 +98,17 @@ public class VistaPrincipal extends Application {
         menu.setMaxWidth(200);
         menu.setVisible(true); // Inicialmente oculto
         
-        // Botón para añadir curso
-        Button btnAddCurso = new Button("Añadir Curso");
-        btnAddCurso.setGraphic(new ImageView(new Image("imagenes/add.png")));
-        styleMenuButton(btnAddCurso);
-        btnAddCurso.setOnAction(e -> agregarNuevoCurso());
-        
-        // Botón para editar perfil
-        Button btnEditarPerfil = new Button("Editar Perfil");
-        btnEditarPerfil.setGraphic(new ImageView(new Image("imagenes/edit-profile.png")));
-        styleMenuButton(btnEditarPerfil);
-        btnEditarPerfil.setOnAction(e -> editarPerfil());
-        
-        // Botón para estadísticas
-        Button btnEstadistica = new Button("Estadísticas");
-        btnEstadistica.setGraphic(new ImageView(new Image("imagenes/estadisticas.png"))); // Esto no sé pa qué sirve
-        styleMenuButton(btnEstadistica);
-        btnEstadistica.setOnAction(e -> estadisticas());
-        
-        
-        // Botón para cerrar sesión
-        Button btnCerrarSesion = new Button("Cerrar Sesión");
-        btnCerrarSesion.setGraphic(new ImageView(new Image("imagenes/logout.png")));
-        styleMenuButton(btnCerrarSesion);
-        btnCerrarSesion.setOnAction(e -> cerrarSesion());
+        // Botón para volver a mis cursos
+        Button btnVolver = new Button("Volver a Cursos");
+        btnVolver.setGraphic(new ImageView(new Image("imagenes/return.png")));
+        styleMenuButton(btnVolver);
+        btnVolver.setOnAction(e -> volverACursos());
         
         // Espaciador para empujar los botones hacia arriba
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
         
-        menu.getChildren().addAll(btnAddCurso, btnEditarPerfil, btnEstadistica, spacer, btnCerrarSesion);
+        menu.getChildren().addAll(btnVolver);
         
         return menu;
     }
@@ -246,80 +160,93 @@ public class VistaPrincipal extends Application {
     }
     
     private Node crearCenterCard() {
-        VBox centerCard = new VBox(20);
-        centerCard.setAlignment(Pos.TOP_CENTER);
-        centerCard.setPadding(new Insets(30, 50, 40, 50));
-        centerCard.setMaxWidth(800);
-        centerCard.setStyle("-fx-background-color: white; -fx-background-radius: 15;");
-        centerCard.setEffect(new DropShadow(20, Color.rgb(0, 0, 0, 0.3)));
+        VBox panelPerfil = new VBox(20);
+        panelPerfil.setAlignment(Pos.TOP_CENTER);
+        panelPerfil.setPadding(new Insets(30, 50, 40, 50));
+        panelPerfil.setMaxWidth(600);
+        panelPerfil.setStyle("-fx-background-color: white; -fx-background-radius: 15;");
+        panelPerfil.setEffect(new DropShadow(20, Color.rgb(0, 0, 0, 0.3)));
 
-        Label title = new Label("Mis Cursos");
-        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
-        title.setTextFill(Color.web("#1a73e8"));
+        Label lblTitulo = new Label("Editar Perfil");
+        lblTitulo.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
+        lblTitulo.setTextFill(Color.web("#1a73e8"));
 
-        cursosContainer = new VBox(15);
-        cursosContainer.setAlignment(Pos.TOP_CENTER);
-        actualizarListaCursos();
+        // Nombre
+        TextField campoNombre = new TextField("Juan Pérez");
+        campoNombre.setPromptText("Nombre completo");
 
-        ScrollPane scrollPane = new ScrollPane(cursosContainer);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
-        scrollPane.setPadding(new Insets(10));
+        // Contraseña
+        PasswordField campoContrasena = new PasswordField();
+        campoContrasena.setPromptText("Nueva contraseña");
 
-        centerCard.getChildren().addAll(title, scrollPane);
+        // Correo
+        TextField campoCorreo = new TextField("juan@example.com");
+        campoCorreo.setPromptText("Correo electrónico");
 
-        // Contenedor de fondo detrás del centerCard
+        // Vista previa de la imagen
+        vistaPreviaFoto = new ImageView(new Image("imagenes/foto-perfil-default.png"));
+        vistaPreviaFoto.setFitWidth(100);
+        vistaPreviaFoto.setFitHeight(100);
+        vistaPreviaFoto.setStyle("-fx-border-radius: 50;");
+        vistaPreviaFoto.setClip(new Circle(50, 50, 50)); // Clip circular si lo quieres redondo
+
+        // Botón cambiar foto
+        Button btnFoto = new Button("Cambiar foto de perfil");
+        styleLoginButton(btnFoto);
+        btnFoto.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Seleccionar nueva foto de perfil");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg"));
+            archivoEscogido = fileChooser.showOpenDialog(primaryStage);
+
+            if (archivoEscogido != null) {
+                vistaPreviaFoto.setImage(new Image(archivoEscogido.toURI().toString()));
+            }
+        });
+
+        // Botón guardar
+        Button btnGuardar = new Button("Guardar cambios");
+        styleLoginButton(btnGuardar);
+        btnGuardar.setOnAction(e -> {
+            String nombre = campoNombre.getText();
+            String contrasena = campoContrasena.getText();
+            String correo = campoCorreo.getText();
+            File foto = archivoEscogido;
+            // TODO: Validar campos y enviar al controlador
+            mostrarAlerta("Perfil actualizado", "Los cambios se han guardado correctamente.", Alert.AlertType.INFORMATION);
+        });
+
+        panelPerfil.getChildren().addAll(
+            lblTitulo,
+            vistaPreviaFoto,
+            btnFoto,
+            campoNombre,
+            campoContrasena,
+            campoCorreo,
+            btnGuardar
+        );
+
         StackPane fondoConTarjeta = new StackPane();
         fondoConTarjeta.setStyle("-fx-background-color: linear-gradient(to bottom right, #1a73e8, #0d47a1);");
-        fondoConTarjeta.setPadding(new Insets(30)); // margen externo visible
-        fondoConTarjeta.getChildren().add(centerCard);
+        fondoConTarjeta.setPadding(new Insets(30));
+        fondoConTarjeta.getChildren().add(panelPerfil);
 
         return fondoConTarjeta;
     }
-    
-    private void actualizarListaCursos() {
-        cursosContainer.getChildren().clear();
+
+
+    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
         
-        if (cursos.isEmpty()) {
-            Label lblSinCursos = new Label("No tienes cursos aún. ¡Añade tu primer curso!");
-            lblSinCursos.setFont(Font.font("Segoe UI", 14));
-            lblSinCursos.setTextFill(Color.GRAY);
-            cursosContainer.getChildren().add(lblSinCursos);
-        } else {
-            for (String curso : cursos) {
-                HBox cursoBox = crearCursoBox(curso);
-                cursosContainer.getChildren().add(cursoBox);
-            }
-        }
-    }
-    
-    private HBox crearCursoBox(String nombreCurso) {
-        // Nombre del curso
-        Label lblCurso = new Label(nombreCurso);
-        lblCurso.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
-        lblCurso.setTextFill(Color.web("#333333"));
+        // Estilo de la alerta
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.setStyle("-fx-background-color: white;");
+        dialogPane.lookup(".content.label").setStyle("-fx-font-size: 14; -fx-text-fill: #333333;");
         
-        // Botón para continuar
-        Button btnContinuar = new Button("Continuar");
-        styleLoginButton(btnContinuar);
-        btnContinuar.setOnAction(e -> abrirCurso(nombreCurso));
-        
-        // Contenedor de botones
-        HBox botonesBox = new HBox(10, btnContinuar);
-        botonesBox.setAlignment(Pos.CENTER_RIGHT);
-        
-        // Espaciador
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        
-        // Contenedor del curso
-        HBox cursoBox = new HBox(20, lblCurso, spacer, botonesBox);
-        cursoBox.setAlignment(Pos.CENTER_LEFT);
-        cursoBox.setPadding(new Insets(15));
-        cursoBox.setStyle("-fx-background-color: #f5f5f5; -fx-background-radius: 10;");
-        
-        return cursoBox;
+        alert.showAndWait();
     }
     
     private void styleLoginButton(Button button) {

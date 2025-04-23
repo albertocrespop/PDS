@@ -3,6 +3,7 @@ package vistas;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
@@ -12,16 +13,72 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class EjercicioEscrito extends Application {
+public class RellenarPalabras extends Application {
 
     private double xOffset = 0;
     private double yOffset = 0;
-
+    private Stage primaryStage;
+    
+    // <--------------------------------------------------------------->
+    // <------------------- FUNCIONES DE BOTONES ---------------------->
+    // <--------------------------------------------------------------->
+    
+    private void volverAtras() {
+    	try {
+            LeccionesCurso lecciones = new LeccionesCurso();
+            Stage stage = new Stage();
+            lecciones.start(stage);
+            primaryStage.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void siguientePregunta() {
+    	// TODO: método para mostrar la siguiente pregunta
+    }
+    
+    private void mostrarPista() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Pista");
+        alert.setHeaderText(null);
+        
+        // TODO: Llamar al controlador para obtener la pista
+        alert.setContentText("Pista sobre el enunciado");
+        
+        // Estilo de la alerta
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.setStyle("-fx-background-color: white;");
+        dialogPane.lookup(".content.label").setStyle("-fx-font-size: 14; -fx-text-fill: #333333;");
+        
+        alert.showAndWait();
+    }
+    
+    private void verificarSolucion(String solucion) {
+        if (solucion.isEmpty()) {
+            mostrarAlerta("Error", "Por favor escribe tu solución antes de verificar", Alert.AlertType.WARNING);
+            return;
+        }
+        
+        // TODO: Llamar al controlador para verificar la respuesta
+        mostrarAlerta("Resultado", "Tu solución está siendo verificada...", Alert.AlertType.INFORMATION);
+    }
+    
+	// <--------------------------------------------------------------->
+	// <--------------------------------------------------------------->
+	// <--------------------------------------------------------------->
+    
     @Override
     public void start(Stage primaryStage) {
+    	this.primaryStage = primaryStage;
+    	
         // Contenedor principal
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: linear-gradient(to bottom right, #1a73e8, #0d47a1);");
@@ -29,12 +86,21 @@ public class EjercicioEscrito extends Application {
         // Barra superior con usuario
         HBox topBar = crearTopBar();
         
+        HBox botonVolver = crearPanelBotones();
+        
         // Panel central con ejercicio
         VBox centerCard = crearPanelEjercicio();
         
+        // Envolver el panel en otro VBox para dar márgenes arriba y abajo
+ 		VBox contenedorConMargenes = new VBox(centerCard);
+ 		contenedorConMargenes.setAlignment(Pos.CENTER);
+ 		contenedorConMargenes.setPadding(new Insets(20));
+        
+ 		VBox panelCentro = new VBox(botonVolver, contenedorConMargenes);
+ 		
         // Configurar el layout
         root.setTop(topBar);
-        root.setCenter(centerCard);
+        root.setCenter(panelCentro);
         
         // Configurar la escena
         Scene scene = new Scene(root, 900, 600);
@@ -56,11 +122,34 @@ public class EjercicioEscrito extends Application {
         primaryStage.setTitle("Ejercicio - OfCourses");
         primaryStage.setScene(scene);
         primaryStage.show();
+        
+        // Centrar la ventana
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        double xCenter = (screenBounds.getWidth() - primaryStage.getWidth()) / 2;
+        double yCenter = (screenBounds.getHeight() - primaryStage.getHeight()) / 2;
+        primaryStage.setX(xCenter);
+        primaryStage.setY(yCenter);
+    }
+    
+    private HBox crearPanelBotones() {
+    	HBox panelBotones = new HBox();
+    	
+    	// Botón para volver atrás
+    	Button btnVolver = new Button("Volver a lecciones");
+        styleButton(btnVolver);
+        btnVolver.setOnAction(e -> volverAtras());
+        btnVolver.setEffect(new DropShadow(20, Color.rgb(0, 0, 0, 0.3)));
+        btnVolver.setPickOnBounds(false);
+        
+        panelBotones.getChildren().addAll(btnVolver);
+        panelBotones.setPadding(new Insets(10,10,30,10));
+        panelBotones.setSpacing(20);
+        return panelBotones;
     }
     
     private HBox crearTopBar() {
         // Foto de perfil
-        ImageView imagenPerfilView = new ImageView(new Image(getClass().getResourceAsStream("/images/logo.png")));
+        ImageView imagenPerfilView = new ImageView(new Image("imagenes/foto-perfil-default.png"));
         imagenPerfilView.setFitWidth(40);
         imagenPerfilView.setFitHeight(40);
         imagenPerfilView.setStyle("-fx-border-radius: 20; -fx-border-color: white; -fx-border-width: 2;");
@@ -89,94 +178,80 @@ public class EjercicioEscrito extends Application {
     }
     
     private VBox crearPanelEjercicio() {
-        // Panel principal
         VBox panelEjercicio = new VBox(20);
         panelEjercicio.setAlignment(Pos.TOP_CENTER);
         panelEjercicio.setPadding(new Insets(30, 50, 40, 50));
         panelEjercicio.setMaxWidth(800);
         panelEjercicio.setStyle("-fx-background-color: white; -fx-background-radius: 15;");
         panelEjercicio.setEffect(new DropShadow(20, Color.rgb(0, 0, 0, 0.3)));
-        
-        // Enunciado del ejercicio
-        Label lblEnunciado = new Label("Ejercicio de Programación");
+
+        Label lblEnunciado = new Label("Ejercicio con huecos");
         lblEnunciado.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20));
         lblEnunciado.setTextFill(Color.web("#1a73e8"));
+
+        Label lblInstruccion = new Label("Completa la frase:");
+        lblInstruccion.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
+        lblInstruccion.setTextFill(Color.web("#333333"));
         
-        // Texto del enunciado con scroll
-        TextArea taEnunciado = new TextArea();
-        taEnunciado.setText("Escribe una función en Java que reciba un array de enteros y devuelva:\n\n"
-                + "1. La suma de todos los elementos\n"
-                + "2. El valor máximo\n"
-                + "3. El valor mínimo\n\n"
-                + "La función debe retornar un objeto con estos tres valores.\n\n"
-                + "Ejemplo de entrada: [4, 2, 9, 5, 1]\n"
-                + "Salida esperada: {suma: 21, max: 9, min: 1}");
-        taEnunciado.setEditable(false);
-        taEnunciado.setWrapText(true);
-        taEnunciado.setStyle("-fx-font-size: 14; -fx-control-inner-background: #f8f9fa;");
-        
-        ScrollPane scrollEnunciado = new ScrollPane(taEnunciado);
-        scrollEnunciado.setFitToWidth(true);
-        scrollEnunciado.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
-        scrollEnunciado.setPadding(new Insets(0));
-        
-        // Panel para enunciado y botón de pista
-        HBox panelEnunciado = new HBox(15);
-        panelEnunciado.setAlignment(Pos.CENTER_LEFT);
-        
+        // TODO: Llamar al controlador y obtener el texto de la pregunta
+        String textoDePrueba = "La inteligencia artificial **?** ha revolucionado **?** muchos sectores como la medicina, la educación, y el transporte. " +
+                "En el ámbito de la salud, por ejemplo, **?** puede ayudar a diagnosticar enfermedades a partir de imágenes médicas, " +
+                "mientras que en la educación permite personalizar el **?** ritmo de aprendizaje de cada estudiante. " +
+                "Por otro lado, en el transporte, los vehículos **?** autónomos están empezando a cambiar el paradigma de la movilidad urbana.";
+        TextFlow fraseConHuecos = generarFraseConHuecos(textoDePrueba);
+        fraseConHuecos.setTextAlignment(TextAlignment.LEFT);
+        fraseConHuecos.setLineSpacing(5);
+
+        Button btnVerificar = new Button("Verificar Solución");
+        styleButton(btnVerificar);
+        btnVerificar.setOnAction(e -> {
+            StringBuilder solucion = new StringBuilder();
+            for (javafx.scene.Node nodo : fraseConHuecos.getChildren()) {
+            	if (nodo instanceof TextField) {
+            	    TextField campo = (TextField) nodo;
+            	    solucion.append("[").append(campo.getText()).append("]");
+            	}
+            }
+            verificarSolucion(solucion.toString());
+        });
+
         Button btnPista = new Button("Pista");
         styleSecondaryButton(btnPista);
-       // btnPista.setStyle("-fx-background-color: transparent; -fx-text-fill: #1a73e8; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 8 15; -fx-background-radius: 5; -fx-border-color: #1a73e8; -fx-border-width: 1; -fx-border-radius: 5;");
         btnPista.setOnAction(e -> mostrarPista());
-        
-        VBox.setVgrow(scrollEnunciado, Priority.ALWAYS);
-        panelEnunciado.getChildren().addAll(scrollEnunciado, btnPista);
-        
-        // Área para la respuesta
-        Label lblRespuesta = new Label("Tu solución:");
-        lblRespuesta.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
-        lblRespuesta.setTextFill(Color.web("#333333"));
-        
-        TextArea taRespuesta = new TextArea();
-        taRespuesta.setPromptText("Escribe tu código aquí...");
-        taRespuesta.setWrapText(true);
-        taRespuesta.setStyle("-fx-font-family: 'Consolas'; -fx-font-size: 14;");
-        
-        // Botón de verificación
-        Button btnVerificar = new Button("Verificar Solución");
-        styleLoginButton(btnVerificar);
-        // btnVerificar.setStyle("-fx-background-color: #1a73e8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 25; -fx-background-radius: 5;");
-        btnVerificar.setOnAction(e -> verificarSolucion(taRespuesta.getText()));
-        
-        // Configurar el panel
-        panelEjercicio.getChildren().addAll(lblEnunciado, panelEnunciado, lblRespuesta, taRespuesta, btnVerificar);
-        
+
+        HBox panelBotones = new HBox(btnPista, btnVerificar);
+        panelBotones.setSpacing(20);
+        panelBotones.setAlignment(Pos.CENTER);
+
+        panelEjercicio.getChildren().addAll(lblEnunciado, lblInstruccion, fraseConHuecos, panelBotones);
+
         return panelEjercicio;
     }
-    
-    private void mostrarPista() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Pista");
-        alert.setHeaderText(null);
-        alert.setContentText("Puedes crear una clase Resultado con tres propiedades: suma, max y min.\nLuego itera sobre el array para calcular estos valores.");
-        
-        // Estilo de la alerta
-        DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.setStyle("-fx-background-color: white;");
-        dialogPane.lookup(".content.label").setStyle("-fx-font-size: 14; -fx-text-fill: #333333;");
-        
-        alert.showAndWait();
-    }
-    
-    private void verificarSolucion(String solucion) {
-        if (solucion.isEmpty()) {
-            mostrarAlerta("Error", "Por favor escribe tu solución antes de verificar", Alert.AlertType.WARNING);
-            return;
+
+    private TextFlow generarFraseConHuecos(String fraseOriginal) {
+        TextFlow contenedor = new TextFlow();
+        contenedor.setPadding(new Insets(10));
+        contenedor.setPrefWidth(600); // Ajusta este valor según tu diseño
+        contenedor.setLineSpacing(5);
+
+        String[] partes = fraseOriginal.split("\\*\\*\\?\\*\\*");
+        for (int i = 0; i < partes.length; i++) {
+            Text texto = new Text(partes[i]);
+            texto.setFont(Font.font("Segoe UI", 14));
+            contenedor.getChildren().add(texto);
+
+            if (i < partes.length - 1) {
+                TextField campo = new TextField();
+                campo.setPromptText("...");
+                campo.setFont(Font.font("Segoe UI", 14));
+                campo.setPrefColumnCount(8);
+                campo.setMaxWidth(120);
+                contenedor.getChildren().add(campo);
+            }
         }
-        
-        // Aquí iría la lógica real de verificación
-        mostrarAlerta("Resultado", "Tu solución está siendo verificada...", Alert.AlertType.INFORMATION);
+        return contenedor;
     }
+
     
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alert = new Alert(tipo);
@@ -213,7 +288,7 @@ public class EjercicioEscrito extends Application {
         });
     }
     
-    private void styleLoginButton(Button button) {
+    private void styleButton(Button button) {
         button.setStyle("-fx-background-color: #1a73e8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 12 30; -fx-background-radius: 5;");
         button.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
         
