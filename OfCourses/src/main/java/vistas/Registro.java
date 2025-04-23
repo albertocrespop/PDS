@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
@@ -19,6 +20,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javafx.stage.FileChooser;
+import javafx.stage.Screen;
+
 import java.io.File;
 
 public class Registro extends Application {
@@ -28,6 +31,60 @@ public class Registro extends Application {
     private ImageView imagenPerfilView;
     private Stage primaryStage;
 
+    // <--------------------------------------------------------------->
+    // <------------------- FUNCIONES DE BOTONES ---------------------->
+    // <--------------------------------------------------------------->
+    
+    private void seleccionarImagen() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Seleccionar imagen de perfil");
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg")
+        );
+        File file = fileChooser.showOpenDialog(primaryStage);
+        if (file != null) {
+            Image image = new Image(file.toURI().toString());
+            imagenPerfilView.setImage(image);
+        }
+    }
+    
+    private void volverALogin() {
+        try {
+            Login login = new Login();
+            Stage stage = new Stage();
+            login.start(stage);
+            primaryStage.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void registrarUsuario(String username, String password, String confirmPassword, String email) {
+        if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || email.isEmpty()) {
+            showAlert("Error", "Por favor completa todos los campos");
+            return;
+        }
+        
+        if (!password.equals(confirmPassword)) {
+            showAlert("Error", "Las contraseñas no coinciden");
+            return;
+        }
+        
+        if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            showAlert("Error", "Por favor ingresa un email válido");
+            return;
+        }
+        
+        // TODO: Llamar al controlador para realizar el registro
+        showAlert("Registro exitoso", "Usuario registrado correctamente\n" +
+                "Nombre: " + username + "\n" +
+                "Email: " + email);
+    }
+    
+    // <--------------------------------------------------------------->
+ 	// <--------------------------------------------------------------->
+ 	// <--------------------------------------------------------------->
+    
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -147,51 +204,13 @@ public class Registro extends Application {
         primaryStage.setTitle("OfCourses - Registro");
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-    
-    private void seleccionarImagen() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Seleccionar imagen de perfil");
-        fileChooser.getExtensionFilters().addAll(
-            new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg")
-        );
-        File file = fileChooser.showOpenDialog(primaryStage);
-        if (file != null) {
-            Image image = new Image(file.toURI().toString());
-            imagenPerfilView.setImage(image);
-        }
-    }
-    
-    private void volverALogin() {
-        try {
-            Login login = new Login();
-            Stage stage = new Stage();
-            login.start(stage);
-            primaryStage.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-    private void registrarUsuario(String username, String password, String confirmPassword, String email) {
-        if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || email.isEmpty()) {
-            showAlert("Error", "Por favor completa todos los campos");
-            return;
-        }
         
-        if (!password.equals(confirmPassword)) {
-            showAlert("Error", "Las contraseñas no coinciden");
-            return;
-        }
-        
-        if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            showAlert("Error", "Por favor ingresa un email válido");
-            return;
-        }
-        
-        showAlert("Registro exitoso", "Usuario registrado correctamente\n" +
-                "Nombre: " + username + "\n" +
-                "Email: " + email);
+        // Centrar la ventana
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        double xCenter = (screenBounds.getWidth() - primaryStage.getWidth()) / 2;
+        double yCenter = (screenBounds.getHeight() - primaryStage.getHeight()) / 2;
+        primaryStage.setX(xCenter);
+        primaryStage.setY(yCenter);
     }
     
     private void showAlert(String title, String message) {

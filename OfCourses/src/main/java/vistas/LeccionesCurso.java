@@ -3,6 +3,7 @@ package vistas;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
@@ -12,6 +13,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.util.ArrayList;
@@ -27,13 +29,70 @@ public class LeccionesCurso extends Application {
     private String nombreCurso = "Curso de Ejemplo";
 
     public LeccionesCurso() {
-        // Puede permanecer vacío
+        // TODO: Llamar a una funcion en el controlador que se llame obtenerCursoActual()
+    	// que devuelva el curso que ha sido seleccionado anteriormente, y asignarlo a nombreCurso
     }
     
     public LeccionesCurso(String nombreCurso) {
         this.nombreCurso = nombreCurso;
+        // TODO: Llamar al controlador y actualizar el curso actual
     }
 
+    // <--------------------------------------------------------------->
+    // <------------------- FUNCIONES DE BOTONES ---------------------->
+    // <--------------------------------------------------------------->
+    
+    private void abrirLeccion(int numeroLeccion, String nombreLeccion) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        switch(numeroLeccion) {
+        	case 1:
+        		OrdenarPalabras ej1 = new OrdenarPalabras();
+                Stage stage = new Stage();
+                ej1.start(stage);
+                primaryStage.close();
+                break;
+        	case 2:
+        		RellenarPalabras ej2 = new RellenarPalabras();
+                Stage stage2 = new Stage();
+                ej2.start(stage2);
+                primaryStage.close();
+                break;
+        	case 3:
+        		FlashCard ej3 = new FlashCard();
+                Stage stage3 = new Stage();
+                ej3.start(stage3);
+                primaryStage.close();
+                break;
+            case 4:
+        		VerdaderoFalso ej4 = new VerdaderoFalso();
+                Stage stage4 = new Stage();
+                ej4.start(stage4);
+                primaryStage.close();
+                break;
+            default:
+            	alert.setTitle("Lección " + numeroLeccion);
+                alert.setHeaderText(nombreLeccion);
+                alert.setContentText("Aquí se abriría la lección seleccionada con su contenido.");
+                alert.showAndWait();
+                break;
+        }
+    }
+    
+    private void volverACursos() {
+        try {
+            VistaPrincipal cursos = new VistaPrincipal();
+            Stage stage = new Stage();
+            cursos.start(stage);
+            primaryStage.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    // <--------------------------------------------------------------->
+ 	// <--------------------------------------------------------------->
+ 	// <--------------------------------------------------------------->
+    
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -49,7 +108,7 @@ public class LeccionesCurso extends Application {
         HBox topBar = crearTopBar(menuLateral);
         
         // Panel central con lista de lecciones
-        ScrollPane centerCard = crearCenterCard();
+        VBox centerCard = crearCenterCard();
         
         // Configurar el layout
         root.setLeft(menuLateral);
@@ -65,6 +124,13 @@ public class LeccionesCurso extends Application {
         primaryStage.setTitle("OfCourses - " + nombreCurso);
         primaryStage.setScene(scene);
         primaryStage.show();
+        
+        // Centrar la ventana
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        double xCenter = (screenBounds.getWidth() - primaryStage.getWidth()) / 2;
+        double yCenter = (screenBounds.getHeight() - primaryStage.getHeight()) / 2;
+        primaryStage.setX(xCenter);
+        primaryStage.setY(yCenter);
     }
     
     private VBox crearMenuLateral() {
@@ -76,34 +142,18 @@ public class LeccionesCurso extends Application {
         
         // Botón para volver a mis cursos
         Button btnVolver = new Button("Volver a Cursos");
-        btnVolver.setGraphic(new ImageView(new Image("https://via.placeholder.com/20/ffffff?text=←")));
+        btnVolver.setGraphic(new ImageView(new Image("imagenes/return.png")));
         styleMenuButton(btnVolver);
         btnVolver.setOnAction(e -> volverACursos());
         
-        // Botón para añadir lección (solo visible para instructores)
-        Button btnAddLeccion = new Button("Añadir Lección");
-        btnAddLeccion.setGraphic(new ImageView(new Image("https://via.placeholder.com/20/ffffff?text=+")));
-        styleMenuButton(btnAddLeccion);
-        btnAddLeccion.setOnAction(e -> agregarNuevaLeccion());
-        
-        // Botón para estadísticas del curso
-        Button btnEstadisticas = new Button("Estadísticas");
-        btnEstadisticas.setGraphic(new ImageView(new Image("https://via.placeholder.com/20/ffffff?text=📊")));
-        styleMenuButton(btnEstadisticas);
-        btnEstadisticas.setOnAction(e -> mostrarEstadisticasCurso());
-        
-        // Espaciador para empujar los botones hacia arriba
-        Region spacer = new Region();
-        VBox.setVgrow(spacer, Priority.ALWAYS);
-        
-        menu.getChildren().addAll(btnVolver, btnAddLeccion, btnEstadisticas, spacer);
+        menu.getChildren().addAll(btnVolver);
         
         return menu;
     }
     
     private HBox crearTopBar(VBox menuLateral) {
         // Foto de perfil
-        imagenPerfilView = new ImageView(new Image(getClass().getResourceAsStream("/images/logo.png")));
+        imagenPerfilView = new ImageView(new Image("imagenes/foto-perfil-default.png"));
         imagenPerfilView.setFitWidth(40);
         imagenPerfilView.setFitHeight(40);
         imagenPerfilView.setStyle("-fx-border-radius: 20; -fx-border-color: white; -fx-border-width: 2;");
@@ -128,11 +178,20 @@ public class LeccionesCurso extends Application {
         topBar.setPadding(new Insets(15, 25, 15, 15));
         topBar.setStyle("-fx-background-color: rgba(0,0,0,0.1);");
         
+        topBar.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+
+        topBar.setOnMouseDragged(event -> {
+            primaryStage.setX(event.getScreenX() - xOffset);
+            primaryStage.setY(event.getScreenY() - yOffset);
+        });
+        
         return topBar;
     }
     
-    private ScrollPane crearCenterCard() {
-        // Panel central
+    private VBox crearCenterCard() {
         VBox centerCard = new VBox(20);
         centerCard.setAlignment(Pos.TOP_CENTER);
         centerCard.setPadding(new Insets(30, 50, 40, 50));
@@ -140,99 +199,89 @@ public class LeccionesCurso extends Application {
         centerCard.setStyle("-fx-background-color: white; -fx-background-radius: 15;");
         centerCard.setEffect(new DropShadow(20, Color.rgb(0, 0, 0, 0.3)));
         
-        // Hacer la ventana arrastrable desde el card
-        centerCard.setOnMousePressed(event -> {
-            xOffset = event.getSceneX();
-            yOffset = event.getSceneY();
-        });
-        
-        centerCard.setOnMouseDragged(event -> {
-            primaryStage.setX(event.getScreenX() - xOffset);
-            primaryStage.setY(event.getScreenY() - yOffset);
-        });
-        
-        // Título del curso
         Label title = new Label(nombreCurso);
         title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
         title.setTextFill(Color.web("#1a73e8"));
         
-        // Descripción del curso
+        // TODO: Llamar al controlador para pedir la descripción del curso actual
         Label descripcion = new Label("Este curso cubre los fundamentos y conceptos avanzados sobre el tema seleccionado.");
         descripcion.setFont(Font.font("Segoe UI", 14));
         descripcion.setTextFill(Color.web("#666666"));
         descripcion.setWrapText(true);
         descripcion.setMaxWidth(700);
-        
-        // Separador
+
         Separator separator = new Separator();
         separator.setPadding(new Insets(10, 0, 20, 0));
-        
-        // Progreso general del curso
+
         HBox progresoBox = new HBox(10);
         progresoBox.setAlignment(Pos.CENTER_LEFT);
-        
+
         Label lblProgreso = new Label("Progreso del curso: ");
         lblProgreso.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
         lblProgreso.setTextFill(Color.web("#333333"));
         
-        ProgressBar progressBar = new ProgressBar(0.65); // Valor de ejemplo (65%)
+        // TODO: Llamar al controlador y pedir el porcentaje de curso completado
+        double porcentajeCompletado = 0.65;
+        ProgressBar progressBar = new ProgressBar(porcentajeCompletado);
         progressBar.setPrefWidth(200);
         progressBar.setStyle("-fx-accent: #1a73e8;");
         
-        Label lblPorcentaje = new Label("65%");
+        String porc = (int)(porcentajeCompletado*100) + "%";
+        Label lblPorcentaje = new Label(porc);
         lblPorcentaje.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
         lblPorcentaje.setTextFill(Color.web("#1a73e8"));
-        
+
         progresoBox.getChildren().addAll(lblProgreso, progressBar, lblPorcentaje);
-        
-        // Título de lecciones
+
         Label lblLecciones = new Label("Lecciones del Curso");
         lblLecciones.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
         lblLecciones.setTextFill(Color.web("#333333"));
         lblLecciones.setPadding(new Insets(10, 0, 10, 0));
-        
-        // GridPane para las lecciones
+
+        // Grid de lecciones
         GridPane gridLecciones = new GridPane();
         gridLecciones.setHgap(20);
         gridLecciones.setVgap(20);
         gridLecciones.setAlignment(Pos.TOP_CENTER);
         gridLecciones.setPadding(new Insets(10));
-        
-        // Generar lecciones de ejemplo
+
+        // TODO: Llamar al controlador y obtener las lecciones del curso actual
         List<String> lecciones = generarLeccionesEjemplo();
         int columnas = 3;
-        
+
         for (int i = 0; i < lecciones.size(); i++) {
             int row = i / columnas;
             int col = i % columnas;
-            
-            VBox leccionCard = crearLeccionCard(lecciones.get(i), i+1, new Random().nextBoolean());
+
+            VBox leccionCard = crearLeccionCard(lecciones.get(i), i + 1, new Random().nextBoolean());
             gridLecciones.add(leccionCard, col, row);
         }
-        
-        // Agregar elementos al card
-        centerCard.getChildren().addAll(title, descripcion, separator, progresoBox, lblLecciones, gridLecciones);
-        
-        // ScrollPane principal
-        ScrollPane mainScroll = new ScrollPane(centerCard);
-        mainScroll.setFitToWidth(true);
-        mainScroll.setFitToHeight(true);
-        mainScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        mainScroll.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
-        
-        return mainScroll;
+
+        // ScrollPane para las lecciones
+        ScrollPane scrollLecciones = new ScrollPane(gridLecciones);
+        scrollLecciones.setFitToWidth(true);
+        scrollLecciones.setPrefViewportHeight(300);
+        scrollLecciones.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
+        scrollLecciones.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        // Agregar todo al centerCard
+        centerCard.getChildren().addAll(title, descripcion, separator, progresoBox, lblLecciones, scrollLecciones);
+
+        // Devolverlo envuelto en Pane
+        VBox mainWrapper = new VBox(centerCard);
+        mainWrapper.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
+        mainWrapper.setPadding(new Insets(30));
+
+        return mainWrapper;
     }
-    
+
+    // TODO: Borrar cuando la implementación esté completa
     private List<String> generarLeccionesEjemplo() {
         List<String> lecciones = new ArrayList<>();
-        lecciones.add("Introducción al curso");
-        lecciones.add("Conceptos básicos");
-        lecciones.add("Primeros pasos prácticos");
-        lecciones.add("Funciones avanzadas");
-        lecciones.add("Casos de estudio");
-        lecciones.add("Optimización");
-        lecciones.add("Proyecto final");
-        lecciones.add("Recursos adicionales");
+        lecciones.add("Ordenar Palabras");
+        lecciones.add("Rellenar Palabras");
+        lecciones.add("FlashCard");
+        lecciones.add("Verdadero Falso");
         return lecciones;
     }
     
@@ -257,14 +306,6 @@ public class LeccionesCurso extends Application {
         lblNombre.setAlignment(Pos.CENTER);
         lblNombre.setMaxWidth(180);
         
-        // Icono de estado
-        ImageView iconoEstado = new ImageView();
-        if (completada) {
-            iconoEstado.setImage(new Image("https://via.placeholder.com/30/4CAF50?text=✓"));
-        } else {
-            iconoEstado.setImage(new Image("https://via.placeholder.com/30/FF9800?text=..."));
-        }
-        
         // Botón para realizar lección
         Button btnRealizar = new Button(completada ? "Repasar" : "Comenzar");
         styleLoginButton(btnRealizar);
@@ -274,60 +315,9 @@ public class LeccionesCurso extends Application {
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
         
-        card.getChildren().addAll(lblNumero, lblNombre, iconoEstado, spacer, btnRealizar);
+        card.getChildren().addAll(lblNumero, lblNombre, spacer, btnRealizar);
         
         return card;
-    }
-    
-    private void volverACursos() {
-        try {
-            VistaPrincipal cursos = new VistaPrincipal();
-            Stage stage = new Stage();
-            cursos.start(stage);
-            primaryStage.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-    private void agregarNuevaLeccion() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Añadir lección");
-        alert.setHeaderText(null);
-        alert.setContentText("Aquí se abriría el formulario para añadir una nueva lección al curso.");
-        alert.showAndWait();
-    }
-    
-    private void mostrarEstadisticasCurso() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Estadísticas del curso");
-        alert.setHeaderText(null);
-        alert.setContentText("Aquí se mostrarían las estadísticas específicas de este curso.");
-        alert.showAndWait();
-    }
-    
-    private void abrirLeccion(int numeroLeccion, String nombreLeccion) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        switch(numeroLeccion) {
-        	case 1:
-        		OrdenarPalabras ej1 = new OrdenarPalabras();
-                Stage stage = new Stage();
-                ej1.start(stage);
-                primaryStage.close();
-                break;
-        	case 2:
-        		EjercicioEscrito ej2 = new EjercicioEscrito();
-                Stage stage2 = new Stage();
-                ej2.start(stage2);
-                primaryStage.close();
-                break;
-            default:
-            	alert.setTitle("Lección " + numeroLeccion);
-                alert.setHeaderText(nombreLeccion);
-                alert.setContentText("Aquí se abriría la lección seleccionada con su contenido.");
-                alert.showAndWait();
-                break;
-        }
     }
     
     private void styleLoginButton(Button button) {

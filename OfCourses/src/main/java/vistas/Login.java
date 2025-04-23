@@ -7,12 +7,9 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -27,6 +24,48 @@ public class Login extends Application {
     private double xOffset = 0;
     private double yOffset = 0;
 
+    // <--------------------------------------------------------------->
+    // <------------------- FUNCIONES DE BOTONES ---------------------->
+    // <--------------------------------------------------------------->
+    
+    private void handleLogin(String username, String password, Stage primaryStage) {
+        if(username.isEmpty() || password.isEmpty()) {
+            showAlert("Error", "Por favor ingresa usuario y contraseña");
+        } else {
+        	// TODO: Llamar al controlador para realizar login
+            try {
+                VistaPrincipal cursos = new VistaPrincipal();
+                Stage stage = new Stage();
+                cursos.start(stage);
+                primaryStage.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    private Hyperlink createRegisterLink(Stage primaryStage) {
+        Hyperlink registerLink = new Hyperlink("Crear una cuenta nueva");
+        registerLink.setTextFill(Color.web("#1a73e8"));
+        registerLink.setBorder(Border.EMPTY);
+        registerLink.setPadding(new Insets(5));
+        registerLink.setOnAction(e -> {
+        	try {
+                Registro ventanaRegistro = new Registro();
+                Stage stage = new Stage();
+                ventanaRegistro.start(stage);
+                primaryStage.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+        return registerLink;
+    }
+    
+    // <--------------------------------------------------------------->
+  	// <--------------------------------------------------------------->
+  	// <--------------------------------------------------------------->
+    
     @Override
     public void start(Stage primaryStage) {
         BorderPane root = new BorderPane();
@@ -73,7 +112,7 @@ public class Login extends Application {
         Separator separator = new Separator();
         separator.setPadding(new Insets(10, 0, 10, 0));
 
-        Hyperlink registerLink = createRegisterLink();
+        Hyperlink registerLink = createRegisterLink(primaryStage);
 
         loginCard.getChildren().addAll(
             title, subtitle,
@@ -100,16 +139,14 @@ public class Login extends Application {
         root.setCenter(loginCard);
         root.setTop(titleBar);
         root.setBottom(spacer);
-
-
-        //Separador para que loginCard no se pegue a root
+        
         // Hacer la ventana arrastrable desde el card
-        root.setOnMousePressed(event -> {
+        titleBar.setOnMousePressed(event -> {
             xOffset = event.getSceneX();
             yOffset = event.getSceneY();
         });
         
-        root.setOnMouseDragged(event -> {
+        titleBar.setOnMouseDragged(event -> {
             primaryStage.setX(event.getScreenX() - xOffset);
             primaryStage.setY(event.getScreenY() - yOffset);
         });        
@@ -142,34 +179,6 @@ public class Login extends Application {
         timeline.getKeyFrames().add(kf);
         timeline.play();
     }
-
-    private void handleLogin(String username, String password, Stage primaryStage) {
-        if(username.isEmpty() || password.isEmpty()) {
-            showAlert("Error", "Por favor ingresa usuario y contraseña");
-        } else {
-            showAlert("Éxito", "Bienvenido a OfCourses, " + username + "!");
-            try {
-                VistaPrincipal cursos = new VistaPrincipal();
-                Stage stage = new Stage();
-                cursos.start(stage);
-                primaryStage.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private Hyperlink createRegisterLink() {
-        Hyperlink registerLink = new Hyperlink("Crear una cuenta nueva");
-        registerLink.setTextFill(Color.web("#1a73e8"));
-        registerLink.setBorder(Border.EMPTY);
-        registerLink.setPadding(new Insets(5));
-        registerLink.setOnAction(e -> {
-            showAlert("Registro", "Redirigiendo al formulario de registro...");
-        });
-        return registerLink;
-    }
-
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
