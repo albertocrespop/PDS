@@ -7,7 +7,7 @@ public class Pregunta {
     private String respuesta;
     private TipoEvaluacion tipo;
 
-    public Pregunta(String texto, String respuesta, List<String> opciones, TipoEvaluacion estrategia) {
+    public Pregunta(String texto, String respuesta, TipoEvaluacion estrategia) {
         this.texto = texto;
         this.respuesta = respuesta;
         this.tipo = estrategia;
