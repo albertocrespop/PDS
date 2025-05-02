@@ -9,4 +9,9 @@ public class EstrategiaSecuencial extends Estrategia {
     public List<Pregunta> ordenar(List<Pregunta> preguntas) {
         return preguntas;
     }
+    
+    @Override
+    public String toString() {
+    	return this.getClass().getName();
+    }
 }

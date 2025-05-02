@@ -15,4 +15,9 @@ public class EstrategiaRepeticion extends Estrategia {
         }
         return result;
     }
+    
+    @Override
+    public String toString() {
+    	return this.getClass().getName();
+    }
 }
