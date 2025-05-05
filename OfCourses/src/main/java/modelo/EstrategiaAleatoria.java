@@ -11,4 +11,9 @@ public class EstrategiaAleatoria extends Estrategia {
         Collections.shuffle(preguntas);
         return preguntas;
     }
+    
+    @Override
+    public String toString() {
+    	return this.getClass().getName();
+    }
 }

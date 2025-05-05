@@ -1,29 +1,47 @@
 package modelo;
 
-import java.util.List;
+import jakarta.persistence.*;
 
-public class Pregunta {
-    private String texto;
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo_pregunta", discriminatorType = DiscriminatorType.STRING)
+public abstract class Pregunta {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String enunciado;
+
     private String respuesta;
-    private TipoEvaluacion tipo;
 
-    public Pregunta(String texto, String respuesta, TipoEvaluacion estrategia) {
-        this.texto = texto;
+    public Pregunta() {}
+
+    public Pregunta(String enunciado, String respuesta) {
+        this.enunciado = enunciado;
         this.respuesta = respuesta;
-        this.tipo = estrategia;
     }
 
-    public boolean esCorrecta(String respuestaUsuario) {
-        return tipo.evaluar(this, respuestaUsuario);
+    public abstract boolean comprobarRespuesta(String respuestaUsuario);
+
+    // Getters y setters
+    public Long getId() {
+        return id;
     }
 
-   
-    //Getters
-    public String getTexto() { 
-    	return texto; 
+    public String getEnunciado() {
+        return enunciado;
     }
-    
-    public String getRespuesta() { 
-    	return respuesta; 
+
+    public void setEnunciado(String enunciado) {
+        this.enunciado = enunciado;
+    }
+
+    public String getRespuesta() {
+        return respuesta;
+    }
+
+    public void setRespuesta(String respuesta) {
+        this.respuesta = respuesta;
     }
 }
