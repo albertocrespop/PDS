@@ -24,13 +24,18 @@ public class Leccion {
 	
 	
 	private boolean completada;
+	
+	@ManyToOne
+	@JoinColumn(name = "curso_id")
+	private Curso curso;
 
-	public Leccion(String titulo, String descripcion, List<Pregunta> preguntas) {
+	public Leccion(String titulo, String descripcion, List<Pregunta> preguntas, Curso curso) {
 				
 		this.titulo = titulo;
 		this.descripcion = descripcion;
 		this.preguntas = new ArrayList<Pregunta>(preguntas);
 		this.completada = false;
+		this.curso = curso;
 	}
 
 	// Getters

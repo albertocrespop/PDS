@@ -132,6 +132,9 @@ public class Curso {
 		this.leccionActual = leccionActual;
 	}
     
+    public void setLecciones(List<Leccion> lecciones) {
+		this.lecciones = lecciones;
+	}
     
     
 }
