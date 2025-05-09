@@ -7,6 +7,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,15 +48,21 @@ public class CargadorYAML {
      * @return Objeto {@link Curso} listo para ser usado en la aplicación.
      */
     private Curso construirCurso(CursoYAML datos) {
-        List<Leccion> lecciones = datos.getLecciones().stream().map(leccionYAML -> {
+    	List<Leccion> temporal = new ArrayList<Leccion>();
+        String tipo = datos.getEstrategia().toLowerCase();
+
+    	Curso curso = new Curso(datos.getTitulo(), datos.getDescripcion(), temporal, tipo, new Usuario());         
+    	
+    	List<Leccion> lecciones = datos.getLecciones().stream().map(leccionYAML -> {
             List<Pregunta> preguntas = leccionYAML.getPreguntas().stream().map(p -> {
                 return crearPreguntaDesdeYAML(p);
             }).toList();
-            return new Leccion(leccionYAML.getTitulo(), leccionYAML.getDescripcion(), preguntas);
+            return new Leccion(leccionYAML.getTitulo(), leccionYAML.getDescripcion(), preguntas, curso);
         }).toList();
-        String tipo = datos.getEstrategia().toLowerCase();
 
-        return new Curso(datos.getTitulo(), datos.getDescripcion(), lecciones, tipo, new Usuario()); // TODO: Llamar al controlador para meter el usuario actual
+    	curso.setLecciones(lecciones);
+    	
+        return curso;// TODO: Llamar al controlador para meter el usuario actual
     }
 
     /**
