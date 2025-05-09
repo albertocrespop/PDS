@@ -33,73 +33,54 @@ public class CargadorYAML {
     }
 
     /**
-     * Construye un objeto {@link Curso} a partir de una instancia auxiliar {@link CursoYAML}. La clase CursoYAML es necesaria
-     * debido a la implementación de SnakeYAML: esta requiere clases con constructores vacíos y tipos simples (como String o List),
-     * y no puede instanciar clases complejas con lógica interna, constructores con parámetros o atributos abstractos como {@link Estrategia}.
-     * Por eso, primero se deserializa el YAML en una estructura auxiliar simple, y luego se transforma manualmente al modelo real.
+     * Construye un objeto {@link Curso} a partir de una instancia auxiliar {@link CursoYAML}.
+     * La clase CursoYAML es necesaria debido a la implementación de SnakeYAML: esta requiere
+     * clases con constructores vacíos y tipos simples (como String o List), y no puede instanciar
+     * directamente clases complejas con lógica interna, constructores con parámetros o estructuras
+     * de herencia como la jerarquía de {@link Pregunta}.
+     * 
+     * Por ello, primero se deserializa el YAML en una estructura auxiliar simple (CursoYAML, LeccionYAML, PreguntaYAML),
+     * y luego se transforma manualmente al modelo real, instanciando explícitamente cada subtipo de {@link Pregunta}
+     * (como {@link PreguntaFlashCard}, {@link PreguntaRelleno}, {@link PreguntaVF}, etc.) según el tipo especificado en el archivo YAML.
      *
      * @param datos Objeto deserializado desde YAML.
      * @return Objeto {@link Curso} listo para ser usado en la aplicación.
      */
     private Curso construirCurso(CursoYAML datos) {
         List<Leccion> lecciones = datos.getLecciones().stream().map(leccionYAML -> {
-            List<Pregunta> preguntas = leccionYAML.getPreguntas().stream().map(p ->
-                new Pregunta(
-                    p.getTexto(),
-                    p.getRespuesta(),
-                    crearTipo(p.getTipo()))
-            ).toList();
+            List<Pregunta> preguntas = leccionYAML.getPreguntas().stream().map(p -> {
+                return crearPreguntaDesdeYAML(p);
+            }).toList();
             return new Leccion(leccionYAML.getTitulo(), leccionYAML.getDescripcion(), preguntas);
         }).toList();
-
-        Estrategia estrategia;
         String tipo = datos.getEstrategia().toLowerCase();
-        switch (tipo) {
-            case "aleatoria":
-                estrategia = new EstrategiaAleatoria();
-                break;
-            case "repeticion":
-                estrategia = new EstrategiaRepeticion();
-                break;
-            case "secuencial":
-                estrategia = new EstrategiaSecuencial();
-                break;
-            default:
-                estrategia = new EstrategiaSecuencial();	// Si la estrategia no está bien definida, se pone como secuencial
-                break;
-        }
 
-        return new Curso(datos.getTitulo(), datos.getDescripcion(), lecciones, estrategia);
+        return new Curso(datos.getTitulo(), datos.getDescripcion(), lecciones, tipo, new Usuario()); // TODO: Llamar al controlador para meter el usuario actual
     }
 
     /**
-     * Crea una instancia concreta de {@link TipoEvaluacion} según el tipo especificado como texto.
+     * Crea una instancia concreta de una subclase de {@link Pregunta} según el tipo especificado como texto.
+     * Este método actúa como una fábrica básica que interpreta el campo "tipo" del archivo YAML
+     * y construye la pregunta correspondiente (por ejemplo: {@link PreguntaFlashCard}, {@link PreguntaRelleno}, etc.).
      *
-     * @param tipo Nombre del tipo de evaluación (flashcard, relleno, vf, ordenar, etc.).
-     * @return Instancia correspondiente de {@link TipoEvaluacion}.
+     * @param p Objeto {@link PreguntaYAML} que contiene los datos básicos de la pregunta.
+     * @return Instancia específica de {@link Pregunta} lista para añadirse a la lección.
      */
-    private TipoEvaluacion crearTipo(String tipo) {
-        tipo = tipo.toLowerCase();
-        TipoEvaluacion evaluador;
+    private Pregunta crearPreguntaDesdeYAML(PreguntaYAML p) {
+        String tipo = p.getTipo().toLowerCase();
 
         switch (tipo) {
             case "flashcard":
-                evaluador = new TipoFlashCard();
-                break;
+                return new PreguntaFlashCard(p.getTexto(), p.getRespuesta());
             case "relleno":
-                evaluador = new TipoRelleno();
-                break;
+                return new PreguntaRellenarPalabras(p.getTexto(), p.getRespuesta());
             case "vf":
-                evaluador = new TipoVF();
-                break;
+                return new PreguntaVF(p.getTexto(), p.getRespuesta());
             case "ordenar":
-                evaluador = new TipoOrdenar();
-                break;
+                return new PreguntaOrdenarPalabras(p.getTexto(), p.getRespuesta(), p.getOpciones());
             default:
-                evaluador = new TipoFlashCard(); // Por defecto
-                break;
+                // Por defecto, usar flashcard si el tipo no es reconocido
+                return new PreguntaFlashCard(p.getTexto(), p.getRespuesta());
         }
-
-        return evaluador;
     }
 }

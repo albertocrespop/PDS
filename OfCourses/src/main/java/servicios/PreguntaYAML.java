@@ -15,6 +15,9 @@ public class PreguntaYAML {
 
     /** Tipo de la pregunta (flashcard, relleno, vf, ordenar, etc.) */
     private String tipo;
+    
+    /** Opciones para la pregunta de tipo Ordenar palabras (palabras desordenadas separadas por espacios)*/
+    private String opciones;
 
     /**
      * Obtiene el texto de la pregunta.
@@ -51,4 +54,20 @@ public class PreguntaYAML {
      * @param tipo el tipo (por ejemplo: "flashcard", "vf", etc.)
      */
     public void setTipo(String tipo) { this.tipo = tipo; }
+    
+    /**
+     * Obtiene las opciones de la pregunta.
+     * @return las opciones
+     */
+    public String getOpciones() { 
+    	return opciones; 
+    }
+    
+    /**
+     * Establece las opciones de la pregunta (para preguntas de tipo Ordenar).
+     * @param opciones palabras separadas por espacios (por ejemplo: "me Hola Alberto llamo")
+     */
+    public void setOpciones(String opciones) { 
+    	this.opciones = opciones;
+    }
 }
