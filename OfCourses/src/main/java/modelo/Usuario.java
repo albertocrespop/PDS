@@ -33,16 +33,16 @@ public class Usuario {
     	this.username = username;
     	this.email = email;
     	this.password = password;
-    //	this.cursos = new ArrayList<Curso>();
+        this.cursos = new ArrayList<Curso>();
     }
     
     
     
     //Getters
-  /*  public List<Curso> getCursos() {
+    public List<Curso> getCursos() {
 		return new ArrayList<Curso>(cursos);
 	}
-    */
+    
     public String getEmail() {
 		return email;
 	}
@@ -94,6 +94,12 @@ public class Usuario {
 		this.username = username;
 	}
  
+    
+    public void addCurso(Curso c) {
+    	if(!cursos.contains(c)) {
+    		cursos.add(c);
+    	}
+    }
     
     @Override
     public String toString() {

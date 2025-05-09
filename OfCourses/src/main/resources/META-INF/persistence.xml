@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
+	<persistence-unit name="ofcoursesPU">
+		<class>modelo.Usuario</class>
+		<class>modelo.Curso</class>
+		<class>modelo.Leccion</class>
+		<class>modelo.Pregunta</class>
+		<class>modelo.PreguntaOrdenarPalabras</class>
+		<class>modelo.PreguntaFlashCard</class>
+		<class>modelo.PreguntaVF</class>
+		<class>modelo.PreguntaRellenarPalabras</class>
+
+		<properties>
+			<property name="jakarta.persistence.jdbc.driver"
+				value="org.sqlite.JDBC" />
+			<property name="jakarta.persistence.jdbc.url"
+				value="jdbc:sqlite:basedatos.db" />
+			<property name="hibermate.dialect" value="org.hibernate.community.dialect.SQLiteDialect" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.show_sql" value="true" />
+		</properties>
+	</persistence-unit>
+</persistence>

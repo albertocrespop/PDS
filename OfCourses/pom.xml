@@ -9,10 +9,25 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>OfCourses</name>
 
-
+	<properties>
+		<junit.version>5.11.0</junit.version>
+	</properties>
 
 	<dependencies>
-			<!-- JPA API -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Soporte para tests parametrizados -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- JPA API -->
 		<dependency>
 			<groupId>jakarta.persistence</groupId>
 			<artifactId>jakarta.persistence-api</artifactId>
@@ -51,7 +66,7 @@
             <artifactId>javafx-fxml</artifactId>
             <version>15.0.1</version>
         </dependency>
-        <!-- Dependencia para leer archivos YAML -->
+		<!-- Dependencia para leer archivos YAML -->
         <dependency>
 		    <groupId>org.yaml</groupId>
 		    <artifactId>snakeyaml</artifactId>
