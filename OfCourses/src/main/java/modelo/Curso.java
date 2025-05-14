@@ -7,6 +7,9 @@ import java.util.List;
 
 import jakarta.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 @Entity
 @Table(name = "cursos")
@@ -36,8 +39,11 @@ public class Curso {
     // Constructor para hibernate
     public Curso() {}
     
-    public Curso(String titulo, String descripcion, List<Leccion> lecciones, String estrategia) {
-    	    	    	
+    public Curso(@JsonProperty("titulo") String titulo,
+    	    @JsonProperty("descripcion") String descripcion,
+    	    @JsonProperty("lecciones") List<Leccion> lecciones,
+    	    @JsonProperty("estrategia") String estrategia) {
+
     	this.estrategiaString = estrategia;
 
     	this.titulo = titulo;
@@ -66,7 +72,6 @@ public class Curso {
     public int getHoras() {
 		return horas;
 	}
-    
     
     public List<Leccion> getLecciones() {
 		return new ArrayList<Leccion>(lecciones);
