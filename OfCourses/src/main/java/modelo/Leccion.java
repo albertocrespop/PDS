@@ -29,6 +29,9 @@ public class Leccion {
 	@JoinColumn(name = "curso_id")
 	private Curso curso;
 
+	// Constructor para hibernate
+	public Leccion () {}
+	
 	public Leccion(String titulo, String descripcion, List<Pregunta> preguntas, Curso curso) {
 				
 		this.titulo = titulo;
