@@ -1,0 +1,10 @@
+titulo: Curso de Prueba
+descripcion: Curso básico para test
+estrategia: EstrategiaSecuencial
+lecciones:
+  - titulo: Lección 1
+    descripcion: Introducción
+    preguntas:
+      - tipo: flashcard
+        enunciado: ¿Qué es Java?
+        respuesta: Un lenguaje de programación
