@@ -4,16 +4,16 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 
-import jakarta.persistence.*;
-
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_pregunta", discriminatorType = DiscriminatorType.STRING)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "tipo")
-@JsonSubTypes({ @JsonSubTypes.Type(value = PreguntaFlashCard.class, name = "flashcard"),
-		@JsonSubTypes.Type(value = PreguntaVF.class, name = "vf"),
-		@JsonSubTypes.Type(value = PreguntaRellenarPalabras.class, name = "rellenar"),
-		@JsonSubTypes.Type(value = PreguntaOrdenarPalabras.class, name = "ordenar") })
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = PreguntaFlashCard.class, name = "flashcard"),
+    @JsonSubTypes.Type(value = PreguntaVF.class, name = "vf"),
+    @JsonSubTypes.Type(value = PreguntaRellenarPalabras.class, name = "relleno"),
+    @JsonSubTypes.Type(value = PreguntaOrdenarPalabras.class, name = "ordenar")
+})
 public abstract class Pregunta {
 
 	@Id
