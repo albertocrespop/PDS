@@ -37,6 +37,7 @@ public class Curso {
     @JoinColumn(name = "usuario_id")
     private Usuario creador;
     
+    // Constructor para hibernate
     public Curso() {}
     
     public Curso(String titulo, String descripcion, List<Leccion> lecciones, String estrategia, Usuario user) {
@@ -48,7 +49,7 @@ public class Curso {
     	this.descripcion = descripcion;
     	this.lecciones = new ArrayList<Leccion>(lecciones);
     	try {
-			this.estrategia = (Estrategia) Class.forName(estrategiaString).getDeclaredConstructor(null).newInstance(null);
+			this.estrategia = (Estrategia) Class.forName(estrategiaString).getDeclaredConstructor().newInstance();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
