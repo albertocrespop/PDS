@@ -36,7 +36,7 @@ public class ModeloTest {
     // Curso Tests
     @Test
     public void testAgregarLeccionACurso() {
-        Curso curso = new Curso("Curso Test", "Descripción test", new ArrayList<Leccion>(), "modelo.EstrategiaAleatoria");
+        Curso curso = new Curso("Curso Test", "Descripción test", new ArrayList<>(), "modelo.EstrategiaAleatoria");
 
         assertEquals("Curso Test", curso.getTitulo());
         assertEquals("Descripción test", curso.getDescripcion());

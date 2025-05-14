@@ -26,8 +26,6 @@ public class Curso {
     private int leccionActual;
     
     private int horas;
-    private int racha;
-    private int rachaMaxima;
     
     @Transient
     private Estrategia estrategia;
@@ -53,8 +51,6 @@ public class Curso {
 			e.printStackTrace();
 		}
     	this.horas = 0;
-    	this.racha = 0;
-    	this.rachaMaxima = 0;
     	this.leccionActual = 0;
     }
     
@@ -75,15 +71,7 @@ public class Curso {
     public List<Leccion> getLecciones() {
 		return new ArrayList<Leccion>(lecciones);
 	}
-    
-    public int getRacha() {
-		return racha;
-	}
-    
-    public int getRachaMaxima() {
-		return rachaMaxima;
-	}
-    
+
     public String getTitulo() {
 		return titulo;
 	}
@@ -107,15 +95,6 @@ public class Curso {
     
     public void setHoras(int horas) {
 		this.horas = horas;
-	}
-    
-    
-    public void setRacha(int racha) {
-		this.racha = racha;
-	}
-    
-    public void setRachaMaxima(int rachaMaxima) {
-		this.rachaMaxima = rachaMaxima;
 	}
     
     public void setEstrategiaString(String estrategiaString) {

@@ -3,6 +3,7 @@ package modelo;
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import jakarta.persistence.*;
 
@@ -49,9 +50,10 @@ public class Usuario {
 	}
     
     
- /*   public int getHorasTotales() {
-		return horasTotales;
-	}*/
+    public int getHorasTotales() {
+		return  cursos.stream()
+				.collect(Collectors.summingInt(Curso::getHoras));
+	}
     
     public String getPassword() {
 		return password;
@@ -70,19 +72,15 @@ public class Usuario {
 	}
     
     //Setters
-  /*  public void setCursos(List<Curso> cursos) {
+    public void setCursos(List<Curso> cursos) {
 		this.cursos = cursos;
-	}*/
+	}
     
     public void setEmail(String email) {
 		this.email = email;
 	}
     
     
-  /*  public void setHorasTotales(int horasTotales) {
-		this.horasTotales = horasTotales;
-	}
-    */
     public void setPassword(String password) {
 		this.password = password;
 	}
