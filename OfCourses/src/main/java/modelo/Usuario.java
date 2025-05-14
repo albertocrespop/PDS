@@ -24,7 +24,8 @@ public class Usuario {
     private String password;
     
     
-    @OneToMany(mappedBy = "creador", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany
+    @JoinColumn(name="autor_id")
     private List<Curso> cursos;
     
     public Usuario() {}

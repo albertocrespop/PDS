@@ -19,7 +19,8 @@ public class Curso {
 	private String titulo;
     private String descripcion;
     
-    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany
+    @JoinColumn(name="curso_id")
     private List<Leccion> lecciones;
     
     private int leccionActual;
@@ -33,16 +34,12 @@ public class Curso {
     
     private String estrategiaString;
     
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "usuario_id")
-    private Usuario creador;
     
     // Constructor para hibernate
     public Curso() {}
     
-    public Curso(String titulo, String descripcion, List<Leccion> lecciones, String estrategia, Usuario user) {
-    	    	
-    	this.creador = user;
+    public Curso(String titulo, String descripcion, List<Leccion> lecciones, String estrategia) {
+    	    	    	
     	this.estrategiaString = estrategia;
 
     	this.titulo = titulo;
@@ -101,10 +98,6 @@ public class Curso {
     
     public int getLeccionActual() {
 		return leccionActual;
-	}
-    
-    public Usuario getCreador() {
-		return creador;
 	}
     
     //Setters

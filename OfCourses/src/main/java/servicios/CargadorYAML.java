@@ -48,19 +48,16 @@ public class CargadorYAML {
      * @return Objeto {@link Curso} listo para ser usado en la aplicación.
      */
     private Curso construirCurso(CursoYAML datos) {
-    	List<Leccion> temporal = new ArrayList<Leccion>();
         String tipo = datos.getEstrategia().toLowerCase();
-
-    	Curso curso = new Curso(datos.getTitulo(), datos.getDescripcion(), temporal, tipo, new Usuario());         
     	
     	List<Leccion> lecciones = datos.getLecciones().stream().map(leccionYAML -> {
             List<Pregunta> preguntas = leccionYAML.getPreguntas().stream().map(p -> {
                 return crearPreguntaDesdeYAML(p);
             }).toList();
-            return new Leccion(leccionYAML.getTitulo(), leccionYAML.getDescripcion(), preguntas, curso);
+            return new Leccion(leccionYAML.getTitulo(), leccionYAML.getDescripcion(), preguntas);
         }).toList();
 
-    	curso.setLecciones(lecciones);
+    	Curso curso = new Curso(datos.getTitulo(), datos.getDescripcion(), lecciones, tipo);         
     	
         return curso;// TODO: Llamar al controlador para meter el usuario actual
     }

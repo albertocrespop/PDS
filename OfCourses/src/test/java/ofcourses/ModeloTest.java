@@ -25,20 +25,18 @@ public class ModeloTest {
     @Test
     public void testAgregarCursoAUsuario() {
         Usuario usuario = new Usuario("Laura", "laura@example.com", "abc");
-        Curso curso = new Curso("Curso Avanzado", "Descripción", new ArrayList<>(), "modelo.EstrategiaAleatoria", usuario);
+        Curso curso = new Curso("Curso Avanzado", "Descripción", new ArrayList<>(), "modelo.EstrategiaAleatoria");
 
         usuario.addCurso(curso);
 
         assertEquals(1, usuario.getCursos().size());
         assertEquals(curso, usuario.getCursos().get(0));
-        assertEquals(usuario, curso.getCreador());
     }
 
     // Curso Tests
     @Test
     public void testAgregarLeccionACurso() {
-        Usuario usuario = new Usuario("Pedro", "pedro@example.com", "123");
-        Curso curso = new Curso("Curso Test", "Descripción test", new ArrayList<>(), "modelo.EstrategiaAleatoria", usuario);
+        Curso curso = new Curso("Curso Test", "Descripción test", new ArrayList<Leccion>(), "modelo.EstrategiaAleatoria");
 
         assertEquals("Curso Test", curso.getTitulo());
         assertEquals("Descripción test", curso.getDescripcion());

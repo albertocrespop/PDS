@@ -51,9 +51,9 @@ public class PersistenciaTest {
         preguntas.add(new PreguntaOrdenarPalabras("Ordena palabras clave", "public static void", "void static public"));
         List<Leccion> lecciones = new ArrayList<Leccion>();
         
-        Curso curso = new Curso("Curso Java Completo", "Aprende Java de forma avanzada", lecciones, "modelo.EstrategiaAleatoria",usuario);
+        Curso curso = new Curso("Curso Java Completo", "Aprende Java de forma avanzada", lecciones, "modelo.EstrategiaAleatoria");
         
-        Leccion leccion = new Leccion("POO", "Conceptos de orientación a objetos", preguntas, curso);
+        Leccion leccion = new Leccion("POO", "Conceptos de orientación a objetos", preguntas);
 
         lecciones.add(leccion);
         curso.setLecciones(lecciones);
@@ -180,7 +180,6 @@ public class PersistenciaTest {
             List<Curso> cursos = usuario.getCursos();
             
             assertFalse(cursos.isEmpty(), "El usuario debería tener cursos asociados");
-            assertEquals(usuario.getId(), cursos.get(0).getCreador().getId());
         } else {
             fail("No se encontró el usuario con email " + emailUsuario);
         }
