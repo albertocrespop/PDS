@@ -78,7 +78,6 @@ public class Usuario {
 		return vidas;
 	}
     
-  /*  public int getRachaMaxima() {
     public int getRacha() {
 		return racha;
 	}
