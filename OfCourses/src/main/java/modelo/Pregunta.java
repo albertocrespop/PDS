@@ -16,7 +16,7 @@ import jakarta.persistence.*;
 })
 public abstract class Pregunta {
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

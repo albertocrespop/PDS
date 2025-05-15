@@ -1,5 +1,8 @@
 package modelo;
 
+
+import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 
 import java.util.List;
@@ -37,6 +40,10 @@ public class Usuario {
     @JoinColumn(name="autor_id")
     private List<Curso> cursos;
     
+    private LocalDateTime ultimoDia;
+    private int racha;
+    private int rachaMaxima;
+    
     public Usuario() {}
 
     public Usuario(String username, String email, String password) {
@@ -72,8 +79,13 @@ public class Usuario {
 	}
     
   /*  public int getRachaMaxima() {
+    public int getRacha() {
+		return racha;
+	}
+    
+    public int getRachaMaxima() {
 		return rachaMaxima;
-	}*/
+	}
     
     public String getUsername() {
 		return username;
@@ -81,6 +93,10 @@ public class Usuario {
     
     public long getId() {
 		return id;
+	}
+    
+    public void setUltimoDia(LocalDateTime ultimoDia) {
+		this.ultimoDia = ultimoDia;
 	}
     
     //Setters
@@ -97,9 +113,13 @@ public class Usuario {
 		this.password = password;
 	}
     
-  /*  public void setRachaMaxima(int rachaMaxima) {
+    public void setRacha(int racha) {
+		this.racha = racha;
+	}
+    
+    public void setRachaMaxima(int rachaMaxima) {
 		this.rachaMaxima = rachaMaxima;
-	}*/
+	}
     
     public void setUsername(String username) {
 		this.username = username;
@@ -108,6 +128,10 @@ public class Usuario {
     public void setUltimaRecarga(LocalDate ultimaRecarga) {
 		this.ultimaRecarga = ultimaRecarga;
 	}
+    public void setUltimaFecha(LocalDateTime fecha) {
+		this.ultimoDia = fecha;
+	}
+ 
     
     public void addCurso(Curso c) {
     	if(!cursos.contains(c)) {

@@ -6,7 +6,9 @@ import jakarta.persistence.Entity;
 @Entity
 @DiscriminatorValue("rellenar")
 public class PreguntaRellenarPalabras extends Pregunta {
-
+	public static final String CARACTER_HUECO = "???";
+	
+	
     public PreguntaRellenarPalabras() {
         super(); // Constructor vacío necesario
     }

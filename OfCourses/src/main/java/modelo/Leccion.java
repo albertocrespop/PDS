@@ -72,15 +72,12 @@ public class Leccion {
 		this.ultimaPregunta = ultimaPregunta;
 	}
 	
-	public void setTitulo(String titulo) {
-	    this.titulo = titulo;
-	}
-
-	public void setDescripcion(String descripcion) {
-	    this.descripcion = descripcion;
-	}
-
 	public void setPreguntas(List<Pregunta> preguntas) {
-	    this.preguntas = preguntas;
+		this.preguntas = preguntas;
+	}
+	
+	//Metodos de clase
+	public void aplicarEstrategia(Estrategia estrategia) {
+		setPreguntas(estrategia.ordenar(preguntas));
 	}
 }
