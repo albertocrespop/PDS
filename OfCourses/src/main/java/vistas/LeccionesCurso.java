@@ -32,7 +32,7 @@ import controlador.OfCourses;
 
 public class LeccionesCurso extends Application {
 	
-	private OfCourses controlador = OfCourses.getUnicaInstancia();;
+	private OfCourses controlador = OfCourses.getUnicaInstancia();
 
 	private Curso cursoActual;
 	
@@ -61,22 +61,22 @@ public class LeccionesCurso extends Application {
         Pregunta pregunta = controlador.getSiguientePregunta(actual);
         
         if(pregunta instanceof PreguntaOrdenarPalabras) {
-    		OrdenarPalabras ej1 = new OrdenarPalabras();
+    		OrdenarPalabras ej1 = new OrdenarPalabras(cursoActual.getTitulo());
             Stage stage = new Stage();
             ej1.start(stage);
             primaryStage.close();
         }else if(pregunta instanceof PreguntaRellenarPalabras) {
-        	RellenarPalabras ej2 = new RellenarPalabras();
+        	RellenarPalabras ej2 = new RellenarPalabras(cursoActual.getTitulo());
             Stage stage2 = new Stage();
             ej2.start(stage2);
             primaryStage.close();
         }else if(pregunta instanceof PreguntaFlashCard) {
-    		FlashCard ej3 = new FlashCard();
+    		FlashCard ej3 = new FlashCard(cursoActual.getTitulo());
             Stage stage3 = new Stage();
             ej3.start(stage3);
             primaryStage.close();
         }else if(pregunta instanceof PreguntaVF) {
-        	VerdaderoFalso ej4 = new VerdaderoFalso();
+        	VerdaderoFalso ej4 = new VerdaderoFalso(cursoActual.getTitulo());
             Stage stage4 = new Stage();
             ej4.start(stage4);
             primaryStage.close();
@@ -162,18 +162,14 @@ public class LeccionesCurso extends Application {
     }
     
     private HBox crearTopBar(VBox menuLateral) {
-        
         // Foto de perfil
         imagenPerfilView = new ImageView(controlador.getFotoUsuarioActual());
-
         imagenPerfilView.setFitWidth(40);
         imagenPerfilView.setFitHeight(40);
         imagenPerfilView.setStyle("-fx-border-radius: 20; -fx-border-color: white; -fx-border-width: 2;");
         
         // Nombre de usuario
-        
-        String nombreUsuario = OfCourses.getUnicaInstancia().getNombreUsuario();
-        Label lblNombreUsuario = new Label(nombreUsuario);
+        Label lblNombreUsuario = new Label("Juan Pérez");
         lblNombreUsuario.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
         lblNombreUsuario.setTextFill(Color.WHITE);
         
@@ -181,15 +177,13 @@ public class LeccionesCurso extends Application {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         
-        HBox vidasBox = crearIndicadorVidas(OfCourses.getUnicaInstancia().getVidas());
-        
         // Botón de cerrar ventana
         Button btnCerrar = new Button("✕");
         btnCerrar.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 18;");
         btnCerrar.setOnAction(e -> primaryStage.close());
         
         // Barra superior
-        HBox topBar = new HBox(15, imagenPerfilView, lblNombreUsuario, vidasBox, spacer, btnCerrar);
+        HBox topBar = new HBox(15, imagenPerfilView, lblNombreUsuario, spacer, btnCerrar);
         topBar.setAlignment(Pos.CENTER_LEFT);
         topBar.setPadding(new Insets(15, 25, 15, 15));
         topBar.setStyle("-fx-background-color: rgba(0,0,0,0.1);");
@@ -352,19 +346,5 @@ public class LeccionesCurso extends Application {
                 button.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 15; -fx-background-radius: 5;");
             }
         });
-    }
-    
-    private HBox crearIndicadorVidas(int vidasActuales) {
-        HBox vidasBox = new HBox(5);
-        vidasBox.setAlignment(Pos.CENTER_RIGHT);
-        
-        for (int i = 0; i < 5; i++) {
-            Image img = new Image("imagenes/" + (i < vidasActuales ? "vida_llena.png" : "vida_vacia.png"));
-            ImageView view = new ImageView(img);
-            view.setFitWidth(20);
-            view.setFitHeight(20);
-            vidasBox.getChildren().add(view);
-        }
-        return vidasBox;
     }
 }

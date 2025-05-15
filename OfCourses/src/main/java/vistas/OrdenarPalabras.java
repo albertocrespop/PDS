@@ -37,12 +37,16 @@ public class OrdenarPalabras extends Application {
     private HBox palabrasContainer = new HBox(10);
     private Stage primaryStage;
     private ImageView imagenPerfilView;
-
+    private String curso;
     // <--------------------------------------------------------------->
     // <------------------- FUNCIONES DE BOTONES ---------------------->
     // <--------------------------------------------------------------->
     
-    private void verificarOrden() {
+    public OrdenarPalabras(String titulo) {
+    	this.curso = titulo;
+    }
+
+	private void verificarOrden() {
         StringBuilder fraseOrdenada = new StringBuilder();
         
         // Obtener el orden ACTUAL de las palabras en el contenedor visual
@@ -81,7 +85,7 @@ public class OrdenarPalabras extends Application {
     
     private void volverAtras() {
     	try {
-            LeccionesCurso lecciones = new LeccionesCurso();
+            LeccionesCurso lecciones = new LeccionesCurso(curso);
             Stage stage = new Stage();
             lecciones.start(stage);
             primaryStage.close();

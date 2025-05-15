@@ -33,14 +33,19 @@ public class VerdaderoFalso extends Application {
     private double yOffset = 0;
     private Stage primaryStage;
     private ImageView imagenPerfilView;
+    private String curso;
 
     // <--------------------------------------------------------------->
     // <------------------- FUNCIONES DE BOTONES ---------------------->
     // <--------------------------------------------------------------->
     
-    private void volverAtras() {
+    public VerdaderoFalso(String curso) {
+    	this.curso = curso;
+    }
+
+	private void volverAtras() {
     	try {
-            LeccionesCurso lecciones = new LeccionesCurso();
+            LeccionesCurso lecciones = new LeccionesCurso(curso);
             Stage stage = new Stage();
             lecciones.start(stage);
             primaryStage.close();

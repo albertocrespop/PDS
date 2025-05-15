@@ -26,6 +26,8 @@ import controlador.OfCourses;
 
 public class EditarPerfil extends Application {
 
+	OfCourses controlador = OfCourses.getUnicaInstancia();
+	
     private double xOffset = 0;
     private double yOffset = 0;
     private Stage primaryStage;
@@ -118,14 +120,14 @@ public class EditarPerfil extends Application {
     private HBox crearTopBar(VBox menuLateral) {
         
         // Foto de perfil
-    	imagenPerfilView = new ImageView(OfCourses.getUnicaInstancia().getFotoUsuarioActual());
+    	imagenPerfilView = new ImageView(controlador.getFotoUsuarioActual());
         imagenPerfilView.setFitWidth(40);
         imagenPerfilView.setFitHeight(40);
         imagenPerfilView.setStyle("-fx-border-radius: 20; -fx-border-color: white; -fx-border-width: 2;");
         
         // Nombre de usuario
         
-        String nombreUsuario = OfCourses.getUnicaInstancia().getNombreUsuario();
+        String nombreUsuario = controlador.getNombreUsuario();
         Label lblNombreUsuario = new Label(nombreUsuario);
         lblNombreUsuario.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
         lblNombreUsuario.setTextFill(Color.WHITE);
@@ -134,7 +136,7 @@ public class EditarPerfil extends Application {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         
-        HBox vidasBox = crearIndicadorVidas(OfCourses.getUnicaInstancia().getVidas());
+        HBox vidasBox = crearIndicadorVidas(controlador.getVidas());
         
         // Botón de cerrar ventana
         Button btnCerrar = new Button("✕");
@@ -173,7 +175,7 @@ public class EditarPerfil extends Application {
         lblTitulo.setTextFill(Color.web("#1a73e8"));
 
         // Nombre
-        TextField campoNombre = new TextField(OfCourses.getUnicaInstancia().getNombreUsuario());
+        TextField campoNombre = new TextField(controlador.getNombreUsuario());
         campoNombre.setPromptText("Nombre completo");
 
         // Contraseña
@@ -181,11 +183,11 @@ public class EditarPerfil extends Application {
         campoContrasena.setPromptText("Nueva contraseña");
 
         // Correo
-        TextField campoCorreo = new TextField(OfCourses.getUnicaInstancia().getCorreoUsuario());
+        TextField campoCorreo = new TextField(controlador.getCorreoUsuario());
         campoCorreo.setPromptText("Correo electrónico");
 
         // Vista previa de la imagen
-        vistaPreviaFoto = new ImageView(OfCourses.getUnicaInstancia().getFotoUsuarioActual());
+        vistaPreviaFoto = new ImageView(controlador.getFotoUsuarioActual());
         vistaPreviaFoto.setFitWidth(100);
         vistaPreviaFoto.setFitHeight(100);
         vistaPreviaFoto.setStyle("-fx-border-radius: 50;");
@@ -229,7 +231,7 @@ public class EditarPerfil extends Application {
             if (hayErrores) return;
 
             // Enviar solo lo necesario
-            OfCourses.getUnicaInstancia().actualizarUsuario(nombre.isEmpty() ? null : nombre,
+            controlador.actualizarUsuario(nombre.isEmpty() ? null : nombre,
                                            contrasena.isEmpty() ? null : contrasena,
                                            correo.isEmpty() ? null : correo,
                                            foto);

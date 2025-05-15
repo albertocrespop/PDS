@@ -61,27 +61,8 @@ public class OfCourses {
 			usuarioActual = null;
 			return false;
 		}else{
-			recargarVidasSiCorresponde();
 			return true;
 		}
-	}
-	
-	public void recargarVidasSiCorresponde() {
-	    boolean recarga = usuarioActual.recargarSiEsNuevoDia();
-	    if(recarga) { repoUser.modificarUsuario(usuarioActual);}
-	}
-	
-	public void perderVida() {
-	    usuarioActual.perderVida();
-	    repoUser.modificarUsuario(usuarioActual);
-	}
-	
-	public boolean tieneVidas() {
-	    return !usuarioActual.estaSinVidas();
-	}
-	
-	public int getVidas() {
-	    return usuarioActual.getVidas();
 	}
 
 
@@ -146,12 +127,31 @@ public class OfCourses {
 
 	public Pregunta getSiguientePregunta(Leccion actual) {
 		return actual.getSiguientePregunta();
+	}
+
 
 	public String getNombreUsuario() {
 		return usuarioActual.getUsername();
 	}
-
-
+	
+	public void recargarVidasSiCorresponde() {
+	    boolean recarga = usuarioActual.recargarSiEsNuevoDia();
+	    if(recarga) { repoUser.modificarUsuario(usuarioActual);}
+	}
+	
+	public void perderVida() {
+	    usuarioActual.perderVida();
+	    repoUser.modificarUsuario(usuarioActual);
+	}
+	
+	public boolean tieneVidas() {
+	    return !usuarioActual.estaSinVidas();
+	}
+	
+	public int getVidas() {
+	    return usuarioActual.getVidas();
+	}
+	
 	public void actualizarUsuario(String nuevoNombre, String nuevaContrasena, String nuevoCorreo, File nuevaFoto) {
 		if (nuevoNombre != null) usuarioActual.setUsername(nuevoNombre);
 	    if (nuevaContrasena != null) usuarioActual.setPassword(nuevaContrasena);
@@ -165,6 +165,5 @@ public class OfCourses {
 	public String getCorreoUsuario() {
 		return usuarioActual.getEmail();
 	}
-	
 	
 }

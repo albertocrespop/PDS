@@ -192,7 +192,7 @@ public class Usuario {
 
 	public Curso getCurso(String cursoActual) {
 		for(Curso c: cursos) {
-			if(c.getTitulo().equals(cursoActual)) {
+			if(c.getTitulo().equals(c.getTitulo())) {
 				return c;
 			}
 		}
