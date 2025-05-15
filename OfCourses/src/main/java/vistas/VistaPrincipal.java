@@ -203,52 +203,49 @@ public class VistaPrincipal extends Application {
     }
     
     private HBox crearTopBar(VBox menuLateral) {
-        
-        // Foto de perfil
-    	
-    	// TODO: pedir al controlador la imagen del usuario actual
-    	imagenPerfilView = new ImageView(new Image("imagenes/foto-perfil-default.png"));
-        imagenPerfilView.setFitWidth(40);
-        imagenPerfilView.setFitHeight(40);
-        imagenPerfilView.setStyle("-fx-border-radius: 20; -fx-border-color: white; -fx-border-width: 2;");
-        
-        // Nombre de usuario
-        
-        // TODO: pedir al controlador el nombre del usuario actual
-        String nombreUsuario = "Juan Pérez";
-        Label lblNombreUsuario = new Label(nombreUsuario);
-        lblNombreUsuario.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
-        lblNombreUsuario.setTextFill(Color.WHITE);
-        
-        // Espaciador
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        
-        HBox vidasBox = crearIndicadorVidas(OfCourses.getUnicaInstancia().getVidas());
-        
-        // Botón de cerrar ventana
-        Button btnCerrar = new Button("✕");
-        btnCerrar.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 18;");
-        btnCerrar.setOnAction(e -> primaryStage.close());
-        
-        // Barra superior
-        HBox topBar = new HBox(15, imagenPerfilView, lblNombreUsuario, vidasBox, spacer, btnCerrar);
-        topBar.setAlignment(Pos.CENTER_LEFT);
-        topBar.setPadding(new Insets(15, 25, 15, 15));
-        topBar.setStyle("-fx-background-color: rgba(0,0,0,0.1);");
-        
-        topBar.setOnMousePressed(event -> {
-            xOffset = event.getSceneX();
-            yOffset = event.getSceneY();
-        });
+            
+            // Foto de perfil
+        	imagenPerfilView = new ImageView(OfCourses.getUnicaInstancia().getFotoUsuarioActual());
+            imagenPerfilView.setFitWidth(40);
+            imagenPerfilView.setFitHeight(40);
+            imagenPerfilView.setStyle("-fx-border-radius: 20; -fx-border-color: white; -fx-border-width: 2;");
+            
+            // Nombre de usuario
+            
+            String nombreUsuario = OfCourses.getUnicaInstancia().getNombreUsuario();
+            Label lblNombreUsuario = new Label(nombreUsuario);
+            lblNombreUsuario.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
+            lblNombreUsuario.setTextFill(Color.WHITE);
+            
+            // Espaciador
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+            
+            HBox vidasBox = crearIndicadorVidas(OfCourses.getUnicaInstancia().getVidas());
+            
+            // Botón de cerrar ventana
+            Button btnCerrar = new Button("✕");
+            btnCerrar.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 18;");
+            btnCerrar.setOnAction(e -> primaryStage.close());
+            
+            // Barra superior
+            HBox topBar = new HBox(15, imagenPerfilView, lblNombreUsuario, vidasBox, spacer, btnCerrar);
+            topBar.setAlignment(Pos.CENTER_LEFT);
+            topBar.setPadding(new Insets(15, 25, 15, 15));
+            topBar.setStyle("-fx-background-color: rgba(0,0,0,0.1);");
+            
+            topBar.setOnMousePressed(event -> {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            });
 
-        topBar.setOnMouseDragged(event -> {
-            primaryStage.setX(event.getScreenX() - xOffset);
-            primaryStage.setY(event.getScreenY() - yOffset);
-        });
-        
-        return topBar;
-    }
+            topBar.setOnMouseDragged(event -> {
+                primaryStage.setX(event.getScreenX() - xOffset);
+                primaryStage.setY(event.getScreenY() - yOffset);
+            });
+            
+            return topBar;
+        }
     
     private Node crearCenterCard() {
         VBox centerCard = new VBox(20);
