@@ -124,6 +124,26 @@ public class OfCourses {
 	public List<Curso> getCursosDisponibles() {
 		return usuarioActual.getCursos();
 	}
+
+
+	public String getNombreUsuario() {
+		return usuarioActual.getUsername();
+	}
+
+
+	public void actualizarUsuario(String nuevoNombre, String nuevaContrasena, String nuevoCorreo, File nuevaFoto) {
+		if (nuevoNombre != null) usuarioActual.setUsername(nuevoNombre);
+	    if (nuevaContrasena != null) usuarioActual.setPassword(nuevaContrasena);
+	    if (nuevoCorreo != null) usuarioActual.setEmail(nuevoCorreo);
+	    if (nuevaFoto != null) usuarioActual.setFoto(nuevaFoto.getAbsolutePath());
+	    
+		repoUser.modificarUsuario(usuarioActual);
+	}
+
+
+	public String getCorreoUsuario() {
+		return usuarioActual.getEmail();
+	}
 	
 	
 }
