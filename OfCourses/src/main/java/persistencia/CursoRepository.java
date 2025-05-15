@@ -5,17 +5,13 @@ import java.util.List;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import modelo.Curso;
-import modelo.Leccion;
 import modelo.Usuario;
 
 public class CursoRepository {
     private EntityManager em;
-    
-    private LeccionRepository repoLeccion;
 
     public CursoRepository(EntityManager em) {
         this.em = em;
-        repoLeccion = new LeccionRepository(em);
     }
     
     public Curso buscarPorId(Long id) {
@@ -31,10 +27,10 @@ public class CursoRepository {
     public void guardar(Curso curso) {
         em.getTransaction().begin();
         em.persist(curso);
-        em.getTransaction().commit();        
+        em.getTransaction().commit();
     }
     
-    public void modificarCurso(Curso curso) {
+    public void modificarUsuario(Curso curso) {
         em.getTransaction().begin();
 		em.merge(curso);
         em.getTransaction().commit();

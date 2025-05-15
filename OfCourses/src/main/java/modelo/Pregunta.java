@@ -24,8 +24,6 @@ public abstract class Pregunta {
 
     private String respuesta;
 
-    private String tipo;
-    
     public Pregunta() {}
 
     public Pregunta(String enunciado, String respuesta) {
@@ -36,13 +34,13 @@ public abstract class Pregunta {
     public abstract boolean comprobarRespuesta(String respuestaUsuario);
 
     // Getters y setters
+    public Long getId() {
+        return id;
+    }
+
     public String getEnunciado() {
         return enunciado;
     }
-    
-    public String getTipo() {
-		return tipo;
-	}
 
     public void setEnunciado(String enunciado) {
         this.enunciado = enunciado;
