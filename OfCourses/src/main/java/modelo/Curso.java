@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
@@ -52,7 +53,7 @@ public class Curso {
     	this.titulo = titulo;
     	this.descripcion = descripcion;
     	this.lecciones = new ArrayList<Leccion>(lecciones);
-		if (estrategia.isEmpty()) {
+		/*if (estrategia.isEmpty()) {
 			estrategiaString = estrategia.substring(0, 1).toUpperCase() + estrategiaString.substring(1);
 			estrategiaString = "Estrategia" + estrategiaString;
 			try {
@@ -62,7 +63,15 @@ public class Curso {
 					| ClassNotFoundException e) {
 			}
 			aplicarEstrategia();
-		}
+		}*/
+		/*try {
+			this.estrategia = (Estrategia) Class.forName("modelo."+estrategiaString).getDeclaredConstructor().newInstance();
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+    	
     	this.horas = 0;
     	this.leccionActual = 0;
     	
@@ -74,6 +83,7 @@ public class Curso {
 		return descripcion;
 	}
     
+    @JsonIgnore
     public Estrategia getEstrategia() {
 		return estrategia;
 	}
@@ -103,6 +113,7 @@ public class Curso {
 	}
     
     //Setters
+    @JsonIgnore
     public void setEstrategia(Estrategia estrategia) {
 		this.estrategia = estrategia;
 	}

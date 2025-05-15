@@ -23,13 +23,20 @@ import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 
 import java.io.File;
+import java.net.URL;
+
+import controlador.OfCourses;
 
 public class Registro extends Application {
 
+	private OfCourses controlador = OfCourses.getUnicaInstancia();
+	
     private double xOffset = 0;
     private double yOffset = 0;
     private ImageView imagenPerfilView;
     private Stage primaryStage;
+    
+    private String url = controlador.FOTO_DEFECTO.toString();
 
     // <--------------------------------------------------------------->
     // <------------------- FUNCIONES DE BOTONES ---------------------->
@@ -43,7 +50,11 @@ public class Registro extends Application {
         );
         File file = fileChooser.showOpenDialog(primaryStage);
         if (file != null) {
-            Image image = new Image(file.toURI().toString());
+        	url = file.toURI().toString();
+            Image image = new Image(url);
+            imagenPerfilView.setImage(image);
+        }else {
+        	Image image = new Image(url.toString());
             imagenPerfilView.setImage(image);
         }
     }
@@ -75,10 +86,19 @@ public class Registro extends Application {
             return;
         }
         
-        // TODO: Llamar al controlador para realizar el registro
-        showAlert("Registro exitoso", "Usuario registrado correctamente\n" +
-                "Nombre: " + username + "\n" +
-                "Email: " + email);
+        if(!controlador.registerUser(username, password, email, url)) {
+            showAlert("Error", "Usuario existente");
+            return;        	
+        }else {
+        	try {
+    			VistaPrincipal cursos = new VistaPrincipal();
+    			Stage stage = new Stage();
+    			cursos.start(stage);
+    			primaryStage.close();
+    		} catch (Exception e) {
+    			e.printStackTrace();
+    		}
+        }
     }
     
     // <--------------------------------------------------------------->

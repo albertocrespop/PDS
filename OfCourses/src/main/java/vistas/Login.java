@@ -1,5 +1,6 @@
 package vistas;
 
+import controlador.OfCourses;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -21,6 +22,8 @@ import javafx.util.Duration;
 
 public class Login extends Application {
 
+	private OfCourses controlador = OfCourses.getUnicaInstancia();
+	
     private double xOffset = 0;
     private double yOffset = 0;
 
@@ -32,15 +35,18 @@ public class Login extends Application {
         if(username.isEmpty() || password.isEmpty()) {
             showAlert("Error", "Por favor ingresa usuario y contraseña");
         } else {
-        	// TODO: Llamar al controlador para realizar login
-            try {
-                VistaPrincipal cursos = new VistaPrincipal();
-                Stage stage = new Stage();
-                cursos.start(stage);
-                primaryStage.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        	if(controlador.Login(username, password)) {
+        		try {
+        			VistaPrincipal cursos = new VistaPrincipal();
+        			Stage stage = new Stage();
+        			cursos.start(stage);
+        			primaryStage.close();
+        		} catch (Exception e) {
+        			e.printStackTrace();
+        		}
+        	}else {
+                showAlert("Error", "Datos erroneos");
+        	}
         }
     }
     
