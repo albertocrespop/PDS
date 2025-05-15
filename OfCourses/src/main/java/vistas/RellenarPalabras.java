@@ -152,17 +152,14 @@ public class RellenarPalabras extends Application {
     private HBox crearTopBar() {
         
         // Foto de perfil
-    	
-    	// TODO: pedir al controlador la imagen del usuario actual
-    	imagenPerfilView = new ImageView(new Image("imagenes/foto-perfil-default.png"));
+    	imagenPerfilView = new ImageView(OfCourses.getUnicaInstancia().getFotoUsuarioActual());
         imagenPerfilView.setFitWidth(40);
         imagenPerfilView.setFitHeight(40);
         imagenPerfilView.setStyle("-fx-border-radius: 20; -fx-border-color: white; -fx-border-width: 2;");
         
         // Nombre de usuario
         
-        // TODO: pedir al controlador el nombre del usuario actual
-        String nombreUsuario = "Juan Pérez";
+        String nombreUsuario = OfCourses.getUnicaInstancia().getNombreUsuario();
         Label lblNombreUsuario = new Label(nombreUsuario);
         lblNombreUsuario.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
         lblNombreUsuario.setTextFill(Color.WHITE);
