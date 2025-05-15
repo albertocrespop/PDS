@@ -72,22 +72,26 @@ public class Registro extends Application {
     
     private void registrarUsuario(String username, String password, String confirmPassword, String email) {
         if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || email.isEmpty()) {
-            showAlert("Error", "Por favor completa todos los campos");
+            showAlert("Error", "Por favor completa todos los campos.");
             return;
         }
         
         if (!password.equals(confirmPassword)) {
-            showAlert("Error", "Las contraseñas no coinciden");
+            showAlert("Error", "Las contraseñas no coinciden.");
             return;
         }
         
+        if(password.length() < 6) {
+        	showAlert("Error", "La contraseña debe tener al menos 6 caracteres.");
+        }
+        
         if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            showAlert("Error", "Por favor ingresa un email válido");
+            showAlert("Error", "Por favor ingresa un email válido.");
             return;
         }
         
         if(!controlador.registerUser(username, password, email, url)) {
-            showAlert("Error", "Usuario existente");
+            showAlert("Error", "Usuario existente.");
             return;        	
         }else {
         	try {

@@ -7,12 +7,15 @@ import java.util.ArrayList;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.time.LocalDate;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "usuarios", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class Usuario {
+	
+	private static final int MAX_VIDAS = 5;
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +29,11 @@ public class Usuario {
     
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private int vidas;
+
+    private LocalDate ultimaRecarga;
     
     
     @OneToMany
@@ -46,9 +54,9 @@ public class Usuario {
     	this.password = password;
     	this.foto = foto;
         this.cursos = new ArrayList<Curso>();
+        this.vidas = MAX_VIDAS;
+        this.setUltimaRecarga(LocalDate.now());
     }
-    
-    
     
     //Getters
     public List<Curso> getCursos() {
@@ -67,6 +75,10 @@ public class Usuario {
     
     public String getPassword() {
 		return password;
+	}
+    
+    public int getVidas() {
+		return vidas;
 	}
     
     public int getRacha() {
@@ -118,6 +130,9 @@ public class Usuario {
 		this.username = username;
 	}
  
+    public void setUltimaRecarga(LocalDate ultimaRecarga) {
+		this.ultimaRecarga = ultimaRecarga;
+	}
     public void setUltimaFecha(LocalDateTime fecha) {
 		this.ultimoDia = fecha;
 	}
@@ -127,6 +142,45 @@ public class Usuario {
     	cursos.add(c);
     }
     
+    /**
+     * Recarga las vidas del usuario si ha pasado al menos un día desde la última recarga.
+     * 
+     * Este método compara la fecha actual con la fecha almacenada en {@code ultimaRecarga}.
+     * Si no son iguales (es decir, ha cambiado el día), restablece las vidas al valor máximo
+     * definido por {@code MAX_VIDAS} y actualiza {@code ultimaRecarga} a la fecha actual.
+     * 
+     * @return {@code true} si se recargaron las vidas; {@code false} en caso contrario.
+     */
+    public boolean recargarSiEsNuevoDia() {
+        LocalDate hoy = LocalDate.now();
+        if (!ultimaRecarga.equals(hoy)) {
+            this.vidas = MAX_VIDAS;
+            this.ultimaRecarga = hoy;
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Resta una vida al usuario si todavía le quedan vidas disponibles.
+     * 
+     * Este método no permite que el contador de vidas sea menor que cero.
+     * Puede utilizarse tras cada respuesta incorrecta durante la realización de un curso.
+     */
+    public void perderVida() {
+    	if(vidas > 0) {
+    		vidas--;
+    	}
+    }
+    
+    /**
+     * Indica si el usuario se ha quedado sin vidas.
+     *
+     * @return {@code true} si el número de vidas actuales es 0; {@code false} en caso contrario.
+     */
+    public boolean estaSinVidas() {
+        return vidas == 0;
+    }
     public void setFoto(String foto) {
 		this.foto = foto;
 	}

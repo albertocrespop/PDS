@@ -20,6 +20,8 @@ import javafx.stage.Screen;
 
 import java.util.List;
 
+import controlador.OfCourses;
+
 public class VentanaEstadisticas extends Application {
 
     private double xOffset = 0;
@@ -112,17 +114,14 @@ public class VentanaEstadisticas extends Application {
     private HBox crearTopBar(VBox menuLateral) {
         
         // Foto de perfil
-    	
-    	// TODO: pedir al controlador la imagen del usuario actual
-    	imagenPerfilView = new ImageView(new Image("imagenes/foto-perfil-default.png"));
+    	imagenPerfilView = new ImageView(OfCourses.getUnicaInstancia().getFotoUsuarioActual());
         imagenPerfilView.setFitWidth(40);
         imagenPerfilView.setFitHeight(40);
         imagenPerfilView.setStyle("-fx-border-radius: 20; -fx-border-color: white; -fx-border-width: 2;");
         
         // Nombre de usuario
         
-        // TODO: pedir al controlador el nombre del usuario actual
-        String nombreUsuario = "Juan Pérez";
+        String nombreUsuario = OfCourses.getUnicaInstancia().getNombreUsuario();
         Label lblNombreUsuario = new Label(nombreUsuario);
         lblNombreUsuario.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
         lblNombreUsuario.setTextFill(Color.WHITE);
@@ -131,13 +130,15 @@ public class VentanaEstadisticas extends Application {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         
+        HBox vidasBox = crearIndicadorVidas(OfCourses.getUnicaInstancia().getVidas());
+        
         // Botón de cerrar ventana
         Button btnCerrar = new Button("✕");
         btnCerrar.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 18;");
         btnCerrar.setOnAction(e -> primaryStage.close());
         
         // Barra superior
-        HBox topBar = new HBox(15, imagenPerfilView, lblNombreUsuario, spacer, btnCerrar);
+        HBox topBar = new HBox(15, imagenPerfilView, lblNombreUsuario, vidasBox, spacer, btnCerrar);
         topBar.setAlignment(Pos.CENTER_LEFT);
         topBar.setPadding(new Insets(15, 25, 15, 15));
         topBar.setStyle("-fx-background-color: rgba(0,0,0,0.1);");
@@ -201,5 +202,19 @@ public class VentanaEstadisticas extends Application {
                 button.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 15; -fx-background-radius: 5;");
             }
         });
+    }
+    
+    private HBox crearIndicadorVidas(int vidasActuales) {
+        HBox vidasBox = new HBox(5);
+        vidasBox.setAlignment(Pos.CENTER_RIGHT);
+        
+        for (int i = 0; i < 5; i++) {
+            Image img = new Image("imagenes/" + (i < vidasActuales ? "vida_llena.png" : "vida_vacia.png"));
+            ImageView view = new ImageView(img);
+            view.setFitWidth(20);
+            view.setFitHeight(20);
+            vidasBox.getChildren().add(view);
+        }
+        return vidasBox;
     }
 }
