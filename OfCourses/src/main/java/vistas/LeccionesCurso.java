@@ -16,14 +16,6 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import modelo.Curso;
-import modelo.Leccion;
-import modelo.Pregunta;
-import modelo.PreguntaFlashCard;
-import modelo.PreguntaOrdenarPalabras;
-import modelo.PreguntaRellenarPalabras;
-import modelo.PreguntaVF;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -31,28 +23,24 @@ import java.util.Random;
 import controlador.OfCourses;
 
 public class LeccionesCurso extends Application {
-	
-	private OfCourses controlador = OfCourses.getUnicaInstancia();
 
-	private Curso cursoActual;
-	
     private double xOffset = 0;
     private double yOffset = 0;
     private Stage primaryStage;
     private ImageView imagenPerfilView;
-    private String nombreCurso;
+    private String nombreCurso = "Curso de Ejemplo";
 
 
     public LeccionesCurso(String nombreCurso) {
         this.nombreCurso = nombreCurso;
-        cursoActual = controlador.getCurso(nombreCurso);
+        // TODO: Llamar al controlador y actualizar el curso actual
     }
 
     // <--------------------------------------------------------------->
     // <------------------- FUNCIONES DE BOTONES ---------------------->
     // <--------------------------------------------------------------->
     
-    private void abrirLeccion(Leccion actual) {
+    private void abrirLeccion(int numeroLeccion, String nombreLeccion) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         Pregunta pregunta = controlador.getSiguientePregunta(actual);
          
@@ -159,7 +147,7 @@ public class LeccionesCurso extends Application {
     
     private HBox crearTopBar(VBox menuLateral) {
         // Foto de perfil
-        imagenPerfilView = new ImageView(controlador.getFotoUsuarioActual());
+    	imagenPerfilView = new ImageView(OfCourses.getUnicaInstancia().getFotoUsuarioActual());
         imagenPerfilView.setFitWidth(40);
         imagenPerfilView.setFitHeight(40);
         imagenPerfilView.setStyle("-fx-border-radius: 20; -fx-border-color: white; -fx-border-width: 2;");
@@ -210,7 +198,7 @@ public class LeccionesCurso extends Application {
         title.setTextFill(Color.web("#1a73e8"));
         
         // TODO: Llamar al controlador para pedir la descripción del curso actual
-        Label descripcion = new Label(cursoActual.getDescripcion());
+        Label descripcion = new Label("Este curso cubre los fundamentos y conceptos avanzados sobre el tema seleccionado.");
         descripcion.setFont(Font.font("Segoe UI", 14));
         descripcion.setTextFill(Color.web("#666666"));
         descripcion.setWrapText(true);
@@ -252,14 +240,14 @@ public class LeccionesCurso extends Application {
         gridLecciones.setPadding(new Insets(10));
 
         // TODO: Llamar al controlador y obtener las lecciones del curso actual
-        List<Leccion> lecciones = cursoActual.getLecciones();
+        List<String> lecciones = generarLeccionesEjemplo();
         int columnas = 3;
 
         for (int i = 0; i < lecciones.size(); i++) {
             int row = i / columnas;
             int col = i % columnas;
 
-            VBox leccionCard = crearLeccionCard(lecciones.get(i), i + 1, lecciones.get(i).getCompletada());
+            VBox leccionCard = crearLeccionCard(lecciones.get(i), i + 1, new Random().nextBoolean());
             gridLecciones.add(leccionCard, col, row);
         }
 
@@ -280,8 +268,18 @@ public class LeccionesCurso extends Application {
 
         return mainWrapper;
     }
+
+    // TODO: Borrar cuando la implementación esté completa
+    private List<String> generarLeccionesEjemplo() {
+        List<String> lecciones = new ArrayList<>();
+        lecciones.add("Ordenar Palabras");
+        lecciones.add("Rellenar Palabras");
+        lecciones.add("FlashCard");
+        lecciones.add("Verdadero Falso");
+        return lecciones;
+    }
     
-    private VBox crearLeccionCard(Leccion leccion, int numeroLeccion, boolean completada) {
+    private VBox crearLeccionCard(String nombreLeccion, int numeroLeccion, boolean completada) {
         VBox card = new VBox(10);
         card.setAlignment(Pos.TOP_CENTER);
         card.setPadding(new Insets(15));
@@ -295,7 +293,7 @@ public class LeccionesCurso extends Application {
         lblNumero.setTextFill(Color.web("#666666"));
         
         // Nombre de lección
-        Label lblNombre = new Label(leccion.getTitulo());
+        Label lblNombre = new Label(nombreLeccion);
         lblNombre.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
         lblNombre.setTextFill(Color.web("#333333"));
         lblNombre.setWrapText(true);
@@ -305,7 +303,7 @@ public class LeccionesCurso extends Application {
         // Botón para realizar lección
         Button btnRealizar = new Button(completada ? "Repasar" : "Comenzar");
         styleLoginButton(btnRealizar);
-        btnRealizar.setOnAction(e -> abrirLeccion(leccion));
+        btnRealizar.setOnAction(e -> abrirLeccion(numeroLeccion, nombreLeccion));
         
         // Espaciador
         Region spacer = new Region();

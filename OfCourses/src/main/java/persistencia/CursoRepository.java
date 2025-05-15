@@ -3,6 +3,7 @@ package persistencia;
 
 import jakarta.persistence.EntityManager;
 import modelo.Curso;
+import modelo.Usuario;
 
 public class CursoRepository {
     private EntityManager em;
