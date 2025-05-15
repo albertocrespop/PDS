@@ -53,8 +53,27 @@ public class OfCourses {
 			usuarioActual = null;
 			return false;
 		}else{
+			recargarVidasSiCorresponde();
 			return true;
 		}
+	}
+	
+	public void recargarVidasSiCorresponde() {
+	    boolean recarga = usuarioActual.recargarSiEsNuevoDia();
+	    if(recarga) { repoUser.modificarUsuario(usuarioActual);}
+	}
+	
+	public void perderVida() {
+	    usuarioActual.perderVida();
+	    repoUser.modificarUsuario(usuarioActual);
+	}
+	
+	public boolean tieneVidas() {
+	    return !usuarioActual.estaSinVidas();
+	}
+	
+	public int getVidas() {
+	    return usuarioActual.getVidas();
 	}
 
 
