@@ -13,7 +13,7 @@ public class ModeloTest {
 	// Usuario Tests
     @Test
     public void testCrearUsuario() {
-        Usuario usuario = new Usuario("Juan", "juan@example.com", "12345");
+        Usuario usuario = new Usuario("Juan", "juan@example.com", "12345","");
 
         assertEquals("Juan", usuario.getUsername());
         assertEquals("juan@example.com", usuario.getEmail());
@@ -24,7 +24,7 @@ public class ModeloTest {
 
     @Test
     public void testAgregarCursoAUsuario() {
-        Usuario usuario = new Usuario("Laura", "laura@example.com", "abc");
+        Usuario usuario = new Usuario("Laura", "laura@example.com", "abc","");
         Curso curso = new Curso("Curso Avanzado", "Descripción", new ArrayList<>(), "modelo.EstrategiaAleatoria");
 
         usuario.addCurso(curso);

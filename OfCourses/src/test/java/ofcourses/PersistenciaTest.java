@@ -44,7 +44,7 @@ public class PersistenciaTest {
     @Test
     @Order(1)
     public void testPersistenciaCompleta() {
-        Usuario usuario = new Usuario("Carlos", "carlos@example.com", "1234");
+        Usuario usuario = new Usuario("Carlos", "carlos@example.com", "1234","");
         List<Pregunta> preguntas = new ArrayList<>();
         preguntas.add(new PreguntaFlashCard("¿Qué es una clase?", "Plantilla para objetos"));
         preguntas.add(new PreguntaVF("¿Java soporta múltiples herencias de clase?", "FALSO"));
