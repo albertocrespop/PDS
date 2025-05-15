@@ -80,4 +80,8 @@ public class Leccion {
 	public void aplicarEstrategia(Estrategia estrategia) {
 		setPreguntas(estrategia.ordenar(preguntas));
 	}
+
+	public Pregunta getSiguientePregunta() {
+		return preguntas.get(ultimaPregunta);
+	}
 }
