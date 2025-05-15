@@ -7,18 +7,24 @@ import java.util.List;
 import jakarta.persistence.EntityManager;
 import javafx.scene.image.Image;
 import modelo.Curso;
+import modelo.Leccion;
+import modelo.Pregunta;
 import modelo.Usuario;
 import persistencia.CursoRepository;
 import persistencia.JPAUtil;
+import persistencia.LeccionRepository;
+import persistencia.PreguntaRepository;
 import persistencia.UsuarioRepository;
 import servicios.CargadorYAML;
 
 public class OfCourses {
-	public static final String FOTO_DEFECTO = "/main/resources/imagenes/foto-perfil-default.png";
+	public static final String FOTO_DEFECTO = "/imagenes/foto-perfil-default.png";
 	private static OfCourses unicaInstancia = null;
 	
 	private UsuarioRepository repoUser;
 	private CursoRepository repoCurso;
+	private LeccionRepository repoLeccion;
+	private PreguntaRepository repoPregunta;
 
 	private EntityManager em = JPAUtil.getEntityManager();
 	
@@ -27,6 +33,8 @@ public class OfCourses {
 	private OfCourses() {
 		repoUser = new UsuarioRepository(em);
 		repoCurso = new CursoRepository(em);
+		repoLeccion = new LeccionRepository(em);
+		repoPregunta = new PreguntaRepository(em);
 	}
 	
 	
@@ -66,6 +74,7 @@ public class OfCourses {
 			return false;
 		}
 		
+		usuarioActual = user;
 		return true;
 	}
 	
@@ -89,10 +98,14 @@ public class OfCourses {
 
 		try{
 			Curso curso = cargador.cargarCursoDesdeArchivo(file);
+			for(Leccion l: curso.getLecciones()) {
+				for(Pregunta p: l.getPreguntas()) {
+					repoPregunta.guardar(p);
+				}
+				repoLeccion.guardar(l);
+			}
 			usuarioActual.addCurso(curso);
-	        em.getTransaction().begin();
-	        em.persist(curso);
-	        em.getTransaction().commit();		
+			repoCurso.guardar(curso);
 	    } catch (IOException e) {
 			return false;
 		}
@@ -104,6 +117,16 @@ public class OfCourses {
 
 	public List<Curso> getCursosDisponibles() {
 		return usuarioActual.getCursos();
+	}
+
+
+	public Curso getCurso(String cursoActual) {
+		return usuarioActual.getCurso(cursoActual);
+	}
+
+
+	public Pregunta getSiguientePregunta(Leccion actual) {
+		return actual.getSiguientePregunta();
 	}
 	
 	
