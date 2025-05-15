@@ -148,13 +148,17 @@ public class Usuario {
      * Este método compara la fecha actual con la fecha almacenada en {@code ultimaRecarga}.
      * Si no son iguales (es decir, ha cambiado el día), restablece las vidas al valor máximo
      * definido por {@code MAX_VIDAS} y actualiza {@code ultimaRecarga} a la fecha actual.
+     * 
+     * @return {@code true} si se recargaron las vidas; {@code false} en caso contrario.
      */
-    public void recargarSiEsNuevoDia() {
+    public boolean recargarSiEsNuevoDia() {
         LocalDate hoy = LocalDate.now();
         if (!ultimaRecarga.equals(hoy)) {
             this.vidas = MAX_VIDAS;
             this.ultimaRecarga = hoy;
+            return true;
         }
+        return false;
     }
     
     /**

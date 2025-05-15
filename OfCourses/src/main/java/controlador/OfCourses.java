@@ -53,16 +53,19 @@ public class OfCourses {
 			usuarioActual = null;
 			return false;
 		}else{
+			recargarVidasSiCorresponde();
 			return true;
 		}
 	}
 	
 	public void recargarVidasSiCorresponde() {
-	    usuarioActual.recargarSiEsNuevoDia();
+	    boolean recarga = usuarioActual.recargarSiEsNuevoDia();
+	    if(recarga) { repoUser.modificarUsuario(usuarioActual);}
 	}
 	
 	public void perderVida() {
 	    usuarioActual.perderVida();
+	    repoUser.modificarUsuario(usuarioActual);
 	}
 	
 	public boolean tieneVidas() {
@@ -70,7 +73,7 @@ public class OfCourses {
 	}
 	
 	public int getVidas() {
-	    return 3; // TODO: Cambiar a usuario.getVidas() cuando usuario sea persistente
+	    return usuarioActual.getVidas();
 	}
 
 
