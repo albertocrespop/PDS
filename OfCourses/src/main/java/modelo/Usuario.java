@@ -189,14 +189,4 @@ public class Usuario {
     public String toString() {
         return "Usuario{id=" + id + ", nombre='" + username + "', email='" + email + "'}";
     }
-
-	public Curso getCurso(String cursoActual) {
-		for(Curso c: cursos) {
-			if(c.getTitulo().equals(cursoActual)) {
-				return c;
-			}
-		}
-		return null;
-	}
-   
 }
