@@ -1,8 +1,10 @@
 package controlador;
 
+import modelo.Usuario;
+
 public class OfCourses {
-	private OfCourses unicaInstancia = null;
-	
+	private static OfCourses unicaInstancia = null;
+	private Usuario usuarioActual;
 	
 	public OfCourses() {
 		
@@ -13,7 +15,7 @@ public class OfCourses {
 	 * 
 	 *	@return Única instancia
 	 */
-	public OfCourses getUnicaInstancia() {
+	public static OfCourses getUnicaInstancia() {
 		if(unicaInstancia == null) {
 			unicaInstancia = new OfCourses();
 		}
@@ -24,5 +26,21 @@ public class OfCourses {
 		
 		
 		return false;
+	}
+	
+	public void recargarVidasSiCorresponde() {
+	    usuarioActual.recargarSiEsNuevoDia();
+	}
+	
+	public void perderVida() {
+	    usuarioActual.perderVida();
+	}
+	
+	public boolean tieneVidas() {
+	    return !usuarioActual.estaSinVidas();
+	}
+	
+	public int getVidas() {
+	    return 3; // TODO: Cambiar a usuario.getVidas() cuando usuario sea persistente
 	}
 }
