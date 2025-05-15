@@ -26,6 +26,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import modelo.PreguntaVF;
 
 public class VerdaderoFalso extends Application {
 	
@@ -33,14 +34,21 @@ public class VerdaderoFalso extends Application {
     private double yOffset = 0;
     private Stage primaryStage;
     private ImageView imagenPerfilView;
+    private String curso;
+    private PreguntaVF pregunta;
 
     // <--------------------------------------------------------------->
     // <------------------- FUNCIONES DE BOTONES ---------------------->
     // <--------------------------------------------------------------->
     
-    private void volverAtras() {
+    public VerdaderoFalso(String curso, PreguntaVF pregunta) {
+    	this.pregunta = pregunta;
+    	this.curso = curso;
+    }
+
+	private void volverAtras() {
     	try {
-            LeccionesCurso lecciones = new LeccionesCurso();
+            LeccionesCurso lecciones = new LeccionesCurso(curso);
             Stage stage = new Stage();
             lecciones.start(stage);
             primaryStage.close();
@@ -201,9 +209,7 @@ public class VerdaderoFalso extends Application {
         lblTitulo.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20));
         lblTitulo.setTextFill(Color.web("#1a73e8"));
 
-        Label lblPregunta = new Label("Los antibióticos son efectivos "
-        		+ "para tratar infecciones causadas tanto por bacterias como por virus, por "
-        		+ "lo que se recomienda su uso en resfriados y gripes.");
+        Label lblPregunta = new Label(pregunta.getEnunciado());
         lblPregunta.setFont(Font.font("Segoe UI", 18));
         lblPregunta.setWrapText(true);
         lblPregunta.setTextFill(Color.web("#333333"));

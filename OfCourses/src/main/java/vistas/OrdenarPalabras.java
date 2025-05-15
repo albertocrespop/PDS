@@ -21,6 +21,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import modelo.PreguntaOrdenarPalabras;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,12 +38,18 @@ public class OrdenarPalabras extends Application {
     private HBox palabrasContainer = new HBox(10);
     private Stage primaryStage;
     private ImageView imagenPerfilView;
-
+    private String curso;
+    private PreguntaOrdenarPalabras pregunta;
     // <--------------------------------------------------------------->
     // <------------------- FUNCIONES DE BOTONES ---------------------->
     // <--------------------------------------------------------------->
     
-    private void verificarOrden() {
+    public OrdenarPalabras(String titulo, PreguntaOrdenarPalabras pregunta) {
+    	this.curso = titulo;
+    	this.pregunta = pregunta;
+    }
+
+	private void verificarOrden() {
         StringBuilder fraseOrdenada = new StringBuilder();
         
         // Obtener el orden ACTUAL de las palabras en el contenedor visual
@@ -54,7 +61,7 @@ public class OrdenarPalabras extends Application {
         }
         
         String resultado = fraseOrdenada.toString().trim();
-        String correcto = "SI A ENTONCES B SINO C";
+        String correcto = pregunta.getRespuesta();
         
         if (resultado.equalsIgnoreCase(correcto)) {
             mostrarAlerta("¡Correcto!", "Has ordenado las palabras correctamente: " + resultado, Alert.AlertType.INFORMATION);
@@ -81,7 +88,7 @@ public class OrdenarPalabras extends Application {
     
     private void volverAtras() {
     	try {
-            LeccionesCurso lecciones = new LeccionesCurso();
+            LeccionesCurso lecciones = new LeccionesCurso(curso);
             Stage stage = new Stage();
             lecciones.start(stage);
             primaryStage.close();
@@ -237,12 +244,9 @@ public class OrdenarPalabras extends Application {
         
         // Crear palabras desordenadas
         List<String> palabras = new ArrayList<>();
-        palabras.add("SI");
-        palabras.add("A");
-        palabras.add("ENTONCES");
-        palabras.add("B");
-        palabras.add("SINO");
-        palabras.add("C");
+        for(String s: pregunta.getOpciones()) {
+        	palabras.add(s);
+        }
         
         Collections.shuffle(palabras);
         

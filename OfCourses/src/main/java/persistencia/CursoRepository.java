@@ -1,9 +1,7 @@
 package persistencia;
 
-import java.util.List;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
 import modelo.Curso;
 import modelo.Usuario;
 

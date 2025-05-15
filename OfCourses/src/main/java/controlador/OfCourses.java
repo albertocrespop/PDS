@@ -7,6 +7,8 @@ import java.util.List;
 import jakarta.persistence.EntityManager;
 import javafx.scene.image.Image;
 import modelo.Curso;
+import modelo.Leccion;
+import modelo.Pregunta;
 import modelo.Usuario;
 import persistencia.CursoRepository;
 import persistencia.JPAUtil;
@@ -14,7 +16,7 @@ import persistencia.UsuarioRepository;
 import servicios.CargadorYAML;
 
 public class OfCourses {
-	public static final String FOTO_DEFECTO = "/main/resources/imagenes/foto-perfil-default.png";
+	public static final String FOTO_DEFECTO = "imagenes/foto-perfil-default.png";
 	private static OfCourses unicaInstancia = null;
 	
 	private UsuarioRepository repoUser;
@@ -53,27 +55,8 @@ public class OfCourses {
 			usuarioActual = null;
 			return false;
 		}else{
-			recargarVidasSiCorresponde();
 			return true;
 		}
-	}
-	
-	public void recargarVidasSiCorresponde() {
-	    boolean recarga = usuarioActual.recargarSiEsNuevoDia();
-	    if(recarga) { repoUser.modificarUsuario(usuarioActual);}
-	}
-	
-	public void perderVida() {
-	    usuarioActual.perderVida();
-	    repoUser.modificarUsuario(usuarioActual);
-	}
-	
-	public boolean tieneVidas() {
-	    return !usuarioActual.estaSinVidas();
-	}
-	
-	public int getVidas() {
-	    return usuarioActual.getVidas();
 	}
 
 
@@ -126,11 +109,38 @@ public class OfCourses {
 	}
 
 
-	public String getNombreUsuario() {
-		return usuarioActual.getUsername();
+	public Curso getCurso(String cursoActual) {
+		return usuarioActual.getCurso(cursoActual);
 	}
 
 
+	public Pregunta getSiguientePregunta(Leccion actual) {
+		return actual.getSiguientePregunta();
+	}
+
+
+	public String getNombreUsuario() {
+		return usuarioActual.getUsername();
+	}
+	
+	public void recargarVidasSiCorresponde() {
+	    boolean recarga = usuarioActual.recargarSiEsNuevoDia();
+	    if(recarga) { repoUser.modificarUsuario(usuarioActual);}
+	}
+	
+	public void perderVida() {
+	    usuarioActual.perderVida();
+	    repoUser.modificarUsuario(usuarioActual);
+	}
+	
+	public boolean tieneVidas() {
+	    return !usuarioActual.estaSinVidas();
+	}
+	
+	public int getVidas() {
+	    return usuarioActual.getVidas();
+	}
+	
 	public void actualizarUsuario(String nuevoNombre, String nuevaContrasena, String nuevoCorreo, File nuevaFoto) {
 		if (nuevoNombre != null) usuarioActual.setUsername(nuevoNombre);
 	    if (nuevaContrasena != null) usuarioActual.setPassword(nuevaContrasena);
@@ -144,6 +154,5 @@ public class OfCourses {
 	public String getCorreoUsuario() {
 		return usuarioActual.getEmail();
 	}
-	
 	
 }
