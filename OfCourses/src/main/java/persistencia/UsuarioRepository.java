@@ -13,13 +13,7 @@ public class UsuarioRepository {
     public UsuarioRepository(EntityManager em) {
         this.em = em;
     }
-
-    public void guardar(Usuario usuario) {
-        em.getTransaction().begin();
-        em.persist(usuario);
-        em.getTransaction().commit();
-    }
-
+    
     public Usuario buscarPorId(Long id) {
         return em.find(Usuario.class, id);
     }
@@ -45,4 +39,27 @@ public class UsuarioRepository {
         em.remove(em.contains(usuario) ? usuario : em.merge(usuario));
         em.getTransaction().commit();
     }
+    
+    public boolean guardar(Usuario usuario) {
+    	
+    	List<Usuario> todos = listarTodos();
+    	
+    	for(Usuario u: todos) {
+    		if(u.getEmail().equals(usuario.getEmail()) || u.getUsername().equals(usuario.getUsername())) {
+    			return false;
+    		}
+    	}
+    	
+        em.getTransaction().begin();
+        em.persist(usuario);
+        em.getTransaction().commit();
+        return true;
+    }
+    
+    public void modificarUsuario(Usuario usuario) {
+        em.getTransaction().begin();
+		em.merge(usuario);
+        em.getTransaction().commit();
+    }
+
 }

@@ -40,16 +40,19 @@ public class Usuario {
     @JoinColumn(name="autor_id")
     private List<Curso> cursos;
     
+    private String foto;
+    
     private LocalDateTime ultimoDia;
     private int racha;
     private int rachaMaxima;
     
     public Usuario() {}
 
-    public Usuario(String username, String email, String password) {
+    public Usuario(String username, String email, String password, String foto) {
     	this.username = username;
     	this.email = email;
     	this.password = password;
+    	this.foto = foto;
         this.cursos = new ArrayList<Curso>();
         this.vidas = MAX_VIDAS;
         this.setUltimaRecarga(LocalDate.now());
@@ -98,6 +101,9 @@ public class Usuario {
 		this.ultimoDia = ultimoDia;
 	}
     
+    public String getFoto() {
+		return foto;
+	}
     //Setters
     public void setCursos(List<Curso> cursos) {
 		this.cursos = cursos;
@@ -133,9 +139,7 @@ public class Usuario {
  
     
     public void addCurso(Curso c) {
-    	if(!cursos.contains(c)) {
-    		cursos.add(c);
-    	}
+    	cursos.add(c);
     }
     
     /**
@@ -173,6 +177,9 @@ public class Usuario {
     public boolean estaSinVidas() {
         return vidas == 0;
     }
+    public void setFoto(String foto) {
+		this.foto = foto;
+	}
     
     @Override
     public String toString() {

@@ -16,6 +16,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import modelo.Curso;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 
@@ -27,12 +28,13 @@ import controlador.OfCourses;
 
 public class VistaPrincipal extends Application {
 
+	private OfCourses controlador = OfCourses.getUnicaInstancia();
+	
     private double xOffset = 0;
     private double yOffset = 0;
     private Stage primaryStage;
     private ImageView imagenPerfilView;
     private VBox cursosContainer;
-    private List<String> cursos = new ArrayList<>();
 
     // <--------------------------------------------------------------->
     // <------------------- FUNCIONES DE BOTONES ---------------------->
@@ -67,16 +69,22 @@ public class VistaPrincipal extends Application {
         
         if (file != null) {
             String nombreCurso = file.getName().replaceFirst("[.][^.]+$", "");
-            cursos.add(nombreCurso);
-            actualizarListaCursos();
             
-            // TODO: Llamar al controlador para guardar el curso
             
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Curso añadido");
-            alert.setHeaderText(null);
-            alert.setContentText("El curso '" + nombreCurso + "' ha sido añadido correctamente.");
-            alert.showAndWait();
+            if(controlador.addCurso(file.getPath())) {
+                actualizarListaCursos();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Curso añadido");
+                alert.setHeaderText(null);
+                alert.setContentText("El curso '" + nombreCurso + "' ha sido añadido correctamente.");
+                alert.showAndWait();
+            }else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Archivo erroneo");
+                alert.showAndWait();            
+            }
         }
     }
     
@@ -115,13 +123,6 @@ public class VistaPrincipal extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        
-        /*for(int i = 0; i < 15; i++) {
-        	cursos.add("Prueba curso");
-        }*/
-        
-        // TODO: Llamar al controlador y pedirle toda la lista de cursos disponibles
-        cursos.add("Curso de introducción a la programación");
         
         // Contenedor principal
         BorderPane root = new BorderPane();
@@ -284,15 +285,15 @@ public class VistaPrincipal extends Application {
     
     private void actualizarListaCursos() {
         cursosContainer.getChildren().clear();
-        
+        List<Curso> cursos = controlador.getCursosDisponibles();
         if (cursos.isEmpty()) {
             Label lblSinCursos = new Label("No tienes cursos aún. ¡Añade tu primer curso!");
             lblSinCursos.setFont(Font.font("Segoe UI", 14));
             lblSinCursos.setTextFill(Color.GRAY);
             cursosContainer.getChildren().add(lblSinCursos);
         } else {
-            for (String curso : cursos) {
-                HBox cursoBox = crearCursoBox(curso);
+            for (Curso curso : cursos) {
+                HBox cursoBox = crearCursoBox(curso.getTitulo());
                 cursosContainer.getChildren().add(cursoBox);
             }
         }
