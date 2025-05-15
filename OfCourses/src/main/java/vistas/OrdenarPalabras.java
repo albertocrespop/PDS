@@ -21,7 +21,6 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import modelo.Pregunta;
 import modelo.PreguntaOrdenarPalabras;
 
 import java.util.Collections;

@@ -7,6 +7,8 @@ import java.util.List;
 import jakarta.persistence.EntityManager;
 import javafx.scene.image.Image;
 import modelo.Curso;
+import modelo.Leccion;
+import modelo.Pregunta;
 import modelo.Usuario;
 import persistencia.CursoRepository;
 import persistencia.JPAUtil;
@@ -14,7 +16,7 @@ import persistencia.UsuarioRepository;
 import servicios.CargadorYAML;
 
 public class OfCourses {
-	public static final String FOTO_DEFECTO = "/main/resources/imagenes/foto-perfil-default.png";
+	public static final String FOTO_DEFECTO = "imagenes/foto-perfil-default.png";
 	private static OfCourses unicaInstancia = null;
 	
 	private UsuarioRepository repoUser;
