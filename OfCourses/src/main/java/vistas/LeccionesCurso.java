@@ -42,11 +42,7 @@ public class LeccionesCurso extends Application {
     private ImageView imagenPerfilView;
     private String nombreCurso;
 
-    public LeccionesCurso() {
-        // TODO: Llamar a una funcion en el controlador que se llame obtenerCursoActual()
-    	// que devuelva el curso que ha sido seleccionado anteriormente, y asignarlo a nombreCurso
-    }
-    
+
     public LeccionesCurso(String nombreCurso) {
         this.nombreCurso = nombreCurso;
         cursoActual = controlador.getCurso(nombreCurso);
@@ -59,24 +55,24 @@ public class LeccionesCurso extends Application {
     private void abrirLeccion(Leccion actual) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         Pregunta pregunta = controlador.getSiguientePregunta(actual);
-        
+         
         if(pregunta instanceof PreguntaOrdenarPalabras) {
-    		OrdenarPalabras ej1 = new OrdenarPalabras(cursoActual.getTitulo());
+    		OrdenarPalabras ej1 = new OrdenarPalabras(cursoActual.getTitulo(),(PreguntaOrdenarPalabras) pregunta);
             Stage stage = new Stage();
             ej1.start(stage);
             primaryStage.close();
         }else if(pregunta instanceof PreguntaRellenarPalabras) {
-        	RellenarPalabras ej2 = new RellenarPalabras(cursoActual.getTitulo());
+        	RellenarPalabras ej2 = new RellenarPalabras(cursoActual.getTitulo(),(PreguntaRellenarPalabras) pregunta);
             Stage stage2 = new Stage();
             ej2.start(stage2);
             primaryStage.close();
         }else if(pregunta instanceof PreguntaFlashCard) {
-    		FlashCard ej3 = new FlashCard(cursoActual.getTitulo());
+    		FlashCard ej3 = new FlashCard(cursoActual.getTitulo(), (PreguntaFlashCard) pregunta);
             Stage stage3 = new Stage();
             ej3.start(stage3);
             primaryStage.close();
         }else if(pregunta instanceof PreguntaVF) {
-        	VerdaderoFalso ej4 = new VerdaderoFalso(cursoActual.getTitulo());
+        	VerdaderoFalso ej4 = new VerdaderoFalso(cursoActual.getTitulo(),(PreguntaVF) pregunta);
             Stage stage4 = new Stage();
             ej4.start(stage4);
             primaryStage.close();

@@ -22,6 +22,8 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import modelo.Pregunta;
+import modelo.PreguntaFlashCard;
 
 public class FlashCard extends Application {
 	
@@ -30,13 +32,14 @@ public class FlashCard extends Application {
     private Stage primaryStage;
     private ImageView imagenPerfilView;
     private String curso;
-
+    private PreguntaFlashCard pregunta;
     // <--------------------------------------------------------------->
     // <------------------- FUNCIONES DE BOTONES ---------------------->
     // <--------------------------------------------------------------->
     
-    public FlashCard(String titulo) {
+    public FlashCard(String titulo, PreguntaFlashCard pregunta) {
     	this.curso = titulo;
+    	this.pregunta = pregunta;
     }
 
 	private void volverAtras() {
@@ -189,13 +192,8 @@ public class FlashCard extends Application {
         
         // Estado de la tarjeta
         boolean[] mostrandoRespuesta = {false};
-        String pregunta = "¿Qué es un ataque XSS?";
-        String respuesta = "Un ataque XSS (Cross-Site Scripting) es una vulnerabilidad de seguridad "
-        		+ "en aplicaciones web que permite a un atacante inyectar scripts maliciosos en páginas "
-        		+ "vistas por otros usuarios. Estos scripts pueden robar datos personales, como cookies "
-        		+ "o credenciales, o realizar acciones en nombre del usuario sin su consentimiento.";
         
-        Label lblContenido = new Label(pregunta);
+        Label lblContenido = new Label(pregunta.getEnunciado());
         lblContenido.setFont(Font.font("Segoe UI", 18));
         lblContenido.setWrapText(true);
         lblContenido.setTextFill(Color.web("#333333"));
@@ -208,10 +206,10 @@ public class FlashCard extends Application {
 
         btnMostrarRespuesta.setOnAction(e -> {
             if (mostrandoRespuesta[0]) {
-                lblContenido.setText(pregunta);
+                lblContenido.setText(pregunta.getEnunciado());
                 btnMostrarRespuesta.setText("Mostrar respuesta");
             } else {
-                lblContenido.setText(respuesta);
+                lblContenido.setText(pregunta.getRespuesta());
                 btnMostrarRespuesta.setText("Ocultar respuesta");
             }
             mostrandoRespuesta[0] = !mostrandoRespuesta[0];

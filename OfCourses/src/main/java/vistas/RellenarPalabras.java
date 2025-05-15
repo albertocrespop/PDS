@@ -20,6 +20,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import modelo.PreguntaRellenarPalabras;
 
 public class RellenarPalabras extends Application {
 
@@ -28,13 +29,15 @@ public class RellenarPalabras extends Application {
     private Stage primaryStage;
     private ImageView imagenPerfilView;
     private String curso;
+    private PreguntaRellenarPalabras pregunta;
     
     // <--------------------------------------------------------------->
     // <------------------- FUNCIONES DE BOTONES ---------------------->
     // <--------------------------------------------------------------->
     
-    public RellenarPalabras(String titulo) {
+    public RellenarPalabras(String titulo, PreguntaRellenarPalabras pregunta) {
     	this.curso = titulo;
+    	this.pregunta = pregunta;
     }
 
 	private void volverAtras() {
@@ -216,11 +219,8 @@ public class RellenarPalabras extends Application {
         lblInstruccion.setTextFill(Color.web("#333333"));
         
         // TODO: Llamar al controlador y obtener el texto de la pregunta
-        String textoDePrueba = "La inteligencia artificial **?** ha revolucionado **?** muchos sectores como la medicina, la educación, y el transporte. " +
-                "En el ámbito de la salud, por ejemplo, **?** puede ayudar a diagnosticar enfermedades a partir de imágenes médicas, " +
-                "mientras que en la educación permite personalizar el **?** ritmo de aprendizaje de cada estudiante. " +
-                "Por otro lado, en el transporte, los vehículos **?** autónomos están empezando a cambiar el paradigma de la movilidad urbana.";
-        TextFlow fraseConHuecos = generarFraseConHuecos(textoDePrueba);
+        String texto = pregunta.getEnunciado();
+        TextFlow fraseConHuecos = generarFraseConHuecos(texto);
         fraseConHuecos.setTextAlignment(TextAlignment.LEFT);
         fraseConHuecos.setLineSpacing(5);
 
