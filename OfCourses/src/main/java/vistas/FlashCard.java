@@ -33,6 +33,8 @@ public class FlashCard extends Application {
     private ImageView imagenPerfilView;
     private String curso;
     private PreguntaFlashCard pregunta;
+    private Button btnSiguiente;
+    
     // <--------------------------------------------------------------->
     // <------------------- FUNCIONES DE BOTONES ---------------------->
     // <--------------------------------------------------------------->
@@ -189,10 +191,10 @@ public class FlashCard extends Application {
         Label lblTitulo = new Label("FlashCard");
         lblTitulo.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20));
         lblTitulo.setTextFill(Color.web("#1a73e8"));
-        
+
         // Estado de la tarjeta
         boolean[] mostrandoRespuesta = {false};
-        
+
         Label lblContenido = new Label(pregunta.getEnunciado());
         lblContenido.setFont(Font.font("Segoe UI", 18));
         lblContenido.setWrapText(true);
@@ -201,21 +203,31 @@ public class FlashCard extends Application {
         lblContenido.setMaxWidth(500);
         lblContenido.setStyle("-fx-border-color: transparent; -fx-padding: 20;");
 
+        // Botón para mostrar respuesta
         Button btnMostrarRespuesta = new Button("Mostrar respuesta");
         styleButton(btnMostrarRespuesta);
 
+        // Botón para siguiente pregunta (oculto al inicio)
+        btnSiguiente = new Button("Siguiente Pregunta");
+        styleButton(btnSiguiente);
+        btnSiguiente.setVisible(false);
+        btnSiguiente.setOnAction(e -> siguientePregunta());
+
+        // Lógica del botón de mostrar respuesta
         btnMostrarRespuesta.setOnAction(e -> {
             if (mostrandoRespuesta[0]) {
                 lblContenido.setText(pregunta.getEnunciado());
                 btnMostrarRespuesta.setText("Mostrar respuesta");
+                btnSiguiente.setVisible(false); // Ocultar cuando se oculta la respuesta
             } else {
                 lblContenido.setText(pregunta.getRespuesta());
                 btnMostrarRespuesta.setText("Ocultar respuesta");
+                btnSiguiente.setVisible(true); // Mostrar cuando se revela la respuesta
             }
             mostrandoRespuesta[0] = !mostrandoRespuesta[0];
         });
 
-        panelFlashCard.getChildren().addAll(lblTitulo, lblContenido, btnMostrarRespuesta);
+        panelFlashCard.getChildren().addAll(lblTitulo, lblContenido, btnMostrarRespuesta, btnSiguiente);
 
         return panelFlashCard;
     }
