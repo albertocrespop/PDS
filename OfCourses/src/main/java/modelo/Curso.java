@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -39,6 +40,9 @@ public class Curso {
     @JsonProperty("estrategia")
     private String estrategiaString;
     
+    @ManyToOne
+    @JoinColumn(name = "autor_id")
+    private Usuario autor;
     
     // Constructor para hibernate
     public Curso() {}
@@ -79,6 +83,10 @@ public class Curso {
     }
 
 	//Getters
+    public Usuario getAutor() {
+		return autor;
+	}
+    
     public String getDescripcion() {
 		return descripcion;
 	}
@@ -118,6 +126,10 @@ public class Curso {
 		this.estrategia = estrategia;
 	}
     
+    public void setAutor(Usuario autor) {
+		this.autor = autor;
+	}
+    
     public void setHoras(int horas) {
 		this.horas = horas;
 	}
@@ -139,6 +151,15 @@ public class Curso {
     	lecciones.stream()
     			 .forEach(l -> l.aplicarEstrategia(this.estrategia));
 	}
+    
+    public double obtenerProgreso() {
+    	List<Leccion> completados = lecciones.stream()
+    					.filter(l -> l.getCompletada())
+    					.collect(Collectors.toList());
+    	
+    	return ((double)completados.size()/(double)lecciones.size())*100;
+    						
+    }
 
     
 }

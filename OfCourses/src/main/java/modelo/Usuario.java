@@ -36,8 +36,7 @@ public class Usuario {
     private LocalDate ultimaRecarga;
     
     
-    @OneToMany
-    @JoinColumn(name="autor_id")
+    @OneToMany(mappedBy="autor")
     private List<Curso> cursos;
     
     private String foto;

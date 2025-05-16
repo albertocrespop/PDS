@@ -12,16 +12,19 @@ import modelo.Pregunta;
 import modelo.Usuario;
 import persistencia.CursoRepository;
 import persistencia.JPAUtil;
+import persistencia.LeccionRepository;
+import persistencia.PreguntaRepository;
 import persistencia.UsuarioRepository;
 import servicios.CargadorYAML;
 
 public class OfCourses {
-	public static final String FOTO_DEFECTO = "imagenes/foto-perfil-default.png";
+	public static final String FOTO_DEFECTO = "/imagenes/foto-perfil-default.png";
 	private static OfCourses unicaInstancia = null;
 	
 	private UsuarioRepository repoUser;
 	private CursoRepository repoCurso;
-
+	private LeccionRepository repoLeccion;
+	private PreguntaRepository repoPregunta;
 	private EntityManager em = JPAUtil.getEntityManager();
 	
 	private Usuario usuarioActual;
@@ -29,6 +32,8 @@ public class OfCourses {
 	private OfCourses() {
 		repoUser = new UsuarioRepository(em);
 		repoCurso = new CursoRepository(em);
+		repoLeccion = new LeccionRepository(em);
+		repoPregunta = new PreguntaRepository(em);
 	}
 	
 	
@@ -68,6 +73,7 @@ public class OfCourses {
 			return false;
 		}
 		
+		usuarioActual = user;
 		return true;
 	}
 	
@@ -92,9 +98,17 @@ public class OfCourses {
 		try{
 			Curso curso = cargador.cargarCursoDesdeArchivo(file);
 			usuarioActual.addCurso(curso);
-	        em.getTransaction().begin();
-	        em.persist(curso);
-	        em.getTransaction().commit();		
+			
+			for(Leccion l: curso.getLecciones()) {
+				for(Pregunta p: l.getPreguntas()) {
+					repoPregunta.guardar(p);
+				}
+				repoLeccion.guardar(l);
+			}
+			
+			curso.setAutor(usuarioActual);
+			repoCurso.guardar(curso);
+			repoUser.guardar(usuarioActual);
 	    } catch (IOException e) {
 			return false;
 		}
