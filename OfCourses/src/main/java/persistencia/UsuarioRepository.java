@@ -1,6 +1,7 @@
 package persistencia;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import modelo.Usuario;
 
@@ -25,9 +26,14 @@ public class UsuarioRepository {
     }
 
     public Usuario buscarPorNombre(String nombre) {
-        TypedQuery<Usuario> query = em.createQuery("SELECT u FROM Usuario u WHERE u.username = :nombre", Usuario.class);
-        query.setParameter("nombre", nombre);
-        return query.getSingleResult();
+        try {
+            TypedQuery<Usuario> query = em.createQuery(
+                "SELECT u FROM Usuario u WHERE u.username = :nombre", Usuario.class);
+            query.setParameter("nombre", nombre);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
     
     public List<Usuario> listarTodos() {
