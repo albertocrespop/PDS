@@ -43,6 +43,11 @@ public class LeccionesCurso extends Application {
     public LeccionesCurso(String nombreCurso) {
         this.nombreCurso = nombreCurso;
         cursoActual = OfCourses.getUnicaInstancia().getCurso(nombreCurso);
+		for(Leccion l: cursoActual.getLecciones()) {
+        	for(Pregunta p: l.getPreguntas()) {
+        		System.out.println(p.getEnunciado());
+        	}
+		}
     }
 
     // <--------------------------------------------------------------->
@@ -229,7 +234,7 @@ public class LeccionesCurso extends Application {
         progressBar.setPrefWidth(200);
         progressBar.setStyle("-fx-accent: #1a73e8;");
         
-        String porc = (int)(porcentajeCompletado*100) + "%";
+        String porc = (int)(porcentajeCompletado) + "%";
         Label lblPorcentaje = new Label(porc);
         lblPorcentaje.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
         lblPorcentaje.setTextFill(Color.web("#1a73e8"));

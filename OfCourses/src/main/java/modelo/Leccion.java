@@ -84,4 +84,5 @@ public class Leccion {
 	public Pregunta getSiguientePregunta() {
 		return preguntas.get(ultimaPregunta);
 	}
+	
 }

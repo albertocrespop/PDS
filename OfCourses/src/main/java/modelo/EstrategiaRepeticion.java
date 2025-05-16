@@ -1,7 +1,9 @@
 package modelo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EstrategiaRepeticion extends Estrategia {
     public EstrategiaRepeticion() {}
@@ -9,10 +11,10 @@ public class EstrategiaRepeticion extends Estrategia {
     @Override
     public List<Pregunta> ordenar(List<Pregunta> preguntas) {
         List<Pregunta> result = new ArrayList<Pregunta>();
-        for (int i = 0; i < preguntas.size(); i++) {
-            result.add(preguntas.get(i));
-            if (i % 3 == 2) result.add(preguntas.get(i));
-        }
+        Collections.shuffle(preguntas);
+        result.addAll(preguntas);
+        Collections.shuffle(preguntas);
+        result.addAll(preguntas);
         return result;
     }
     

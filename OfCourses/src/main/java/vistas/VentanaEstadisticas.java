@@ -168,17 +168,16 @@ public class VentanaEstadisticas extends Application {
         lblTitulo.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
         lblTitulo.setTextFill(Color.web("#1a73e8"));
         
-        // TODO: Pedir al controlador las estadísticas
-        Label lblTiempoUso = new Label("Tiempo de uso: 3 horas y 42 minutos");
-        Label lblMejorRacha = new Label("Mejor racha: 7 días consecutivos");
-        Label lblPreguntasRespondidas = new Label("Preguntas respondidas: 182");
+        Label lblRacha = new Label("Racha: " + OfCourses.getUnicaInstancia().getRacha() + " días consecutivos");
+        Label lblMejorRacha = new Label("Mejor racha: " + OfCourses.getUnicaInstancia().getMaximaRacha() + " días consecutivos");
+        Label lblPreguntasRespondidas = new Label("Preguntas respondidas: "+  OfCourses.getUnicaInstancia().preguntasContestadas());
 
-        for (Label lbl : List.of(lblTiempoUso, lblMejorRacha, lblPreguntasRespondidas)) {
+        for (Label lbl : List.of(lblRacha, lblMejorRacha, lblPreguntasRespondidas)) {
             lbl.setFont(Font.font("Segoe UI", 16));
             lbl.setTextFill(Color.web("#333333"));
         }
 
-        panelEstadisticas.getChildren().addAll(lblTitulo, lblTiempoUso, lblMejorRacha, lblPreguntasRespondidas);
+        panelEstadisticas.getChildren().addAll(lblTitulo, lblRacha,lblMejorRacha, lblPreguntasRespondidas);
 
         // Envolver con fondo para mantener consistencia
         StackPane fondoConTarjeta = new StackPane();
