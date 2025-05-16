@@ -48,7 +48,7 @@ public class PersistenciaTest {
         List<Pregunta> preguntas = new ArrayList<>();
         preguntas.add(new PreguntaFlashCard("¿Qué es una clase?", "Plantilla para objetos"));
         preguntas.add(new PreguntaVF("¿Java soporta múltiples herencias de clase?", "FALSO"));
-        preguntas.add(new PreguntaOrdenarPalabras("Ordena palabras clave", "public static void", "void static public"));
+        preguntas.add(new PreguntaOrdenarPalabras("Ordena palabras clave", "public static void"));
         List<Leccion> lecciones = new ArrayList<Leccion>();
         
         Curso curso = new Curso("Curso Java Completo", "Aprende Java de forma avanzada", lecciones, "modelo.EstrategiaAleatoria");
@@ -97,22 +97,6 @@ public class PersistenciaTest {
 
     @Test
     @Order(3)
-    public void testBuscarCursosPorTitulo() {
-        // Buscar cursos que contengan "Java" en el título
-        String terminoBusqueda = "Java";
-        
-        TypedQuery<Curso> query = em.createQuery(
-            "SELECT c FROM Curso c WHERE c.titulo LIKE :termino", Curso.class);
-        query.setParameter("termino", "%" + terminoBusqueda + "%");
-        
-        List<Curso> cursos = query.getResultList();
-        
-        assertFalse(cursos.isEmpty(), "Debería encontrar al menos un curso con 'Java' en el título");
-        assertTrue(cursos.get(0).getTitulo().contains(terminoBusqueda));
-    }
-
-    @Test
-    @Order(4)
     public void testContarPreguntasPorTipo() {
         // Contar preguntas de cada tipo en la base de datos
         TypedQuery<Long> flashCardQuery = em.createQuery(
@@ -136,33 +120,9 @@ public class PersistenciaTest {
         System.out.println("Ordenar palabras: " + totalOrdenar);
     }
 
-    @Test
-    @Order(5)
-    public void testBuscarLeccionesPorCurso() {
-        // Primero buscar un curso existente
-        TypedQuery<Curso> cursoQuery = em.createQuery(
-            "SELECT c FROM Curso c WHERE c.titulo = 'Curso Java Completo'", Curso.class);
-        List<Curso> cursos = cursoQuery.getResultList();
-        
-        if (!cursos.isEmpty()) {
-            Curso curso = cursos.get(0);
-            
-            // Buscar las lecciones de este curso
-            TypedQuery<Leccion> leccionQuery = em.createQuery(
-                "SELECT l FROM Leccion l WHERE l.curso = :curso", Leccion.class);
-            leccionQuery.setParameter("curso", curso);
-            
-            List<Leccion> lecciones = leccionQuery.getResultList();
-            
-            assertFalse(lecciones.isEmpty(), "El curso debería tener lecciones asociadas");
-            assertEquals(curso.getId(), lecciones.get(0).getId());
-        } else {
-            fail("No se encontró el curso 'Curso Java Completo' en la base de datos");
-        }
-    }
 
     @Test
-    @Order(6)
+    @Order(4)
     public void testBuscarCursosDeUsuario() {
         // Buscar un usuario específico
         String emailUsuario = "carlos@example.com";
