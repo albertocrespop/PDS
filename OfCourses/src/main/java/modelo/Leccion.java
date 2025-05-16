@@ -94,6 +94,7 @@ public class Leccion {
 		return preguntas.get(ultimaPregunta);
 	}
 
+
 	public boolean isCompletada() {
 		if(ultimaPregunta >= preguntas.size()) {
 			return true;

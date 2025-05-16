@@ -57,25 +57,6 @@ public class Curso {
     	this.titulo = titulo;
     	this.descripcion = descripcion;
     	this.lecciones = new ArrayList<Leccion>(lecciones);
-		/*if (estrategia.isEmpty()) {
-			estrategiaString = estrategia.substring(0, 1).toUpperCase() + estrategiaString.substring(1);
-			estrategiaString = "Estrategia" + estrategiaString;
-			try {
-				this.estrategia = (Estrategia) Class.forName(estrategiaString).getDeclaredConstructor().newInstance();
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException | NoSuchMethodException | SecurityException
-					| ClassNotFoundException e) {
-			}
-			aplicarEstrategia();
-		}*/
-		/*try {
-			this.estrategia = (Estrategia) Class.forName("modelo."+estrategiaString).getDeclaredConstructor().newInstance();
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-    	
     	this.horas = 0;
     	this.leccionActual = 0;
     	
@@ -147,7 +128,15 @@ public class Curso {
 	}
     
     //Metodos auxiliares
-    private void aplicarEstrategia() {
+    public void aplicarEstrategia() {
+    	String estrategiatexto = estrategiaString.substring(0, 1).toUpperCase() + estrategiaString.substring(1);
+    	estrategiatexto = "Estrategia" + estrategiatexto;
+		try {
+			this.estrategia = (Estrategia) Class.forName("modelo."+estrategiatexto).getDeclaredConstructor().newInstance();
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | NoSuchMethodException | SecurityException
+				| ClassNotFoundException e) {
+		}
     	lecciones.stream()
     			 .forEach(l -> l.aplicarEstrategia(this.estrategia));
 	}
@@ -161,5 +150,11 @@ public class Curso {
     						
     }
 
-    
+    public int getPreguntasContestadas() {
+    	int resultado  = 0;
+    	for(Leccion l: lecciones) {
+    		resultado = resultado + l.getUltimaPregunta();
+    	}
+    	return resultado;
+    }
 }

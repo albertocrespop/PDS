@@ -60,6 +60,7 @@ public class OfCourses {
 			usuarioActual = null;
 			return false;
 		}else{
+			usuarioActual.comprobarRacha();
 			return true;
 		}
 	}
@@ -109,6 +110,7 @@ public class OfCourses {
 			curso.setAutor(usuarioActual);
 			repoCurso.guardar(curso);
 			repoUser.guardar(usuarioActual);
+			curso.aplicarEstrategia();
 	    } catch (IOException e) {
 			return false;
 		}
@@ -177,8 +179,22 @@ public class OfCourses {
 		return usuarioActual.getEmail();
 	}
 
+	public int getRacha() {
+		return usuarioActual.getRacha();
+	}
+
+
+	public int getMaximaRacha() {
+		return usuarioActual.getRachaMaxima();
+	}
+
+	public int preguntasContestadas() {
+		return usuarioActual.obtenerPreguntasContestadas();
+	}
+
 	public Pregunta getPreguntaActual(Leccion actual) {
 		return actual.getPreguntaActual();
 	}
 	
+
 }

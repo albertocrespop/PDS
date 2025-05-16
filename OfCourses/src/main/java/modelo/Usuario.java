@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.time.Duration;
 import java.time.LocalDate;
 
 import jakarta.persistence.*;
@@ -41,7 +42,7 @@ public class Usuario {
     
     private String foto;
     
-    private LocalDateTime ultimoDia;
+    private LocalDate ultimoDia;
     private int racha;
     private int rachaMaxima;
     
@@ -55,6 +56,9 @@ public class Usuario {
         this.cursos = new ArrayList<Curso>();
         this.vidas = MAX_VIDAS;
         this.setUltimaRecarga(LocalDate.now());
+        this.racha = 0;
+        this.rachaMaxima = 0;
+        this.ultimoDia = LocalDate.now();
     }
     
     //Getters
@@ -96,13 +100,14 @@ public class Usuario {
 		return id;
 	}
     
-    public void setUltimoDia(LocalDateTime ultimoDia) {
-		this.ultimoDia = ultimoDia;
+    public LocalDate getUltimoDia() {
+		return ultimoDia;
 	}
     
     public String getFoto() {
 		return foto;
 	}
+    
     //Setters
     public void setCursos(List<Curso> cursos) {
 		this.cursos = cursos;
@@ -132,10 +137,10 @@ public class Usuario {
     public void setUltimaRecarga(LocalDate ultimaRecarga) {
 		this.ultimaRecarga = ultimaRecarga;
 	}
-    public void setUltimaFecha(LocalDateTime fecha) {
-		this.ultimoDia = fecha;
+
+    public void setUltimoDia(LocalDate ultimoDia) {
+		this.ultimoDia = ultimoDia;
 	}
- 
     
     public void addCurso(Curso c) {
     	cursos.add(c);
@@ -197,4 +202,23 @@ public class Usuario {
 		}
 		return null;
 	}
+    
+    public void comprobarRacha() {
+    	if(ultimoDia.equals(LocalDate.now())) {
+    		return;
+    	}
+    	ultimoDia = LocalDate.now();
+    	racha = racha + 1;
+    	if(racha > rachaMaxima) {
+    		rachaMaxima = racha;
+    	}
+    }
+    
+    public int obtenerPreguntasContestadas() {
+    	int resultado = 0;
+    	for(Curso c: cursos) {
+    		resultado = resultado + c.getPreguntasContestadas();
+    	}
+    	return resultado;
+    }
 }

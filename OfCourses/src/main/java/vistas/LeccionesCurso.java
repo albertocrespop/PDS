@@ -44,6 +44,11 @@ public class LeccionesCurso extends Application {
     public LeccionesCurso(String nombreCurso) {
         this.nombreCurso = nombreCurso;
         cursoActual = OfCourses.getUnicaInstancia().getCurso(nombreCurso);
+		for(Leccion l: cursoActual.getLecciones()) {
+        	for(Pregunta p: l.getPreguntas()) {
+        		System.out.println(p.getEnunciado());
+        	}
+		}
     }
 
     // <--------------------------------------------------------------->
