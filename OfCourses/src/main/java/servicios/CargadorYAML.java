@@ -1,5 +1,6 @@
 package servicios;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import modelo.Curso;
@@ -31,6 +32,9 @@ public class CargadorYAML {
      */
     public CargadorYAML() {
         this.yamlMapper = new ObjectMapper(new YAMLFactory());
+        yamlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+        yamlMapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, true);
+        yamlMapper.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, true);
     }
     
     /**

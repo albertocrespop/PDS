@@ -129,7 +129,8 @@ public class OfCourses {
 
 
 	public Pregunta getSiguientePregunta(Leccion actual) {
-		return actual.getSiguientePregunta();
+		Pregunta siguiente = actual.getSiguientePregunta();
+		return null;
 	}
 
 
@@ -167,6 +168,10 @@ public class OfCourses {
 
 	public String getCorreoUsuario() {
 		return usuarioActual.getEmail();
+	}
+
+	public Pregunta getPreguntaActual(Leccion actual) {
+		return actual.getPreguntaActual();
 	}
 	
 }

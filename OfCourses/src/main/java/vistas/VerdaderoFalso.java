@@ -26,6 +26,11 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import modelo.Leccion;
+import modelo.Pregunta;
+import modelo.PreguntaFlashCard;
+import modelo.PreguntaOrdenarPalabras;
+import modelo.PreguntaRellenarPalabras;
 import modelo.PreguntaVF;
 
 public class VerdaderoFalso extends Application {
@@ -36,14 +41,17 @@ public class VerdaderoFalso extends Application {
     private ImageView imagenPerfilView;
     private String curso;
     private PreguntaVF pregunta;
+    private Leccion leccionActual;
+    private Button btnSiguiente;
 
     // <--------------------------------------------------------------->
     // <------------------- FUNCIONES DE BOTONES ---------------------->
     // <--------------------------------------------------------------->
     
-    public VerdaderoFalso(String curso, PreguntaVF pregunta) {
+    public VerdaderoFalso(String curso, PreguntaVF pregunta, Leccion leccion) {
     	this.pregunta = pregunta;
     	this.curso = curso;
+    	this.leccionActual = leccion;
     }
 
 	private void volverAtras() {
@@ -58,7 +66,30 @@ public class VerdaderoFalso extends Application {
     }
     
     private void siguientePregunta() {
-    	// TODO: método para mostrar la siguiente pregunta
+
+    	Pregunta pregunta = OfCourses.getUnicaInstancia().getSiguientePregunta(leccionActual);
+        
+        if(pregunta instanceof PreguntaOrdenarPalabras) {
+    		OrdenarPalabras ej1 = new OrdenarPalabras(curso,(PreguntaOrdenarPalabras) pregunta, leccionActual);
+            Stage stage = new Stage();
+            ej1.start(stage);
+            primaryStage.close();
+        }else if(pregunta instanceof PreguntaRellenarPalabras) {
+        	RellenarPalabras ej2 = new RellenarPalabras(curso,(PreguntaRellenarPalabras) pregunta, leccionActual);
+            Stage stage2 = new Stage();
+            ej2.start(stage2);
+            primaryStage.close();
+        }else if(pregunta instanceof PreguntaFlashCard) {
+    		FlashCard ej3 = new FlashCard(curso, (PreguntaFlashCard) pregunta, leccionActual);
+            Stage stage3 = new Stage();
+            ej3.start(stage3);
+            primaryStage.close();
+        }else if(pregunta instanceof PreguntaVF) {
+        	VerdaderoFalso ej4 = new VerdaderoFalso(curso,(PreguntaVF) pregunta, leccionActual);
+            Stage stage4 = new Stage();
+            ej4.start(stage4);
+            primaryStage.close();
+        }
     }
     
     private void verificarRespuesta(ToggleGroup grupoOpciones) {
@@ -66,13 +97,15 @@ public class VerdaderoFalso extends Application {
             mostrarAlerta("Advertencia", "Debes seleccionar una opción.", Alert.AlertType.WARNING);
         } else {
             RadioButton seleccionada = (RadioButton) grupoOpciones.getSelectedToggle();
-			String respuestaSeleccionada = seleccionada.getText();
+            String respuestaSeleccionada = seleccionada.getText();
 
-            // TODO: Llamar al controlador para verificar si la respuestaSeleccionada es correcta
-            boolean esCorrecto = respuestaSeleccionada.equals("Verdadero");
+            boolean esCorrecto = pregunta.comprobarRespuesta(respuestaSeleccionada);
 
             String mensaje = esCorrecto ? "¡Correcto!" : "Incorrecto.";
             mostrarAlerta("Resultado", mensaje, Alert.AlertType.INFORMATION);
+
+            // Mostrar botón solo si es correcto
+            btnSiguiente.setVisible(esCorrecto);
         }
     }
     
@@ -233,7 +266,12 @@ public class VerdaderoFalso extends Application {
         styleButton(btnVerificar);
         btnVerificar.setOnAction(e -> verificarRespuesta(grupoOpciones));
 
-        panelVF.getChildren().addAll(lblTitulo, lblPregunta, opciones, btnVerificar);
+        btnSiguiente = new Button("Siguiente Pregunta");
+        styleButton(btnSiguiente);
+        btnSiguiente.setVisible(false);
+        btnSiguiente.setOnAction(e -> siguientePregunta());
+
+        panelVF.getChildren().addAll(lblTitulo, lblPregunta, opciones, btnVerificar, btnSiguiente);
 
         return panelVF;
     }

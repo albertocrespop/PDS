@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
@@ -20,7 +21,12 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import modelo.Leccion;
+import modelo.Pregunta;
+import modelo.PreguntaFlashCard;
+import modelo.PreguntaOrdenarPalabras;
 import modelo.PreguntaRellenarPalabras;
+import modelo.PreguntaVF;
 
 public class RellenarPalabras extends Application {
 
@@ -30,14 +36,18 @@ public class RellenarPalabras extends Application {
     private ImageView imagenPerfilView;
     private String curso;
     private PreguntaRellenarPalabras pregunta;
+    private Button btnSiguiente;
+    private VBox panelEjercicio;
+    private Leccion leccionActual;
     
     // <--------------------------------------------------------------->
     // <------------------- FUNCIONES DE BOTONES ---------------------->
     // <--------------------------------------------------------------->
     
-    public RellenarPalabras(String titulo, PreguntaRellenarPalabras pregunta) {
+    public RellenarPalabras(String titulo, PreguntaRellenarPalabras pregunta, Leccion leccion) {
     	this.curso = titulo;
     	this.pregunta = pregunta;
+    	this.leccionActual = leccion;
     }
 
 	private void volverAtras() {
@@ -52,7 +62,30 @@ public class RellenarPalabras extends Application {
     }
     
     private void siguientePregunta() {
-    	// TODO: método para mostrar la siguiente pregunta
+
+    	Pregunta pregunta = OfCourses.getUnicaInstancia().getSiguientePregunta(leccionActual);
+        
+        if(pregunta instanceof PreguntaOrdenarPalabras) {
+    		OrdenarPalabras ej1 = new OrdenarPalabras(curso,(PreguntaOrdenarPalabras) pregunta, leccionActual);
+            Stage stage = new Stage();
+            ej1.start(stage);
+            primaryStage.close();
+        }else if(pregunta instanceof PreguntaRellenarPalabras) {
+        	RellenarPalabras ej2 = new RellenarPalabras(curso,(PreguntaRellenarPalabras) pregunta, leccionActual);
+            Stage stage2 = new Stage();
+            ej2.start(stage2);
+            primaryStage.close();
+        }else if(pregunta instanceof PreguntaFlashCard) {
+    		FlashCard ej3 = new FlashCard(curso, (PreguntaFlashCard) pregunta, leccionActual);
+            Stage stage3 = new Stage();
+            ej3.start(stage3);
+            primaryStage.close();
+        }else if(pregunta instanceof PreguntaVF) {
+        	VerdaderoFalso ej4 = new VerdaderoFalso(curso,(PreguntaVF) pregunta, leccionActual);
+            Stage stage4 = new Stage();
+            ej4.start(stage4);
+            primaryStage.close();
+        }
     }
     
     private void mostrarPista() {
@@ -77,8 +110,16 @@ public class RellenarPalabras extends Application {
             return;
         }
         
-        // TODO: Llamar al controlador para verificar la respuesta
-        mostrarAlerta("Resultado", "Tu solución está siendo verificada...", Alert.AlertType.INFORMATION);
+        boolean correcta = pregunta.comprobarRespuesta(solucion.toString());
+
+        if (correcta) {
+            mostrarAlerta("¡Correcto!", "¡Has acertado!", Alert.AlertType.INFORMATION);
+            btnSiguiente.setVisible(true);
+        } else {
+            mostrarAlerta("Incorrecto", "La solución no es correcta. Inténtalo de nuevo.", Alert.AlertType.WARNING);
+            btnSiguiente.setVisible(false);
+        }
+        
     }
     
 	// <--------------------------------------------------------------->
@@ -203,7 +244,7 @@ public class RellenarPalabras extends Application {
     }
     
     private VBox crearPanelEjercicio() {
-        VBox panelEjercicio = new VBox(20);
+        panelEjercicio = new VBox(20);
         panelEjercicio.setAlignment(Pos.TOP_CENTER);
         panelEjercicio.setPadding(new Insets(30, 50, 40, 50));
         panelEjercicio.setMaxWidth(800);
@@ -217,23 +258,33 @@ public class RellenarPalabras extends Application {
         Label lblInstruccion = new Label("Completa la frase:");
         lblInstruccion.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
         lblInstruccion.setTextFill(Color.web("#333333"));
-        
-        // TODO: Llamar al controlador y obtener el texto de la pregunta
+
         String texto = pregunta.getEnunciado();
         TextFlow fraseConHuecos = generarFraseConHuecos(texto);
         fraseConHuecos.setTextAlignment(TextAlignment.LEFT);
         fraseConHuecos.setLineSpacing(5);
 
+        // Botón verificar
         Button btnVerificar = new Button("Verificar Solución");
         styleButton(btnVerificar);
+
+        // Botón siguiente (oculto al principio)
+        btnSiguiente = new Button("Siguiente Pregunta");
+        styleSecondaryButton(btnSiguiente);
+        btnSiguiente.setVisible(false);
+        btnSiguiente.setOnAction(e -> siguientePregunta());
+
         btnVerificar.setOnAction(e -> {
-            StringBuilder solucion = new StringBuilder();
-            for (javafx.scene.Node nodo : fraseConHuecos.getChildren()) {
-            	if (nodo instanceof TextField) {
-            	    TextField campo = (TextField) nodo;
-            	    solucion.append("[").append(campo.getText()).append("]");
-            	}
+        	StringBuilder solucion = new StringBuilder();
+            for (Node nodo : fraseConHuecos.getChildren()) {
+                if (nodo instanceof TextField campo) {
+                	solucion.append(campo.getText());
+                }
             }
+            
+            // TODO: Aquí la solucion tiene que estar bien preparada para comprobar la respuesta
+            System.out.println(solucion.toString());
+
             verificarSolucion(solucion.toString());
         });
 
@@ -241,12 +292,11 @@ public class RellenarPalabras extends Application {
         styleSecondaryButton(btnPista);
         btnPista.setOnAction(e -> mostrarPista());
 
-        HBox panelBotones = new HBox(btnPista, btnVerificar);
+        HBox panelBotones = new HBox(btnPista, btnVerificar, btnSiguiente);
         panelBotones.setSpacing(20);
         panelBotones.setAlignment(Pos.CENTER);
 
         panelEjercicio.getChildren().addAll(lblEnunciado, lblInstruccion, fraseConHuecos, panelBotones);
-
         return panelEjercicio;
     }
 
