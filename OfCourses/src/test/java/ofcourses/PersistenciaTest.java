@@ -2,9 +2,16 @@ package ofcourses;
 
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import modelo.*;
-
+import persistencia.CursoRepository;
 import persistencia.JPAUtil;
 
 import java.util.ArrayList;
@@ -17,30 +24,48 @@ import org.junit.jupiter.api.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PersistenciaTest {
+	  private static EntityManagerFactory emf;
+	    private EntityManager em;
+	    private CursoRepository cursoRepository;
 
-    private static EntityManager em;
+	    @BeforeAll
+	    static void setUpBeforeAll() {
+	        emf = Persistence.createEntityManagerFactory("ofcoursesPU");
+	    }
 
-    @BeforeAll
-    public static void init() {
-        em = JPAUtil.getEntityManager();
-        em.getTransaction().begin(); // Abrimos una transacción global
-    }
+	    @BeforeEach
+	    void setUp() {
+	        em = emf.createEntityManager();
+	        cursoRepository = new CursoRepository(em);
+	        limpiarBaseDeDatos();
+	    }
 
-    @AfterAll
-    public static void cleanup() {
-        try {
-            if (em != null && em.isOpen()) {
-                if (em.getTransaction().isActive()) {
-                    em.getTransaction().rollback(); // Revertimos TODO lo que se hizo
-                }
-                em.clear();
-                em.close();
-            }
-        } finally {
-            JPAUtil.cerrar();
-        }
-    }
+	    private void limpiarBaseDeDatos() {
+	        EntityTransaction tx = em.getTransaction();
+	        try {
+	            if (!tx.isActive()) {
+	                tx.begin();
+	            }
+            em.createNativeQuery("PRAGMA foreign_keys = OFF").executeUpdate();
+            em.createQuery("DELETE FROM PreguntaRellenarPalabras").executeUpdate();
+            em.createQuery("DELETE FROM PreguntaVF").executeUpdate();
+            em.createQuery("DELETE FROM PreguntaFlashCard").executeUpdate();
+            em.createQuery("DELETE FROM PreguntaOrdenarPalabras").executeUpdate();
+            em.createQuery("DELETE FROM Pregunta").executeUpdate();
+            em.createQuery("DELETE FROM Leccion").executeUpdate();
+            em.createQuery("DELETE FROM Curso").executeUpdate();
+            em.createQuery("DELETE FROM Usuario").executeUpdate();
+            em.createNativeQuery("PRAGMA foreign_keys = ON").executeUpdate();
+            tx.commit();
+	        } catch (Exception e) {
+	            if (tx.isActive()) {
+	                tx.rollback();
+	            }
+	            throw e;
+	        }
+	    }
 
+<<<<<<< Updated upstream
     @Test
     @Order(1)
     public void testPersistenciaCompleta() {
@@ -54,11 +79,23 @@ public class PersistenciaTest {
         Curso curso = new Curso("Curso Java Completo", "Aprende Java de forma avanzada", lecciones, "modelo.EstrategiaAleatoria",usuario);
         
         Leccion leccion = new Leccion("POO", "Conceptos de orientación a objetos", preguntas, curso);
+=======
+	    @AfterEach
+	    void tearDown() {
+	        if (em != null && em.isOpen()) {
+	            em.close();
+	        }
+	    }
+>>>>>>> Stashed changes
 
-        lecciones.add(leccion);
-        curso.setLecciones(lecciones);
-        usuario.addCurso(curso);
+	    @AfterAll
+	    static void tearDownAfterAll() {
+	        if (emf != null && emf.isOpen()) {
+	            emf.close();
+	        }
+	    }
 
+<<<<<<< Updated upstream
         //em.getTransaction().begin();
         em.persist(usuario);
         //em.getTransaction().commit();
@@ -185,4 +222,46 @@ public class PersistenciaTest {
             fail("No se encontró el usuario con email " + emailUsuario);
         }
     }
+=======
+	    @Test
+	    void testGuardarYRecuperarCurso() {
+	        // No inicies transacción aquí, déjalo que el repositorio lo maneje
+	        Curso curso = new Curso();
+	        
+	        cursoRepository.guardar(curso);
+	        
+	        Curso recuperado = cursoRepository.buscarPorId(curso.getId());
+	        assertNotNull(recuperado);
+	    }
+	    
+	    @Test
+	    void testEliminarCursoExistente() {
+	        // Buscar un curso por ID (más seguro que por nombre)
+	    	Curso curso = new Curso();
+	        
+	        cursoRepository.guardar(curso);
+	        curso = em.find(Curso.class, 1L);
+	        
+	        // Eliminar el curso
+	        cursoRepository.eliminar(curso);
+	        
+	        // Verificar que ya no existe
+	        Curso eliminado = cursoRepository.buscarPorId(1L);
+	        assertNull(eliminado, "El curso debería haber sido eliminado");
+	    }
+	    @Test
+	    void testEliminarCursoNoAdjuntado() {
+	        // Crear un curso nuevo no adjuntado al EM
+	        Curso nuevoCurso = new Curso();
+	        
+	        // Esto debería funcionar porque el repositorio hace merge si no está adjuntado
+	        cursoRepository.eliminar(nuevoCurso);
+	        
+	        // Verificar que no se creó accidentalmente
+	        Long id = nuevoCurso.getId();
+	        if (id != null) {
+	            assertNull(cursoRepository.buscarPorId(id), "No debería existir el curso temporal");
+	        }
+	    }
+>>>>>>> Stashed changes
 }
