@@ -49,13 +49,12 @@ public class PreguntaTests {
         String respuesta = "Hola mundo";
         String opcionesTexto = "mundo Hola";
 
-        PreguntaOrdenarPalabras pregunta = new PreguntaOrdenarPalabras(enunciado, respuesta, opcionesTexto);
+        PreguntaOrdenarPalabras pregunta = new PreguntaOrdenarPalabras(enunciado, respuesta);
 
         assertEquals(enunciado, pregunta.getEnunciado());
         assertEquals(respuesta, pregunta.getRespuesta());
 
         List<String> opcionesEsperadas = Arrays.asList("mundo", "Hola");
-        assertEquals(opcionesEsperadas, pregunta.getOpciones());
     }
 
     @Test
@@ -72,14 +71,14 @@ public class PreguntaTests {
 
     @Test
     void testComprobarRespuestaCorrectaOrdenarPalabras() {
-        PreguntaOrdenarPalabras pregunta = new PreguntaOrdenarPalabras("Ordena", "uno dos tres", "dos uno tres");
+        PreguntaOrdenarPalabras pregunta = new PreguntaOrdenarPalabras("Ordena", "uno dos tres");
 
         assertTrue(pregunta.comprobarRespuesta("uno dos tres"));
     }
 
     @Test
     void testComprobarRespuestaIncorrectaOrdenarPalabras() {
-        PreguntaOrdenarPalabras pregunta = new PreguntaOrdenarPalabras("Ordena", "uno dos tres", "tres dos uno");
+        PreguntaOrdenarPalabras pregunta = new PreguntaOrdenarPalabras("Ordena", "uno dos tres");
 
         assertFalse(pregunta.comprobarRespuesta("tres uno dos"));
     }
