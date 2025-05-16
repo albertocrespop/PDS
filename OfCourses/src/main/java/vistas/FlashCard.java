@@ -22,8 +22,12 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import modelo.Leccion;
 import modelo.Pregunta;
 import modelo.PreguntaFlashCard;
+import modelo.PreguntaOrdenarPalabras;
+import modelo.PreguntaRellenarPalabras;
+import modelo.PreguntaVF;
 
 public class FlashCard extends Application {
 	
@@ -34,14 +38,16 @@ public class FlashCard extends Application {
     private String curso;
     private PreguntaFlashCard pregunta;
     private Button btnSiguiente;
+    private Leccion leccionActual;
     
     // <--------------------------------------------------------------->
     // <------------------- FUNCIONES DE BOTONES ---------------------->
     // <--------------------------------------------------------------->
     
-    public FlashCard(String titulo, PreguntaFlashCard pregunta) {
+    public FlashCard(String titulo, PreguntaFlashCard pregunta, Leccion leccion) {
     	this.curso = titulo;
     	this.pregunta = pregunta;
+    	this.leccionActual = leccion;
     }
 
 	private void volverAtras() {
@@ -56,7 +62,30 @@ public class FlashCard extends Application {
     }
     
     private void siguientePregunta() {
-    	// TODO: método para mostrar la siguiente pregunta
+
+    	Pregunta pregunta = OfCourses.getUnicaInstancia().getSiguientePregunta(leccionActual);
+        
+        if(pregunta instanceof PreguntaOrdenarPalabras) {
+    		OrdenarPalabras ej1 = new OrdenarPalabras(curso,(PreguntaOrdenarPalabras) pregunta, leccionActual);
+            Stage stage = new Stage();
+            ej1.start(stage);
+            primaryStage.close();
+        }else if(pregunta instanceof PreguntaRellenarPalabras) {
+        	RellenarPalabras ej2 = new RellenarPalabras(curso,(PreguntaRellenarPalabras) pregunta, leccionActual);
+            Stage stage2 = new Stage();
+            ej2.start(stage2);
+            primaryStage.close();
+        }else if(pregunta instanceof PreguntaFlashCard) {
+    		FlashCard ej3 = new FlashCard(curso, (PreguntaFlashCard) pregunta, leccionActual);
+            Stage stage3 = new Stage();
+            ej3.start(stage3);
+            primaryStage.close();
+        }else if(pregunta instanceof PreguntaVF) {
+        	VerdaderoFalso ej4 = new VerdaderoFalso(curso,(PreguntaVF) pregunta, leccionActual);
+            Stage stage4 = new Stage();
+            ej4.start(stage4);
+            primaryStage.close();
+        }
     }
     
 	// <--------------------------------------------------------------->

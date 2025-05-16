@@ -51,25 +51,25 @@ public class LeccionesCurso extends Application {
     
     private void abrirLeccion(Leccion actual) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        Pregunta pregunta = OfCourses.getUnicaInstancia().getSiguientePregunta(actual);
+        Pregunta pregunta = OfCourses.getUnicaInstancia().getPreguntaActual(actual);
          
         if(pregunta instanceof PreguntaOrdenarPalabras) {
-    		OrdenarPalabras ej1 = new OrdenarPalabras(cursoActual.getTitulo(),(PreguntaOrdenarPalabras) pregunta);
+    		OrdenarPalabras ej1 = new OrdenarPalabras(cursoActual.getTitulo(),(PreguntaOrdenarPalabras) pregunta, actual);
             Stage stage = new Stage();
             ej1.start(stage);
             primaryStage.close();
         }else if(pregunta instanceof PreguntaRellenarPalabras) {
-        	RellenarPalabras ej2 = new RellenarPalabras(cursoActual.getTitulo(),(PreguntaRellenarPalabras) pregunta);
+        	RellenarPalabras ej2 = new RellenarPalabras(cursoActual.getTitulo(),(PreguntaRellenarPalabras) pregunta, actual);
             Stage stage2 = new Stage();
             ej2.start(stage2);
             primaryStage.close();
         }else if(pregunta instanceof PreguntaFlashCard) {
-    		FlashCard ej3 = new FlashCard(cursoActual.getTitulo(), (PreguntaFlashCard) pregunta);
+    		FlashCard ej3 = new FlashCard(cursoActual.getTitulo(), (PreguntaFlashCard) pregunta, actual);
             Stage stage3 = new Stage();
             ej3.start(stage3);
             primaryStage.close();
         }else if(pregunta instanceof PreguntaVF) {
-        	VerdaderoFalso ej4 = new VerdaderoFalso(cursoActual.getTitulo(),(PreguntaVF) pregunta);
+        	VerdaderoFalso ej4 = new VerdaderoFalso(cursoActual.getTitulo(),(PreguntaVF) pregunta, actual);
             Stage stage4 = new Stage();
             ej4.start(stage4);
             primaryStage.close();

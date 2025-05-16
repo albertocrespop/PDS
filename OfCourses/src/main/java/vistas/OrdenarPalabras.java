@@ -21,7 +21,12 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import modelo.Leccion;
+import modelo.Pregunta;
+import modelo.PreguntaFlashCard;
 import modelo.PreguntaOrdenarPalabras;
+import modelo.PreguntaRellenarPalabras;
+import modelo.PreguntaVF;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,50 +45,38 @@ public class OrdenarPalabras extends Application {
     private ImageView imagenPerfilView;
     private String curso;
     private PreguntaOrdenarPalabras pregunta;
+    private Leccion leccionActual;
+    private Button btnSiguiente;
     // <--------------------------------------------------------------->
     // <------------------- FUNCIONES DE BOTONES ---------------------->
     // <--------------------------------------------------------------->
     
-    public OrdenarPalabras(String titulo, PreguntaOrdenarPalabras pregunta) {
+    public OrdenarPalabras(String titulo, PreguntaOrdenarPalabras pregunta, Leccion leccion) {
     	this.curso = titulo;
     	this.pregunta = pregunta;
+    	this.leccionActual = leccion;
     }
 
-	private void verificarOrden() {
+    private void verificarOrden() {
         StringBuilder fraseOrdenada = new StringBuilder();
-        
-        // Obtener el orden ACTUAL de las palabras en el contenedor visual
+
         for (Node node : palabrasContainer.getChildren()) {
             if (node instanceof Label) {
                 Label label = (Label) node;
                 fraseOrdenada.append(label.getText()).append(" ");
             }
         }
-        
+
         String resultado = fraseOrdenada.toString().trim();
         String correcto = pregunta.getRespuesta();
-        
+
         if (resultado.equalsIgnoreCase(correcto)) {
             mostrarAlerta("¡Correcto!", "Has ordenado las palabras correctamente: " + resultado, Alert.AlertType.INFORMATION);
+            btnSiguiente.setVisible(true);
         } else {
-            mostrarAlerta("Incorrecto", "El orden correcto es: SI A ENTONCES B SINO C\nTu orden: " + resultado, Alert.AlertType.ERROR);
+            mostrarAlerta("Incorrecto", "El orden correcto es: " + correcto + "\nTu orden: " + resultado, Alert.AlertType.ERROR);
+            btnSiguiente.setVisible(false);
         }
-    }
-    
-    private void mostrarPista() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Pista");
-        alert.setHeaderText(null);
-        
-        // TODO: Llamar al controlador para obtener la pista
-        alert.setContentText("Pista sobre el enunciado");
-        
-        // Estilo de la alerta
-        DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.setStyle("-fx-background-color: white;");
-        dialogPane.lookup(".content.label").setStyle("-fx-font-size: 14; -fx-text-fill: #333333;");
-        
-        alert.showAndWait();
     }
     
     private void volverAtras() {
@@ -98,7 +91,36 @@ public class OrdenarPalabras extends Application {
     }
     
     private void siguientePregunta() {
-    	// TODO: método para mostrar la siguiente pregunta
+
+    	Pregunta pregunta = OfCourses.getUnicaInstancia().getSiguientePregunta(leccionActual);
+        
+        if(pregunta instanceof PreguntaOrdenarPalabras) {
+    		OrdenarPalabras ej1 = new OrdenarPalabras(curso,(PreguntaOrdenarPalabras) pregunta, leccionActual);
+            Stage stage = new Stage();
+            ej1.start(stage);
+            primaryStage.close();
+        }else if(pregunta instanceof PreguntaRellenarPalabras) {
+        	RellenarPalabras ej2 = new RellenarPalabras(curso,(PreguntaRellenarPalabras) pregunta, leccionActual);
+            Stage stage2 = new Stage();
+            ej2.start(stage2);
+            primaryStage.close();
+        }else if(pregunta instanceof PreguntaFlashCard) {
+    		FlashCard ej3 = new FlashCard(curso, (PreguntaFlashCard) pregunta, leccionActual);
+            Stage stage3 = new Stage();
+            ej3.start(stage3);
+            primaryStage.close();
+        }else if(pregunta instanceof PreguntaVF) {
+        	VerdaderoFalso ej4 = new VerdaderoFalso(curso,(PreguntaVF) pregunta, leccionActual);
+            Stage stage4 = new Stage();
+            ej4.start(stage4);
+            primaryStage.close();
+        }else {
+        	LeccionesCurso vistaLecciones = new LeccionesCurso(curso);
+            Stage stageLecciones = new Stage();
+            stageLecciones.initStyle(StageStyle.TRANSPARENT);
+            vistaLecciones.start(stageLecciones);
+            primaryStage.close();
+        }
     }
     
 	// <--------------------------------------------------------------->
@@ -232,7 +254,7 @@ public class OrdenarPalabras extends Application {
         panelEjercicio.setEffect(new DropShadow(20, Color.rgb(0, 0, 0, 0.3)));
         
         // Enunciado del ejercicio
-        Label lblEnunciado = new Label("Ordena las palabras para formar una función if-else en la que se ejecute B sólo si \nse cumple A, o se ejecute C en caso contrario:");
+        Label lblEnunciado = new Label(pregunta.getEnunciado());
         lblEnunciado.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
         lblEnunciado.setTextFill(Color.web("#1a73e8"));
         
@@ -264,13 +286,12 @@ public class OrdenarPalabras extends Application {
         styleButton(btnVerificar);
         btnVerificar.setOnAction(e -> verificarOrden());
         
-        // Botón de pista
-        Button btnPista = new Button("Pista");
-        styleSecondaryButton(btnPista);
-        btnPista.setOnAction(e -> mostrarPista());
+        btnSiguiente = new Button("Siguiente Pregunta");
+        styleButton(btnSiguiente);
+        btnSiguiente.setVisible(false);
+        btnSiguiente.setOnAction(e -> siguientePregunta());
         
-        
-        HBox panelBotones = new HBox(btnPista, btnVerificar);
+        HBox panelBotones = new HBox(20, btnVerificar, btnSiguiente);
         panelBotones.setSpacing(20);
         panelBotones.setAlignment(Pos.CENTER);
         
