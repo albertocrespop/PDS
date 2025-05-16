@@ -51,16 +51,23 @@ Los recursos de análisis del sistema se encuentran en el siguiente enlace:
 
 ## Cómo ejecutar la aplicación
 
+### Primera alternativa: desde entorno de desarrollo:
 1. Abre el proyecto en tu entorno Java (por ejemplo, IntelliJ o Eclipse).
 2. Asegúrate de tener configurado:
    - Java 17 o superior.
    - Dependencias de JavaFX, JPA y Jackson (definidas en el `pom.xml`).
 3. Ejecuta la clase principal:  
    `main.Main.java`
-4. Regístrate con un nuevo usuario (introduciendo email, nombre y contraseña).
-5. Desde la pantalla principal, pulsa en **"Añadir Curso"** y selecciona un archivo YAML válido (en la carpeta del proyecto hay 3 cursos de ejemplo).
-6. Una vez añadido, pulsa sobre un curso para entrar y explorar las lecciones.
-7. Responde las preguntas, no pierdas vidas y mantén tu racha diaria.
+
+### Segunda alternativa: desde el fichero ofcourses.jar:
+1. Asegúrate de tener Java 17 configurado en el sistema.
+2. Ejecuta desde una terminal: ´java -jar ofcourses.jar´. Dicho jar se encuentra en la carpeta del proyecto.
+
+### Cómo usar la aplicación:
+1. Regístrate con un nuevo usuario (introduciendo email, nombre y contraseña).
+2. Desde la pantalla principal, pulsa en **"Añadir Curso"** y selecciona un archivo YAML válido (en la carpeta del proyecto hay 3 cursos de ejemplo).
+3. Una vez añadido, pulsa sobre un curso para entrar y explorar las lecciones.
+4. Responde las preguntas, no pierdas vidas y mantén tu racha diaria.
 
 ---
 
