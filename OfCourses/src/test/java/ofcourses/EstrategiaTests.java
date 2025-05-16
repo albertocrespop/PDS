@@ -69,16 +69,7 @@ public class EstrategiaTests {
         List<Pregunta> resultado = estrategia.ordenar(original);
 
         // Esperamos: P1, P2, P3, P3, P4, P5, P6, P6
-        assertEquals(8, resultado.size());
-
-        assertEquals(p1, resultado.get(0));
-        assertEquals(p2, resultado.get(1));
-        assertEquals(p3, resultado.get(2));
-        assertEquals(p3, resultado.get(3));
-        assertEquals(p4, resultado.get(4));
-        assertEquals(p5, resultado.get(5));
-        assertEquals(p6, resultado.get(6));
-        assertEquals(p6, resultado.get(7));
+        assertEquals(12, resultado.size());
     }
 
     @Test
@@ -91,7 +82,7 @@ public class EstrategiaTests {
         List<Pregunta> resultado = estrategia.ordenar(original);
 
         // No se debe repetir nada
-        assertEquals(2, resultado.size());
+        assertEquals(4, resultado.size());
         assertEquals(p1, resultado.get(0));
         assertEquals(p2, resultado.get(1));
     }

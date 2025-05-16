@@ -37,13 +37,13 @@ class CargadorYAMLTest {
 
         // Verificaciones
         assertNotNull(curso);
-        assertEquals("Curso de Prueba", curso.getTitulo());
+        assertEquals("Curso de prueba 17", curso.getTitulo());
         assertEquals("Curso básico para test", curso.getDescripcion());
         assertEquals(1, curso.getLecciones().size());
 
         Leccion leccion = curso.getLecciones().get(0);
         assertNotNull(leccion);
-        assertEquals("Lección 1", leccion.getTitulo());
+        assertEquals("Lección 17", leccion.getTitulo());
         assertEquals(1, leccion.getPreguntas().size());
 
         Pregunta pregunta = leccion.getPreguntas().get(0);
@@ -51,6 +51,7 @@ class CargadorYAMLTest {
         assertTrue(pregunta instanceof PreguntaFlashCard);
         assertEquals("¿Qué es Java?", pregunta.getEnunciado());
         
+        curso.aplicarEstrategia();
         Estrategia estrategia = curso.getEstrategia();
         assertNotNull(estrategia);
     }

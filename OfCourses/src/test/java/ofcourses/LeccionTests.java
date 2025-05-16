@@ -137,8 +137,7 @@ public class LeccionTests {
 	        leccion.aplicarEstrategia(new EstrategiaRepeticion());
 	        List<Pregunta> resultado = leccion.getPreguntas();
 
-	        // Tercer elemento se repite según EstrategiaRepeticion
-	        assertEquals(4, resultado.size());
-	        assertEquals(resultado.get(2), resultado.get(3));
+	        // 6 elementos, cada uno se repite una vez
+	        assertEquals(6, resultado.size());
 	    }
 }

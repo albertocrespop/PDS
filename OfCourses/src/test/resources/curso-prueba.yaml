@@ -1,6 +1,6 @@
 titulo: Curso de prueba 17
 descripcion: Curso básico para test
-estrategia: EstrategiaSecuencial
+estrategia: secuencial
 lecciones:
   - titulo: Lección 17
     descripcion: Introducción

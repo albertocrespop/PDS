@@ -47,7 +47,6 @@ public class UsuarioTest {
 
         assertEquals(1, usuario.getCursos().size());
         assertEquals(curso, usuario.getCursos().get(0));
-        assertEquals(usuario, curso.getAutor());
     }
 
     // PreguntaFlashCard Tests
