@@ -88,8 +88,16 @@ public class Leccion {
 	public Pregunta getSiguientePregunta() {
 		ultimaPregunta++;
 		if(ultimaPregunta >= preguntas.size()) {
+			completada = true;
 			return null;
 		}
 		return preguntas.get(ultimaPregunta);
+	}
+
+	public boolean isCompletada() {
+		if(ultimaPregunta >= preguntas.size()) {
+			return true;
+		}
+		return false;
 	}
 }
