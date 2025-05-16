@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
@@ -210,8 +211,7 @@ public class LeccionesCurso extends Application {
         Label title = new Label(nombreCurso);
         title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
         title.setTextFill(Color.web("#1a73e8"));
-        
-        // TODO: Llamar al OfCourses.getUnicaInstancia() para pedir la descripción del curso actual
+
         Label descripcion = new Label(cursoActual.getDescripcion());
         descripcion.setFont(Font.font("Segoe UI", 14));
         descripcion.setTextFill(Color.web("#666666"));
@@ -228,9 +228,8 @@ public class LeccionesCurso extends Application {
         lblProgreso.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
         lblProgreso.setTextFill(Color.web("#333333"));
         
-        // TODO: Llamar al OfCourses.getUnicaInstancia() y pedir el porcentaje de curso completado
         double porcentajeCompletado = cursoActual.obtenerProgreso();
-        ProgressBar progressBar = new ProgressBar(porcentajeCompletado);
+        ProgressBar progressBar = new ProgressBar(porcentajeCompletado/100);
         progressBar.setPrefWidth(200);
         progressBar.setStyle("-fx-accent: #1a73e8;");
         
@@ -253,7 +252,6 @@ public class LeccionesCurso extends Application {
         gridLecciones.setAlignment(Pos.TOP_CENTER);
         gridLecciones.setPadding(new Insets(10));
 
-        // TODO: Llamar al controlador y obtener las lecciones del curso actual
         List<Leccion> lecciones = cursoActual.getLecciones();
         int columnas = 3;
 
@@ -261,7 +259,7 @@ public class LeccionesCurso extends Application {
             int row = i / columnas;
             int col = i % columnas;
 
-            VBox leccionCard = crearLeccionCard(lecciones.get(i), i + 1, lecciones.get(i).getCompletada());
+            VBox leccionCard = crearLeccionCard(lecciones.get(i), i + 1, OfCourses.getUnicaInstancia().isCompletada(lecciones.get(i)));
             gridLecciones.add(leccionCard, col, row);
         }
 
@@ -304,16 +302,34 @@ public class LeccionesCurso extends Application {
         lblNombre.setAlignment(Pos.CENTER);
         lblNombre.setMaxWidth(180);
         
-        // Botón para realizar lección
-        Button btnRealizar = new Button(completada ? "Repasar" : "Comenzar");
-        styleLoginButton(btnRealizar);
-        btnRealizar.setOnAction(e -> abrirLeccion(leccion));
-        
         // Espaciador
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
-        
-        card.getChildren().addAll(lblNumero, lblNombre, spacer, btnRealizar);
+
+        // Acción: botón o texto según el estado
+        Node accion;
+
+        if (completada) {
+            Label lblCompletado = new Label("Completado");
+            lblCompletado.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
+            lblCompletado.setTextFill(Color.web("#2e7d32"));
+            accion = lblCompletado;
+
+        } else if (leccion.getUltimaPregunta() > 0) {
+            Button btnContinuar = new Button("Continuar");
+            styleLoginButton(btnContinuar);
+            btnContinuar.setOnAction(e -> abrirLeccion(leccion));
+            accion = btnContinuar;
+
+        } else {
+            Button btnComenzar = new Button("Comenzar");
+            styleLoginButton(btnComenzar);
+            btnComenzar.setOnAction(e -> abrirLeccion(leccion));
+            accion = btnComenzar;
+        }
+
+        // Añadir elementos al card
+        card.getChildren().addAll(lblNumero, lblNombre, spacer, accion);
         
         return card;
     }

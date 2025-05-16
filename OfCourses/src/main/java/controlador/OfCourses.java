@@ -129,10 +129,17 @@ public class OfCourses {
 		return usuarioActual.getCurso(cursoActual);
 	}
 
-
+	public boolean isCompletada(Leccion leccion) {
+		return leccion.isCompletada();
+	}
+	
 	public Pregunta getSiguientePregunta(Leccion actual) {
 		Pregunta siguiente = actual.getSiguientePregunta();
-		return null;
+		if(siguiente == null) {
+			actual.setCompletada(true);
+		}
+		repoLeccion.guardar(actual);
+		return siguiente;
 	}
 
 
