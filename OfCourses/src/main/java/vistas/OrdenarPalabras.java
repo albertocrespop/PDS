@@ -47,6 +47,8 @@ public class OrdenarPalabras extends Application {
     private PreguntaOrdenarPalabras pregunta;
     private Leccion leccionActual;
     private Button btnSiguiente;
+    private HBox vidasBox;
+
     // <--------------------------------------------------------------->
     // <------------------- FUNCIONES DE BOTONES ---------------------->
     // <--------------------------------------------------------------->
@@ -75,6 +77,11 @@ public class OrdenarPalabras extends Application {
             btnSiguiente.setVisible(true);
         } else {
             mostrarAlerta("Incorrecto", "El orden correcto es: " + correcto + "\nTu orden: " + resultado, Alert.AlertType.ERROR);
+            OfCourses.getUnicaInstancia().perderVida();
+            actualizarIndicadorVidas();
+        	if(!OfCourses.getUnicaInstancia().tieneVidas()) {
+        		volverAtras();
+        	}
             btnSiguiente.setVisible(false);
         }
     }
@@ -218,7 +225,7 @@ public class OrdenarPalabras extends Application {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         
-        HBox vidasBox = crearIndicadorVidas(OfCourses.getUnicaInstancia().getVidas());
+        vidasBox = crearIndicadorVidas(OfCourses.getUnicaInstancia().getVidas());
         
         // Botón de cerrar ventana
         Button btnCerrar = new Button("✕");
@@ -446,5 +453,19 @@ public class OrdenarPalabras extends Application {
             vidasBox.getChildren().add(view);
         }
         return vidasBox;
+    }
+    
+    private void actualizarIndicadorVidas() {
+        vidasBox.getChildren().clear(); // Elimina los iconos actuales
+
+        int vidasActuales = OfCourses.getUnicaInstancia().getVidas();
+
+        for (int i = 0; i < 5; i++) {
+            Image img = new Image("imagenes/" + (i < vidasActuales ? "vida_llena.png" : "vida_vacia.png"));
+            ImageView view = new ImageView(img);
+            view.setFitWidth(20);
+            view.setFitHeight(20);
+            vidasBox.getChildren().add(view);
+        }
     }
 }
