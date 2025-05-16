@@ -75,6 +75,10 @@ public class OrdenarPalabras extends Application {
             btnSiguiente.setVisible(true);
         } else {
             mostrarAlerta("Incorrecto", "El orden correcto es: " + correcto + "\nTu orden: " + resultado, Alert.AlertType.ERROR);
+            OfCourses.getUnicaInstancia().perderVida();
+        	if(!OfCourses.getUnicaInstancia().tieneVidas()) {
+        		volverAtras();
+        	}
             btnSiguiente.setVisible(false);
         }
     }

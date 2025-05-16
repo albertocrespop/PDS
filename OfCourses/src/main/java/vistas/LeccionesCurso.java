@@ -50,7 +50,18 @@ public class LeccionesCurso extends Application {
     // <--------------------------------------------------------------->
     
     private void abrirLeccion(Leccion actual) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    	
+    	Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    	
+    	if(!OfCourses.getUnicaInstancia().tieneVidas()) {
+    		alert.setTitle("No tienes vidas");
+            alert.setHeaderText(actual.getTitulo());
+            alert.setContentText("Te has quedado sin vidas. Espera hasta mañana para que se recarguen.");
+            alert.showAndWait();
+    		return;
+    	}
+    	
+        
         Pregunta pregunta = OfCourses.getUnicaInstancia().getPreguntaActual(actual);
          
         if(pregunta instanceof PreguntaOrdenarPalabras) {

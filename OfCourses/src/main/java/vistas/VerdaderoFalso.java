@@ -100,7 +100,14 @@ public class VerdaderoFalso extends Application {
             String respuestaSeleccionada = seleccionada.getText();
 
             boolean esCorrecto = pregunta.comprobarRespuesta(respuestaSeleccionada);
-
+            
+            if(!esCorrecto) {
+            	OfCourses.getUnicaInstancia().perderVida();
+            	if(!OfCourses.getUnicaInstancia().tieneVidas()) {
+            		volverAtras();
+            	}
+            }
+            
             String mensaje = esCorrecto ? "¡Correcto!" : "Incorrecto.";
             mostrarAlerta("Resultado", mensaje, Alert.AlertType.INFORMATION);
 

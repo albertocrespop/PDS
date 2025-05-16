@@ -117,6 +117,10 @@ public class RellenarPalabras extends Application {
             btnSiguiente.setVisible(true);
         } else {
             mostrarAlerta("Incorrecto", "La solución no es correcta. Inténtalo de nuevo.", Alert.AlertType.WARNING);
+            OfCourses.getUnicaInstancia().perderVida();
+        	if(!OfCourses.getUnicaInstancia().tieneVidas()) {
+        		volverAtras();
+        	}
             btnSiguiente.setVisible(false);
         }
         
