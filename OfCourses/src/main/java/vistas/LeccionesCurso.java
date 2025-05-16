@@ -24,6 +24,7 @@ import modelo.PreguntaOrdenarPalabras;
 import modelo.PreguntaRellenarPalabras;
 import modelo.PreguntaVF;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import controlador.OfCourses;
@@ -223,7 +224,7 @@ public class LeccionesCurso extends Application {
         lblProgreso.setTextFill(Color.web("#333333"));
         
         // TODO: Llamar al OfCourses.getUnicaInstancia() y pedir el porcentaje de curso completado
-        double porcentajeCompletado = 0.65;
+        double porcentajeCompletado = cursoActual.obtenerProgreso();
         ProgressBar progressBar = new ProgressBar(porcentajeCompletado);
         progressBar.setPrefWidth(200);
         progressBar.setStyle("-fx-accent: #1a73e8;");
