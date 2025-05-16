@@ -12,3 +12,6 @@
 - Daniel Conesa Sáez
 
 OfCourses es una app educativa para aprender mediante cursos interactivos creados por la comunidad. Permite realizar ejercicios variados como test, completar huecos o usar flashcards, adaptándose a distintos ritmos de estudio. Los cursos pueden compartirse fácilmente en formato JSON o YAML.
+
+
+![ModeladoImg](Modelado.jpeg)
