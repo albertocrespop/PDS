@@ -8,18 +8,34 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ModeloTest {
-
+public class UsuarioTests {
+	
 	// Usuario Tests
     @Test
     public void testCrearUsuario() {
         Usuario usuario = new Usuario("Juan", "juan@example.com", "12345");
-
+        
         assertEquals("Juan", usuario.getUsername());
         assertEquals("juan@example.com", usuario.getEmail());
         assertEquals("12345", usuario.getPassword());
         assertNotNull(usuario.getCursos()); // Se devuelve una lista vacía no null
         assertTrue(usuario.getCursos().isEmpty());
+        assertNotNull(usuario.getId());
+    }
+	
+    @Test
+    public void testSettersUsuario() {
+    	Usuario usuario = new Usuario("Juan", "juan@example.com", "12345");
+    	usuario.setEmail("pedro@example.com");
+    	usuario.setPassword("4321");
+    	usuario.setUsername("Matias");
+
+    	assertEquals("pedro@example.com", usuario.getEmail());
+    	assertEquals("4321", usuario.getPassword());
+    	assertEquals("Matias", usuario.getUsername());
+    	// Usuario{id=" + id + ", nombre='" + username + "', email='" + email + "'}
+    	String salida = new String("Usuario{id=" + usuario.getId() + ", nombre='" + usuario.getUsername() + "', email='" + usuario.getEmail() + "'}");
+    	assertEquals(salida, usuario.toString());
     }
 
     @Test
@@ -34,18 +50,6 @@ public class ModeloTest {
         assertEquals(usuario, curso.getCreador());
     }
 
-    // Curso Tests
-    @Test
-    public void testAgregarLeccionACurso() {
-        Usuario usuario = new Usuario("Pedro", "pedro@example.com", "123");
-        Curso curso = new Curso("Curso Test", "Descripción test", new ArrayList<>(), "modelo.EstrategiaAleatoria", usuario);
-
-        assertEquals("Curso Test", curso.getTitulo());
-        assertEquals("Descripción test", curso.getDescripcion());
-        assertNotNull(curso.getLecciones());
-        assertTrue(curso.getLecciones().isEmpty());
-    }
-    
     // PreguntaFlashCard Tests
     @Test
     public void testPreguntaFlashCard() {
