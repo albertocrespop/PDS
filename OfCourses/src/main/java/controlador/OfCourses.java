@@ -131,7 +131,8 @@ public class OfCourses {
 
 
 	public Pregunta getSiguientePregunta(Leccion actual) {
-		return actual.getSiguientePregunta();
+		Pregunta siguiente = actual.getSiguientePregunta();
+		return null;
 	}
 
 
@@ -171,7 +172,6 @@ public class OfCourses {
 		return usuarioActual.getEmail();
 	}
 
-
 	public int getRacha() {
 		return usuarioActual.getRacha();
 	}
@@ -184,4 +184,10 @@ public class OfCourses {
 	public int preguntasContestadas() {
 		return usuarioActual.obtenerPreguntasContestadas();
 	}
+
+	public Pregunta getPreguntaActual(Leccion actual) {
+		return actual.getPreguntaActual();
+	}
+	
+
 }

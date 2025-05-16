@@ -17,9 +17,8 @@ public class PreguntaOrdenarPalabras extends Pregunta {
         super(); // Requerido por JPA
     }
 
-    public PreguntaOrdenarPalabras(String enunciado, String respuesta, String opcionesTexto) {
+    public PreguntaOrdenarPalabras(String enunciado, String respuesta) {
         super(enunciado, respuesta);
-        this.opciones = Arrays.asList(opcionesTexto.trim().split("\\s+"));
     }
 
     public List<String> getOpciones() {

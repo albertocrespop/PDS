@@ -22,8 +22,12 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import modelo.Leccion;
 import modelo.Pregunta;
 import modelo.PreguntaFlashCard;
+import modelo.PreguntaOrdenarPalabras;
+import modelo.PreguntaRellenarPalabras;
+import modelo.PreguntaVF;
 
 public class FlashCard extends Application {
 	
@@ -33,13 +37,17 @@ public class FlashCard extends Application {
     private ImageView imagenPerfilView;
     private String curso;
     private PreguntaFlashCard pregunta;
+    private Button btnSiguiente;
+    private Leccion leccionActual;
+    
     // <--------------------------------------------------------------->
     // <------------------- FUNCIONES DE BOTONES ---------------------->
     // <--------------------------------------------------------------->
     
-    public FlashCard(String titulo, PreguntaFlashCard pregunta) {
+    public FlashCard(String titulo, PreguntaFlashCard pregunta, Leccion leccion) {
     	this.curso = titulo;
     	this.pregunta = pregunta;
+    	this.leccionActual = leccion;
     }
 
 	private void volverAtras() {
@@ -54,7 +62,30 @@ public class FlashCard extends Application {
     }
     
     private void siguientePregunta() {
-    	// TODO: método para mostrar la siguiente pregunta
+
+    	Pregunta pregunta = OfCourses.getUnicaInstancia().getSiguientePregunta(leccionActual);
+        
+        if(pregunta instanceof PreguntaOrdenarPalabras) {
+    		OrdenarPalabras ej1 = new OrdenarPalabras(curso,(PreguntaOrdenarPalabras) pregunta, leccionActual);
+            Stage stage = new Stage();
+            ej1.start(stage);
+            primaryStage.close();
+        }else if(pregunta instanceof PreguntaRellenarPalabras) {
+        	RellenarPalabras ej2 = new RellenarPalabras(curso,(PreguntaRellenarPalabras) pregunta, leccionActual);
+            Stage stage2 = new Stage();
+            ej2.start(stage2);
+            primaryStage.close();
+        }else if(pregunta instanceof PreguntaFlashCard) {
+    		FlashCard ej3 = new FlashCard(curso, (PreguntaFlashCard) pregunta, leccionActual);
+            Stage stage3 = new Stage();
+            ej3.start(stage3);
+            primaryStage.close();
+        }else if(pregunta instanceof PreguntaVF) {
+        	VerdaderoFalso ej4 = new VerdaderoFalso(curso,(PreguntaVF) pregunta, leccionActual);
+            Stage stage4 = new Stage();
+            ej4.start(stage4);
+            primaryStage.close();
+        }
     }
     
 	// <--------------------------------------------------------------->
@@ -189,10 +220,10 @@ public class FlashCard extends Application {
         Label lblTitulo = new Label("FlashCard");
         lblTitulo.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20));
         lblTitulo.setTextFill(Color.web("#1a73e8"));
-        
+
         // Estado de la tarjeta
         boolean[] mostrandoRespuesta = {false};
-        
+
         Label lblContenido = new Label(pregunta.getEnunciado());
         lblContenido.setFont(Font.font("Segoe UI", 18));
         lblContenido.setWrapText(true);
@@ -201,21 +232,31 @@ public class FlashCard extends Application {
         lblContenido.setMaxWidth(500);
         lblContenido.setStyle("-fx-border-color: transparent; -fx-padding: 20;");
 
+        // Botón para mostrar respuesta
         Button btnMostrarRespuesta = new Button("Mostrar respuesta");
         styleButton(btnMostrarRespuesta);
 
+        // Botón para siguiente pregunta (oculto al inicio)
+        btnSiguiente = new Button("Siguiente Pregunta");
+        styleButton(btnSiguiente);
+        btnSiguiente.setVisible(false);
+        btnSiguiente.setOnAction(e -> siguientePregunta());
+
+        // Lógica del botón de mostrar respuesta
         btnMostrarRespuesta.setOnAction(e -> {
             if (mostrandoRespuesta[0]) {
                 lblContenido.setText(pregunta.getEnunciado());
                 btnMostrarRespuesta.setText("Mostrar respuesta");
+                btnSiguiente.setVisible(false); // Ocultar cuando se oculta la respuesta
             } else {
                 lblContenido.setText(pregunta.getRespuesta());
                 btnMostrarRespuesta.setText("Ocultar respuesta");
+                btnSiguiente.setVisible(true); // Mostrar cuando se revela la respuesta
             }
             mostrandoRespuesta[0] = !mostrandoRespuesta[0];
         });
 
-        panelFlashCard.getChildren().addAll(lblTitulo, lblContenido, btnMostrarRespuesta);
+        panelFlashCard.getChildren().addAll(lblTitulo, lblContenido, btnMostrarRespuesta, btnSiguiente);
 
         return panelFlashCard;
     }

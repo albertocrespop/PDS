@@ -1,0 +1,66 @@
+titulo: Curso de Introduccion a la Ciberseguridad
+descripcion: Aprende los fundamentos de la ciberseguridad y cómo proteger tus sistemas.
+estrategia: EstrategiaSecuencial
+lecciones:
+  - titulo: Fundamentos
+    descripcion: Conceptos básicos de ciberseguridad.
+    preguntas:
+      - tipo: flashcard
+        enunciado: ¿Qué es la ciberseguridad?
+        respuesta: Es la práctica de proteger sistemas, redes y programas de ataques digitales.
+      - tipo: vf
+        enunciado: La ciberseguridad solo es responsabilidad del departamento de IT.
+        respuesta: Falso
+      - tipo: relleno
+        enunciado: La **?** consiste en analizar el sistema para descubrir vulnerabilidades.
+        respuesta: auditoría
+      - tipo: ordenar
+        enunciado: Ordena los pasos de una política de seguridad
+        opciones:
+          - identificar
+          - evaluar
+          - implementar
+          - monitorear
+        respuesta: "identificar evaluar implementar monitorear"
+
+  - titulo: Amenazas comunes
+    descripcion: Principales amenazas a la seguridad informática.
+    preguntas:
+      - tipo: flashcard
+        enunciado: ¿Qué es un malware?
+        respuesta: Es un software malicioso diseñado para dañar o explotar sistemas.
+      - tipo: vf
+        enunciado: Un ransomware cifra los datos y solicita un rescate.
+        respuesta: Verdadero
+      - tipo: relleno
+        enunciado: El **?** engaña al usuario para que revele información confidencial.
+        respuesta: phishing
+      - tipo: ordenar
+        enunciado: Fases típicas de un ataque de ingeniería social
+        opciones:
+          - reconocimiento
+          - contacto
+          - manipulación
+          - ejecución
+        respuesta: "reconocimiento contacto manipulación ejecución"
+
+  - titulo: Buenas prácticas
+    descripcion: Medidas para mejorar la seguridad personal y empresarial.
+    preguntas:
+      - tipo: flashcard
+        enunciado: ¿Qué es una autenticación multifactor (MFA)?
+        respuesta: Es un método que requiere más de una forma de verificación.
+      - tipo: vf
+        enunciado: Usar la misma contraseña para todo es una buena práctica.
+        respuesta: Falso
+      - tipo: relleno
+        enunciado: Es recomendable cambiar las contraseñas cada **?** meses.
+        respuesta: tres
+      - tipo: ordenar
+        enunciado: Ordena los pasos al crear una contraseña segura
+        opciones:
+          - longitud
+          - mayúsculas
+          - números
+          - símbolos
+        respuesta: "longitud mayúsculas números símbolos"

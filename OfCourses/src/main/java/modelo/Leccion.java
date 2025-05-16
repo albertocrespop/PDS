@@ -63,6 +63,10 @@ public class Leccion {
 		return ultimaPregunta;
 	}
 	
+	public Pregunta getPreguntaActual() {
+		return preguntas.get(ultimaPregunta);
+	}
+	
 	// Setters
 	public void setCompletada(boolean completada) {
 		this.completada = completada;
@@ -82,6 +86,10 @@ public class Leccion {
 	}
 	
 	public Pregunta getSiguientePregunta() {
+		ultimaPregunta++;
+		if(ultimaPregunta >= preguntas.size()) {
+			return null;
+		}
 		return preguntas.get(ultimaPregunta);
 	}
 	
