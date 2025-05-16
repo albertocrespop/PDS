@@ -11,6 +11,7 @@ La aplicación permitirá a los usuarios aprender programación a través de la 
 |------|--------------------------------|---------------------------------------------------|----------------|
 | CU01 | Registrarse                   | Permite a un usuario crear una cuenta nueva.       | Usuario       |
 | CU02 | Iniciar sesión                | Permite a un usuario autenticarse para acceder a la aplicación | Usuario       |
+| CU03 | Elegir curso                 | Permite a un usuario elegir un archivo para realizar un curso | Usuario       |
 | CU04 | Realizar Curso               | Permite al usuario realizar un curso seleccionado | Usuario     |
 | CU05 | Consultar Estadísticas       | Permite al usuario visualizar sus estadísticas en la aplicación así como de un único curso | Usuario       |
 | CU06 | Reanudar Curso              | Permite al usuario continuar con un curso desde el punto en que lo dejó | Usuario       |
@@ -48,8 +49,23 @@ La aplicación permitirá a los usuarios aprender programación a través de la 
 
 **Flujos Alternativos:**
 
-2a. El usuario ha olvidado la contraseña y selecciona la opción para recuperarla
 3a. Los datos introducidos son correctos y el sistema lanza un mensaje de error
+
+---
+
+### CU03: Elegir curso
+**Actor Principal:** Usuario  
+**Precondiciones:** El usuario debe estar registrado y debe existir un curso que elegir.
+**Postcondiciones:** El usuario tiene disponible un curso para realizar.
+
+**Flujo Básico:**
+1. El usuario elige el curso
+2. El sistema comprueba que el curso sea válido
+3. El sistema carga el curso en la vista de la aplicación para su uso
+
+**Flujos Alternativos:**
+
+2a. El curso no es válido y el sistema lanza un mensaje de error.
 
 ---
 
