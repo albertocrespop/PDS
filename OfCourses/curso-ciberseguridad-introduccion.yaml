@@ -1,6 +1,6 @@
 titulo: Curso de Introduccion a la Ciberseguridad
 descripcion: Aprende los fundamentos de la ciberseguridad y cómo proteger tus sistemas.
-estrategia: EstrategiaSecuencial
+estrategia: secuencial
 lecciones:
   - titulo: Fundamentos
     descripcion: Conceptos básicos de ciberseguridad.

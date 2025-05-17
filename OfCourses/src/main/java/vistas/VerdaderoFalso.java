@@ -43,6 +43,8 @@ public class VerdaderoFalso extends Application {
     private PreguntaVF pregunta;
     private Leccion leccionActual;
     private Button btnSiguiente;
+    private HBox vidasBox;
+
 
     // <--------------------------------------------------------------->
     // <------------------- FUNCIONES DE BOTONES ---------------------->
@@ -106,7 +108,15 @@ public class VerdaderoFalso extends Application {
             String respuestaSeleccionada = seleccionada.getText();
 
             boolean esCorrecto = pregunta.comprobarRespuesta(respuestaSeleccionada);
-
+            
+            if(!esCorrecto) {
+            	OfCourses.getUnicaInstancia().perderVida();
+            	actualizarIndicadorVidas();
+            	if(!OfCourses.getUnicaInstancia().tieneVidas()) {
+            		volverAtras();
+            	}
+            }
+            
             String mensaje = esCorrecto ? "¡Correcto!" : "Incorrecto.";
             mostrarAlerta("Resultado", mensaje, Alert.AlertType.INFORMATION);
 
@@ -210,7 +220,7 @@ public class VerdaderoFalso extends Application {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         
-        HBox vidasBox = crearIndicadorVidas(OfCourses.getUnicaInstancia().getVidas());
+        vidasBox = crearIndicadorVidas(OfCourses.getUnicaInstancia().getVidas());
         
         // Botón de cerrar ventana
         Button btnCerrar = new Button("✕");
@@ -329,5 +339,19 @@ public class VerdaderoFalso extends Application {
             vidasBox.getChildren().add(view);
         }
         return vidasBox;
+    }
+    
+    private void actualizarIndicadorVidas() {
+        vidasBox.getChildren().clear();
+
+        int vidasActuales = OfCourses.getUnicaInstancia().getVidas();
+
+        for (int i = 0; i < 5; i++) {
+            Image img = new Image("imagenes/" + (i < vidasActuales ? "vida_llena.png" : "vida_vacia.png"));
+            ImageView view = new ImageView(img);
+            view.setFitWidth(20);
+            view.setFitHeight(20);
+            vidasBox.getChildren().add(view);
+        }
     }
 }

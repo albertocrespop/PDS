@@ -61,6 +61,7 @@ public class OfCourses {
 			return false;
 		}else{
 			usuarioActual.comprobarRacha();
+			usuarioActual.recargarSiEsNuevoDia();
 			return true;
 		}
 	}
