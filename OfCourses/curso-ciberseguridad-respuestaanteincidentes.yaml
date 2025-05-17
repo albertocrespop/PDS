@@ -1,0 +1,45 @@
+titulo: Defensa y Respuesta ante Incidentes
+descripcion: Aprende a construir un plan de respuesta efectivo ante incidentes de ciberseguridad.
+estrategia: repeticion
+lecciones:
+  - titulo: Preparación
+    descripcion: Qué debe tener una organización lista antes de sufrir un incidente.
+    preguntas:
+      - tipo: flashcard
+        enunciado: ¿Qué es un plan de respuesta ante incidentes?
+        respuesta: Es un conjunto de instrucciones para detectar, responder y recuperarse de incidentes.
+      - tipo: vf
+        enunciado: Un buen plan de respuesta reduce el impacto de los incidentes.
+        respuesta: Verdadero
+      - tipo: relleno
+        enunciado: La **?** es el proceso de identificar posibles riesgos antes de que ocurran.
+        respuesta: evaluación
+      - tipo: ordenar
+        enunciado: Fases de un plan de respuesta ante incidentes
+        opciones:
+          - preparación
+          - detección
+          - contención
+          - recuperación
+        respuesta: "preparación detección contención recuperación"
+
+  - titulo: Contención y erradicación
+    descripcion: Cómo actuar durante un ataque para minimizar el daño.
+    preguntas:
+      - tipo: flashcard
+        enunciado: ¿Qué es la contención en ciberseguridad?
+        respuesta: Es la acción de limitar el alcance del ataque y evitar que se propague.
+      - tipo: vf
+        enunciado: La erradicación implica mantener el sistema afectado en producción.
+        respuesta: Falso
+      - tipo: relleno
+        enunciado: Tras contener un ataque, se deben eliminar todas las **?** encontradas.
+        respuesta: vulnerabilidades
+      - tipo: ordenar
+        enunciado: Acciones clave durante un ataque
+        opciones:
+          - identificar
+          - aislar
+          - neutralizar
+          - documentar
+        respuesta: "identificar aislar neutralizar documentar"

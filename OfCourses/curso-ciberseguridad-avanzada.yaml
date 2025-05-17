@@ -1,0 +1,45 @@
+titulo: Curso de Ciberseguridad Avanzada
+descripcion: Técnicas avanzadas para detectar, prevenir y responder ante ciberataques.
+estrategia: aleatoria
+lecciones:
+  - titulo: Buffer Overflow
+    descripcion: Introducción a ataques de desbordamiento de búfer.
+    preguntas:
+      - tipo: flashcard
+        enunciado: ¿Qué es un buffer overflow?
+        respuesta: Es un error que ocurre cuando se escribe más allá de los límites de un búfer de memoria.
+      - tipo: vf
+        enunciado: Los lenguajes como C y C++ son más propensos a vulnerabilidades de buffer overflow.
+        respuesta: Verdadero
+      - tipo: relleno
+        enunciado: El ataque de buffer overflow puede sobrescribir la **?** del programa.
+        respuesta: pila
+      - tipo: ordenar
+        enunciado: Ordena los pasos básicos para ejecutar un buffer overflow
+        opciones:
+          - identificar
+          - diseñar payload
+          - inyectar
+          - ejecutar
+        respuesta: "identificar diseñar payload inyectar ejecutar"
+
+  - titulo: Análisis de tráfico
+    descripcion: Interpretación y análisis de paquetes de red para detectar amenazas.
+    preguntas:
+      - tipo: flashcard
+        enunciado: ¿Qué herramienta se utiliza comúnmente para analizar tráfico de red?
+        respuesta: Wireshark
+      - tipo: vf
+        enunciado: El protocolo HTTP transmite datos cifrados por defecto.
+        respuesta: Falso
+      - tipo: relleno
+        enunciado: El protocolo **?** asegura el tráfico web mediante cifrado.
+        respuesta: HTTPS
+      - tipo: ordenar
+        enunciado: Pasos para analizar un ataque en red
+        opciones:
+          - capturar
+          - filtrar
+          - inspeccionar
+          - reportar
+        respuesta: "capturar filtrar inspeccionar reportar"

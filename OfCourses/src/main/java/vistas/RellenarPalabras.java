@@ -85,23 +85,13 @@ public class RellenarPalabras extends Application {
             Stage stage4 = new Stage();
             ej4.start(stage4);
             primaryStage.close();
+        }else {
+        	LeccionesCurso vistaLecciones = new LeccionesCurso(curso);
+            Stage stageLecciones = new Stage();
+            stageLecciones.initStyle(StageStyle.TRANSPARENT);
+            vistaLecciones.start(stageLecciones);
+            primaryStage.close();
         }
-    }
-    
-    private void mostrarPista() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Pista");
-        alert.setHeaderText(null);
-        
-        // TODO: Llamar al controlador para obtener la pista
-        alert.setContentText("Pista sobre el enunciado");
-        
-        // Estilo de la alerta
-        DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.setStyle("-fx-background-color: white;");
-        dialogPane.lookup(".content.label").setStyle("-fx-font-size: 14; -fx-text-fill: #333333;");
-        
-        alert.showAndWait();
     }
     
     private void verificarSolucion(String solucion) {
@@ -288,11 +278,7 @@ public class RellenarPalabras extends Application {
             verificarSolucion(solucion.toString());
         });
 
-        Button btnPista = new Button("Pista");
-        styleSecondaryButton(btnPista);
-        btnPista.setOnAction(e -> mostrarPista());
-
-        HBox panelBotones = new HBox(btnPista, btnVerificar, btnSiguiente);
+        HBox panelBotones = new HBox(btnVerificar, btnSiguiente);
         panelBotones.setSpacing(20);
         panelBotones.setAlignment(Pos.CENTER);
 

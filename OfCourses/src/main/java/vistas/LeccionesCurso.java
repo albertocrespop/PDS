@@ -25,7 +25,6 @@ import modelo.PreguntaOrdenarPalabras;
 import modelo.PreguntaRellenarPalabras;
 import modelo.PreguntaVF;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import controlador.OfCourses;

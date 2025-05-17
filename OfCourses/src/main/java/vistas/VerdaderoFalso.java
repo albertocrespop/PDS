@@ -89,6 +89,12 @@ public class VerdaderoFalso extends Application {
             Stage stage4 = new Stage();
             ej4.start(stage4);
             primaryStage.close();
+        }else {
+        	LeccionesCurso vistaLecciones = new LeccionesCurso(curso);
+            Stage stageLecciones = new Stage();
+            stageLecciones.initStyle(StageStyle.TRANSPARENT);
+            vistaLecciones.start(stageLecciones);
+            primaryStage.close();
         }
     }
     
